@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import { useRef } from 'react';
 import { styled } from '@mui/material/styles';
 
-export default function ImportButton({ setElements, setInfo }) {
+export default function ImportButton({ setElements, setInfo, setNodes }) {
     const fileInputRef = useRef(null);
 
     const VisuallyHiddenInput = styled('input')({
@@ -40,6 +40,7 @@ export default function ImportButton({ setElements, setInfo }) {
             const data = await res.json();
             setElements(data.elements);
             setInfo(data.info);
+            setNodes(data.nodes);
         } 
         catch (err) {
             console.error("Fail", err);

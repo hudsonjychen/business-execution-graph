@@ -3,10 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import '/src/stylesnew/Interaction.css'
 import NodeInfoCard from "./NodeInfoCard";
 
-export default function Interaction({ elements, notationType }) {
+export default function Interaction({ elements, notationType, nodes }) {
     const interactionRef = useRef(null);
     const [infoCard, setInfoCard] = useState(null);
     const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
+    const [selectedNodeId, setSelectedNodeId] = useState(null);
+    const selectedNodeRef = useRef(null);
 
     useEffect(() => {
         const cy = cytoscape(
@@ -59,6 +61,8 @@ export default function Interaction({ elements, notationType }) {
             const data = node.data();
             const pos = node.renderedPosition();
 
+            setSelectedNodeId(node.id());
+
             setInfoCard({
                 label: data.label,
                 desc: data.desc,
@@ -72,13 +76,57 @@ export default function Interaction({ elements, notationType }) {
             console.log(cardPosition.top);
         });
 
+        cy.on('tap', (event) => {
+            if (event.target === cy) {
+                setInfoCard(null);
+            }
+        });
+
+        cy.on('tap', 'node', (event) => {
+            const node = event.target;
+            selectedNodeRef.current = node;
+        
+            const pos = node.renderedPosition();
+
+            setSelectedNodeId(node.id());
+        
+            setInfoCard({
+                label: node.data().label,
+                desc: node.data().desc,
+            });
+        
+            setCardPosition({
+                top: pos.y + 50,
+                left: pos.x + 120,
+            });
+        });
+
     }, [elements, notationType]);
 
-    const handleClickOutside = () => {
+    useEffect(() => {
+        let animationFrameId;
+    
+        const updateCardPosition = () => {
+            if (infoCard && selectedNodeRef.current) {
+                const pos = selectedNodeRef.current.renderedPosition();
+                setCardPosition({
+                    top: pos.y + 50,
+                    left: pos.x + 120,
+                });
+                animationFrameId = requestAnimationFrame(updateCardPosition);
+            }
+        };
+    
         if (infoCard) {
-            setInfoCard(null);
+            animationFrameId = requestAnimationFrame(updateCardPosition);
         }
-    };
+    
+        return () => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        };
+    }, [infoCard]);
     
     return (
         <div>
@@ -90,7 +138,12 @@ export default function Interaction({ elements, notationType }) {
             </div>
             {
                 infoCard && (
-                    <NodeInfoCard  top={cardPosition.top} left={cardPosition.left}/>
+                    <NodeInfoCard 
+                        top={cardPosition.top} 
+                        left={cardPosition.left}
+                        selectedNodeId={selectedNodeId}
+                        nodes={nodes}
+                    />
                 )
             }
         </div>

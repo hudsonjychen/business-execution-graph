@@ -69,6 +69,7 @@ export default function App(){
   const [elements, setElements] = useState([]);
   const [info, setInfo] = useState({});
   const [notationType, setNotationType] = useState('');
+  const [nodes, setNodes] = useState({});
 
   return(
     <div>
@@ -79,9 +80,17 @@ export default function App(){
           notationType={notationType}
           setNotationType={setNotationType}
       />
-      <FilePanel setElements={setElements} setInfo={setInfo} />
+      <FilePanel 
+          setElements={setElements} 
+          setInfo={setInfo} 
+          setNodes={setNodes}
+      />
       <Divider />
-      <Interaction elements={elements} notationType={notationType}/>
+      <Interaction 
+        elements={elements} 
+        nodes={nodes}
+        notationType={notationType}
+      />
       <InteractionInfo info={info}/>
       <Divider />
     </div>
