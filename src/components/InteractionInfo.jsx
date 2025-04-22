@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material'
-import '/src/stylesnew/InteractionInfo.css'
+import '/src/styles/InteractionInfo.css'
 
 export default function({ info }) {
     return (

@@ -1,9 +1,16 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
-import '/src/stylesnew/Interaction.css'
+import '/src/styles/Interaction.css'
 import NodeInfoCard from "./NodeInfoCard";
 
-export default function Interaction({ elements, notationType, nodes }) {
+const objectTypeFilter = (elements, objectTypeChecked) => {
+    return elements.filter(element => {
+        const objectType = element.data.objectType;
+        return objectTypeChecked.some(obj => objectType.includes(obj));
+    });
+};
+
+export default function Interaction({ elements, objectTypeChecked, notationType, nodes  }) {
     const interactionRef = useRef(null);
     const [infoCard, setInfoCard] = useState(null);
     const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
@@ -11,21 +18,13 @@ export default function Interaction({ elements, notationType, nodes }) {
     const selectedNodeRef = useRef(null);
 
     useEffect(() => {
+        const filteredElements = objectTypeFilter(elements, objectTypeChecked);
+
         const cy = cytoscape(
         {
             container: interactionRef.current,
 
-            elements: elements,
-            /**
-            [
-                {data: { id: 'om', label: 'Order Management' }},
-                {data: { id: 'dm', label: 'Delivery Management' }},
-                {data: { id: 'rm', label: 'Return Management' }},
-                {data: { id: 'om-dm', source: 'om', target: 'dm', label: '{Order, Item}' }},
-                {data: { id: 'dm-om', source: 'dm', target: 'om', label: '{Order, Item}' }},
-                {data: { id: 'om-rm', source: 'om', target: 'rm', label: '{Item}' }}
-            ],
-            */
+            elements: filteredElements,
             
             style: [
                 {
@@ -56,26 +55,6 @@ export default function Interaction({ elements, notationType, nodes }) {
             },
         });
 
-        cy.on('tap', 'node', (event) => {
-            const node = event.target;
-            const data = node.data();
-            const pos = node.renderedPosition();
-
-            setSelectedNodeId(node.id());
-
-            setInfoCard({
-                label: data.label,
-                desc: data.desc,
-            });
-
-            setCardPosition({
-                top: pos.y + 50,
-                left: pos.x + 120,
-            });
-
-            console.log(cardPosition.top);
-        });
-
         cy.on('tap', (event) => {
             if (event.target === cy) {
                 setInfoCard(null);
@@ -90,18 +69,15 @@ export default function Interaction({ elements, notationType, nodes }) {
 
             setSelectedNodeId(node.id());
         
-            setInfoCard({
-                label: node.data().label,
-                desc: node.data().desc,
-            });
+            setInfoCard(true);
         
             setCardPosition({
-                top: pos.y + 50,
-                left: pos.x + 120,
+                top: pos.y + 20,
+                left: pos.x + 50,
             });
         });
 
-    }, [elements, notationType]);
+    }, [elements, objectTypeChecked, notationType]);
 
     useEffect(() => {
         let animationFrameId;
@@ -110,8 +86,8 @@ export default function Interaction({ elements, notationType, nodes }) {
             if (infoCard && selectedNodeRef.current) {
                 const pos = selectedNodeRef.current.renderedPosition();
                 setCardPosition({
-                    top: pos.y + 50,
-                    left: pos.x + 120,
+                    top: pos.y + 20,
+                    left: pos.x + 50,
                 });
                 animationFrameId = requestAnimationFrame(updateCardPosition);
             }

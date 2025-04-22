@@ -1,12 +1,10 @@
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select, Checkbox, ListItemText } from '@mui/material';
-import { useState } from 'react';
 
-export default function ObjectTypeFilter( {objectTypes} ) {
-    const[objectTypeChecked, setObjectTypeChecked] = useState([]);
+export default function ObjectTypeFilter( {objectTypes, objectTypeChecked, setObjectTypeChecked} ) {
 
     const handleChange = (check) => {
-        if (check === 'All') {
-            if (objectTypeChecked.includes('All')) {
+        if (check === 'all') {
+            if (objectTypeChecked.includes('all')) {
                 setObjectTypeChecked([]);
             } else {
                 setObjectTypeChecked(objectTypes);
@@ -14,14 +12,14 @@ export default function ObjectTypeFilter( {objectTypes} ) {
         } else {
             if (objectTypeChecked.includes(check)) {
                 const checks = objectTypeChecked.filter((c) => c !== check);
-                if (checks.includes('All')) {
-                    checks.splice(checks.indexOf('All'), 1);
+                if (checks.includes('all')) {
+                    checks.splice(checks.indexOf('all'), 1);
                 }
                 setObjectTypeChecked(checks);
             } else {
                 const checks = [...objectTypeChecked, check];
                 if (checks.length === objectTypes.length - 1) {
-                    checks.unshift('All');
+                    checks.unshift('all');
                 }
                 setObjectTypeChecked(checks);
             }

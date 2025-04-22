@@ -1,15 +1,23 @@
-import { useState } from 'react';
 import EdgeNotationConfig from "./EdgeNotationConfig";
 import NodeSizeConfig from "./NodeSizeConfig";
 import ObjectTypeFilter from "./ObjectTypeFilter";
-import '/src/stylesnew/ConfigPanel.css'
+import '/src/styles/ConfigPanel.css'
 
-export default function ConfigPanel( {objectTypes, attributeTypes, notationTypes, notationType, setNotationType} ) {
+export default function ConfigPanel( 
+    {   objectTypes, attributeTypes, notationTypes, 
+        notationType, setNotationType, 
+        objectTypeChecked, setObjectTypeChecked 
+    } 
+) {
 
     return (
         <div className="config-panel-container">
             <div className="config-panel-item">
-                <ObjectTypeFilter objectTypes={objectTypes} />
+                <ObjectTypeFilter 
+                    objectTypes={objectTypes}
+                    objectTypeChecked={objectTypeChecked}
+                    setObjectTypeChecked={setObjectTypeChecked} 
+                />
             </div>
             <div className="config-panel-item">
                 <NodeSizeConfig attributeTypes={attributeTypes} />
