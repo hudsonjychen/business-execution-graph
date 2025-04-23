@@ -1,8 +1,10 @@
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { useState } from 'react';
+import { useGlobal } from "../GlobalContext";
 
 export default function NodeSizeConfig( {attributeTypes} ) {
     const [attributeType, setAttributeType] = useState('');
+    const { mode } = useGlobal();
 
     const handleChange = (event) => {
         setAttributeType(event.target.value);
@@ -10,7 +12,7 @@ export default function NodeSizeConfig( {attributeTypes} ) {
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 200}} size='small'>
+            <FormControl sx={{ m: 1, width: 200}} size='small' disabled={mode === 'knowledge'}>
                 <InputLabel id='node-size-config-label'>Node Size</InputLabel>
                 <Select
                     labelId='node-size-config-label'

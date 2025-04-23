@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { useGlobal } from "./GlobalContext";
-import '/src/styles/ModeNavi.css'
+import { useGlobal } from "../GlobalContext";
+import './ModeNavi.css'
 
 export default function ModeNavi() {
     const { mode, setMode } = useGlobal();

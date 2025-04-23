@@ -1,5 +1,5 @@
 import { Box, Divider } from "@mui/material";
-import '/src/styles/Divider.css'
+import './Divider.css'
 
 export default function() {
     return (

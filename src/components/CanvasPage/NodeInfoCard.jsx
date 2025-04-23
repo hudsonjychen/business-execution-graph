@@ -1,8 +1,8 @@
 import { Box, Card, CardContent } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
-export default function NodeInfoCard( {top, left, selectedNodeId, nodes} ) {
-    const node = nodes[selectedNodeId]
+export default function NodeInfoCard( {top, left, selectedNodeId, nodeCard} ) {
+    const node = nodeCard[selectedNodeId]
     const listObjectType = Object.entries(node.objectType).map(([objectType, objectTypeInfo]) =>(
             <div key={objectType} style={{ textIndent: '1em' }}>
                 #{objectType}: {objectTypeInfo.count}

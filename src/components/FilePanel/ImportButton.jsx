@@ -2,8 +2,11 @@ import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import IconButton from '@mui/material/IconButton';
 import { useRef } from 'react';
 import { styled } from '@mui/material/styles';
+import { useGlobal } from "../GlobalContext";
 
-export default function ImportButton({ setElements, setElementsProcess, setInfo, setNodes }) {
+export default function ImportButton({ setElements, setKnowledge, setInfoChip, setNodeCard, setObjects }) {
+    const { setObjectTypes, setObjectTypeChecked } = useGlobal();
+
     const fileInputRef = useRef(null);
 
     const VisuallyHiddenInput = styled('input')({
@@ -39,9 +42,13 @@ export default function ImportButton({ setElements, setElementsProcess, setInfo,
             const res = await fetch("http://127.0.0.1:5000/get_data");
             const data = await res.json();
             setElements(data.elements);
-            setElementsProcess(data.elementsProcess)
-            setInfo(data.info);
-            setNodes(data.nodes);
+            setKnowledge(data.knowledge);
+            setObjectTypes(['all', ...data.objectTypes]);
+            setInfoChip(data.info);
+            setNodeCard(data.nodes);
+            setObjectTypeChecked(['all', ...data.objectTypes]);
+            setObjects(data.objects)
+
         } 
         catch (err) {
             console.error("Fail", err);

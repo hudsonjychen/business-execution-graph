@@ -1,8 +1,8 @@
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { useState } from 'react';
+import { useGlobal } from "../GlobalContext";
 
 export default function EdgeNotationConfig( {notationTypes, notationType, setNotationType } ) {
-    //const [notationType, setNotationType] = useState('');
+    const { mode } = useGlobal();
 
     const handleChange = (event) => {
         setNotationType(event.target.value);
@@ -10,7 +10,7 @@ export default function EdgeNotationConfig( {notationTypes, notationType, setNot
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 200}} size='small'>
+            <FormControl sx={{ m: 1, width: 200}} size='small' disabled={mode === 'knowledge'}>
                 <InputLabel id='edge-notation-config-label'>Edge Notation</InputLabel>
                 <Select
                     labelId='edge-notation-config-label'

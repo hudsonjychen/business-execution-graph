@@ -1,54 +1,47 @@
 import { useState } from 'react' 
-import ConfigPanel from './ConfigPanel';
-import FilePanel from './FilePanel';
-import Interaction from './Interaction';
+import ConfigPanel from './ConfigPanel/ConfigPanel';
+import FilePanel from './FilePanel/FilePanel';
 import Divider from './Divider';
-import InteractionInfo from './InteractionInfo';
-import Knowledge from './Knowledge';
 import { GlobalProvider } from './GlobalContext';
-import ModeNavi from './ModeNavi';
-import CanvasPage from './CanvasPage';
+import ModeNavi from './ModeNavi/ModeNavi';
+import CanvasPage from './CanvasPage/CanvasPage';
 
 const items = ['Object count', 'Execution time'];
-const objects = ['all', 'order', 'shipment'];
 const notations = ['objectType', 'totalObjectCount', 'averageFlowTime'];
 
 export default function AppPage(){
     const [elements, setElements] = useState([]);
-    const [info, setInfo] = useState({});
-    const [objectTypeChecked, setObjectTypeChecked] = useState(objects);
+    const [infoChip, setInfoChip] = useState({});
     const [notationType, setNotationType] = useState('');
-    const [nodes, setNodes] = useState({});
-    const [elementsProcess, setElementsProcess] = useState([]);
+    const [nodeCard, setNodeCard] = useState({});
+    const [knowledge, setKnowledge] = useState([]);
+    const [objects, setObjects] = useState([]);
 
     return(
         <div>
             <GlobalProvider>
                 <ConfigPanel
-                    objectTypes={objects}
                     attributeTypes={items}
                     notationTypes={notations}
                     notationType={notationType}
                     setNotationType={setNotationType}
-                    objectTypeChecked={objectTypeChecked}
-                    setObjectTypeChecked={setObjectTypeChecked}
                 />
                 <FilePanel 
                     setElements={setElements} 
-                    setElementsProcess={setElementsProcess}
-                    setInfo={setInfo} 
-                    setNodes={setNodes}
+                    setKnowledge={setKnowledge}
+                    setInfoChip={setInfoChip} 
+                    setNodeCard={setNodeCard}
+                    setObjects={setObjects}
                 />
                 <ModeNavi />
                 <Divider />
                 <CanvasPage
                     elements={elements} 
-                    objectTypeChecked={objectTypeChecked}
-                    nodes={nodes}
+                    nodeCard={nodeCard}
                     notationType={notationType}
-                    elementsProcess={elementsProcess}
+                    knowledge={knowledge}
+                    objects={objects}
                 />
-                <InteractionInfo info={info}/>
                 <Divider />
             </GlobalProvider>
         </div>

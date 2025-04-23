@@ -1,17 +1,17 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef } from "react";
-import '/src/styles/Interaction.css'
+import './Canvas.css'
 
-export default function Knowledge({ elementsProcess }) {
-    const interactionRef = useRef(null);
+export default function Knowledge({ knowledge }) {
+    const knowledgeRef = useRef(null);
 
     useEffect(() => {
     
         const cy = cytoscape(
         {
-            container: interactionRef.current,
+            container: knowledgeRef.current,
 
-            elements: elementsProcess,
+            elements: knowledge,
             
             style: [
                 {
@@ -61,13 +61,13 @@ export default function Knowledge({ elementsProcess }) {
             },
         });
     
-    }, [elementsProcess]);
+    }, [knowledge]);
 
     return (
-        <div className="interaction-container">
+        <div className="canvas-container">
             <div 
-                ref={interactionRef} 
-                className="interaction"
+                ref={knowledgeRef} 
+                className="canvas"
             />
         </div>
     )

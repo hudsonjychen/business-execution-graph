@@ -1,17 +1,18 @@
 import ImportButton from "./ImportButton";
 import DownloadButton from "./DownloadButton";
 import InfoButton from "./InfoButton";
-import '/src/styles/FilePanel.css'
+import './FilePanel.css'
 
-export default function FilePanel({ setElements, setElementsProcess, setInfo, setNodes }) {
+export default function FilePanel({ setElements, setKnowledge, setInfoChip, setNodeCard, setObjects }) {
     return (
         <div className="file-panel-container">
             <div className="file-panel-item">
                 <ImportButton 
                     setElements={setElements} 
-                    setElementsProcess={setElementsProcess}
-                    setInfo={setInfo}
-                    setNodes={setNodes}
+                    setKnowledge={setKnowledge}
+                    setInfoChip={setInfoChip}
+                    setNodeCard={setNodeCard}
+                    setObjects={setObjects}
                 />
             </div>
             <div className="file-panel-item">

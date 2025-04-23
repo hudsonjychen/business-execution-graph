@@ -1,16 +1,16 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
-import '/src/styles/Interaction.css'
+import './Canvas.css'
 import NodeInfoCard from "./NodeInfoCard";
 
-const objectTypeFilter = (elements, objectTypeChecked) => {
+export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {
         const objectType = element.data.objectType;
         return objectTypeChecked.some(obj => objectType.includes(obj));
     });
 };
 
-export default function Interaction({ elements, objectTypeChecked, notationType, nodes  }) {
+export default function Interaction({ elements, objectTypeChecked, notationType, nodeCard }) {
     const interactionRef = useRef(null);
     const [infoCard, setInfoCard] = useState(null);
     const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
@@ -106,10 +106,10 @@ export default function Interaction({ elements, objectTypeChecked, notationType,
     
     return (
         <div>
-            <div className="interaction-container">
+            <div className="canvas-container">
                 <div 
                     ref={interactionRef} 
-                    className="interaction"
+                    className="canvas"
                 />
             </div>
             {
@@ -118,7 +118,7 @@ export default function Interaction({ elements, objectTypeChecked, notationType,
                         top={cardPosition.top} 
                         left={cardPosition.left}
                         selectedNodeId={selectedNodeId}
-                        nodes={nodes}
+                        nodeCard={nodeCard}
                     />
                 )
             }

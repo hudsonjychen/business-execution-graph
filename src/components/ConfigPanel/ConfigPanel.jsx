@@ -1,23 +1,18 @@
 import EdgeNotationConfig from "./EdgeNotationConfig";
 import NodeSizeConfig from "./NodeSizeConfig";
 import ObjectTypeFilter from "./ObjectTypeFilter";
-import '/src/styles/ConfigPanel.css'
+import './ConfigPanel.css';
 
 export default function ConfigPanel( 
-    {   objectTypes, attributeTypes, notationTypes, 
-        notationType, setNotationType, 
-        objectTypeChecked, setObjectTypeChecked 
+    {   attributeTypes, notationTypes, 
+        notationType, setNotationType
     } 
 ) {
 
     return (
         <div className="config-panel-container">
             <div className="config-panel-item">
-                <ObjectTypeFilter 
-                    objectTypes={objectTypes}
-                    objectTypeChecked={objectTypeChecked}
-                    setObjectTypeChecked={setObjectTypeChecked} 
-                />
+                <ObjectTypeFilter />
             </div>
             <div className="config-panel-item">
                 <NodeSizeConfig attributeTypes={attributeTypes} />

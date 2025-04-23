@@ -1,7 +1,9 @@
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select, Checkbox, ListItemText } from '@mui/material';
+import { useGlobal } from "../GlobalContext";
 
-export default function ObjectTypeFilter( {objectTypes, objectTypeChecked, setObjectTypeChecked} ) {
-
+export default function ObjectTypeFilter() {
+    const { mode, objectTypes, objectTypeChecked, setObjectTypeChecked } = useGlobal();
+    
     const handleChange = (check) => {
         if (check === 'all') {
             if (objectTypeChecked.includes('all')) {
@@ -28,7 +30,7 @@ export default function ObjectTypeFilter( {objectTypes, objectTypeChecked, setOb
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 200}} size='small'>
+            <FormControl sx={{ m: 1, width: 200}} size='small' disabled={mode === 'knowledge'}>
                 <InputLabel id='objet-type-filter-label'>Object Type</InputLabel>
                 <Select
                     labelId='object-type-filter-label'
