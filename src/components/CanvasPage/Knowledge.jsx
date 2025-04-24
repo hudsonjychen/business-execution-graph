@@ -1,9 +1,11 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef } from "react";
 import './Canvas.css'
+import { useGlobal } from "../GlobalContext";
 
 export default function Knowledge({ knowledge }) {
     const knowledgeRef = useRef(null);
+    const { setPngDataUrl } = useGlobal();
 
     useEffect(() => {
     
@@ -57,9 +59,17 @@ export default function Knowledge({ knowledge }) {
             ],
             
             layout: {
-                name: 'circle',
+                name: 'circle'
             },
         });
+
+        const pngDataUrl = cy.png({
+            output: 'base64uri',
+            full: true,
+            scale: 2,
+            bg: '#ffffff'
+        });
+        setPngDataUrl(pngDataUrl);
     
     }, [knowledge]);
 

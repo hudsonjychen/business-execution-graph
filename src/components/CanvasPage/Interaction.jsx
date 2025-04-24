@@ -2,6 +2,7 @@ import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
 import './Canvas.css'
 import NodeInfoCard from "./NodeInfoCard";
+import { useGlobal } from "../GlobalContext";
 
 export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {
@@ -10,7 +11,40 @@ export const objectTypeFilter = (elements, objectTypeChecked) => {
     });
 };
 
-export default function Interaction({ elements, objectTypeChecked, notationType, nodeCard }) {
+const calculateNodeSize = (elements, attributeTypeChecked) => {
+    if(attributeTypeChecked == ''){
+        return
+    }
+    const values = {};
+    const sizes = {};
+    let maxValue;
+    let minValue;
+
+    elements.forEach(element => {
+        if(element['data']['label']){
+            values[element['data']['id']] = element['data'][attributeTypeChecked]
+        }
+    });
+
+    const allValues = Object.values(values);
+
+    maxValue = Math.max(...allValues);
+    minValue = Math.min(...allValues);
+
+    function calculate(maxValue, minValue, value) {
+        return (40 + (value - minValue) / (maxValue - minValue) * 80)
+    };
+
+    elements.forEach(element => {
+        sizes[element['data']['id']] = calculate(maxValue, minValue, values[element['data']['id']]);
+    });
+
+    return sizes;
+}
+
+export default function Interaction({ elements, objectTypeChecked, notationTypeChecked, nodeCard }) {
+    const { attributeTypeChecked, setPngDataUrl } = useGlobal();
+    
     const interactionRef = useRef(null);
     const [infoCard, setInfoCard] = useState(null);
     const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
@@ -45,7 +79,6 @@ export default function Interaction({ elements, objectTypeChecked, notationType,
                         'target-arrow-color': '#ccc',
                         'target-arrow-shape': 'triangle',
                         'curve-style': 'unbundled-bezier',
-                        'label': notationType ? `data(${notationType})` : '',
                     }
                 }
             ],
@@ -54,6 +87,30 @@ export default function Interaction({ elements, objectTypeChecked, notationType,
                 name: 'circle'
             },
         });
+
+        if(attributeTypeChecked != ''){
+            const sizes = calculateNodeSize(elements, attributeTypeChecked)
+
+            cy.nodes().forEach(node => {
+                const nodeId = node.id();
+                const size = sizes[nodeId];
+              
+                if (size !== undefined) {
+                    node.style('width', size);
+                    node.style('height', size);
+                }
+            });
+        };
+
+        if(notationTypeChecked != ''){
+            cy.edges().forEach(edge => {
+                if (notationTypeChecked) {
+                    edge.style('label', edge.data(notationTypeChecked));
+                } else {
+                    edge.style('label', '');
+                }
+            });
+        };
 
         cy.on('tap', (event) => {
             if (event.target === cy) {
@@ -73,11 +130,19 @@ export default function Interaction({ elements, objectTypeChecked, notationType,
         
             setCardPosition({
                 top: pos.y + 20,
-                left: pos.x + 50,
+                left: pos.x + 80,
             });
         });
 
-    }, [elements, objectTypeChecked, notationType]);
+        const pngDataUrl = cy.png({
+            output: 'base64uri',
+            full: true,
+            scale: 2,
+            bg: '#ffffff'
+        });
+        setPngDataUrl(pngDataUrl);
+
+    }, [elements, objectTypeChecked, attributeTypeChecked, notationTypeChecked]);
 
     useEffect(() => {
         let animationFrameId;
@@ -87,7 +152,7 @@ export default function Interaction({ elements, objectTypeChecked, notationType,
                 const pos = selectedNodeRef.current.renderedPosition();
                 setCardPosition({
                     top: pos.y + 20,
-                    left: pos.x + 50,
+                    left: pos.x + 80,
                 });
                 animationFrameId = requestAnimationFrame(updateCardPosition);
             }

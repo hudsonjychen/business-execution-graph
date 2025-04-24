@@ -5,7 +5,7 @@ import './ConfigPanel.css';
 
 export default function ConfigPanel( 
     {   attributeTypes, notationTypes, 
-        notationType, setNotationType
+        notationTypeChecked, setNotationTypeChecked
     } 
 ) {
 
@@ -20,8 +20,8 @@ export default function ConfigPanel(
             <div className="config-panel-item">
                 <EdgeNotationConfig 
                     notationTypes={notationTypes} 
-                    notationType={notationType}
-                    setNotationType={setNotationType}
+                    notationTypeChecked={notationTypeChecked}
+                    setNotationTypeChecked={setNotationTypeChecked}
                 />
             </div>
         </div>

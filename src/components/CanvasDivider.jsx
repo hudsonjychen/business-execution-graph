@@ -1,9 +1,8 @@
 import { Box, Divider } from "@mui/material";
-import './Divider.css'
 
-export default function() {
+export default function CanvasDivider() {
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box>
             <Divider />
         </Box>
     )

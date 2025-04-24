@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, OutlinedInput, Select, Checkbox, Lis
 import { useGlobal } from "../GlobalContext";
 
 export default function ObjectTypeFilter() {
-    const { mode, objectTypes, objectTypeChecked, setObjectTypeChecked } = useGlobal();
+    const { mode, fileImported, objectTypes, objectTypeChecked, setObjectTypeChecked } = useGlobal();
     
     const handleChange = (check) => {
         if (check === 'all') {
@@ -30,7 +30,7 @@ export default function ObjectTypeFilter() {
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 200}} size='small' disabled={mode === 'knowledge'}>
+            <FormControl sx={{ m: 1, width: 200}} size='small' disabled={mode === 'knowledge' | !fileImported}>
                 <InputLabel id='objet-type-filter-label'>Object Type</InputLabel>
                 <Select
                     labelId='object-type-filter-label'

@@ -4,8 +4,8 @@ import { useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { useGlobal } from "../GlobalContext";
 
-export default function ImportButton({ setElements, setKnowledge, setInfoChip, setNodeCard, setObjects }) {
-    const { setObjectTypes, setObjectTypeChecked } = useGlobal();
+export default function ImportButton({ setElements, setKnowledge, setNodeCard, setObjects }) {
+    const { setFileImported, setObjectTypes, setObjectTypeChecked } = useGlobal();
 
     const fileInputRef = useRef(null);
 
@@ -27,6 +27,9 @@ export default function ImportButton({ setElements, setKnowledge, setInfoChip, s
 
     const handleChange = async (event) => {
         const file = event.target.files[0];
+        if(file){
+            setFileImported(true);
+        };
         const formData = new FormData();
         formData.append("file", file);
 
@@ -44,7 +47,6 @@ export default function ImportButton({ setElements, setKnowledge, setInfoChip, s
             setElements(data.elements);
             setKnowledge(data.knowledge);
             setObjectTypes(['all', ...data.objectTypes]);
-            setInfoChip(data.info);
             setNodeCard(data.nodes);
             setObjectTypeChecked(['all', ...data.objectTypes]);
             setObjects(data.objects)
