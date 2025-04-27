@@ -12,7 +12,7 @@ def get_object_types(ocel):
 def get_objects(ocel):
     objects = set()
     for row in ocel.objects[ocel.object_id_column]:
-        if not row.startswith('p'):
+        if not row.startswith('@process:'):
             objects.add(row)
     return objects
 
