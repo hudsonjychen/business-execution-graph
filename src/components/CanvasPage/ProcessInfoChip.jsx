@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material'
 import './ProcessInfoChip.css'
-import { useGlobal } from "../GlobalContext";
+import { useFilter } from "../FilterContext";
 import { objectTypeFilter } from './Interaction'
 
 export default function ProcessInfoChip({ elements, knowledge, objects }) {
-    const { objectTypeChecked } = useGlobal();
+    const { objectTypeChecked } = useFilter();
     let processCount = 0, objectTypeCount = 0, objectCount = 0;
 
     if(elements){

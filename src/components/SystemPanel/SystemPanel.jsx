@@ -1,9 +1,9 @@
 import ImportButton from "./ImportButton";
 import DownloadButton from "./DownloadButton";
 import InfoButton from "./InfoButton";
-import './FilePanel.css'
+import './SystemPanel.css'
 
-export default function FilePanel({ setElements, setKnowledge, setInfoChip, setNodeCard, setObjects }) {
+export default function SystemPanel({ setElements, setKnowledge, setInfoChip, setNodeCard, setObjects, setObjectTypeCounts, setActivityCounts }) {
     return (
         <div className="file-panel-container">
             <div className="file-panel-item">
@@ -13,6 +13,8 @@ export default function FilePanel({ setElements, setKnowledge, setInfoChip, setN
                     setInfoChip={setInfoChip}
                     setNodeCard={setNodeCard}
                     setObjects={setObjects}
+                    setObjectTypeCounts={setObjectTypeCounts}
+                    setActivityCounts={setActivityCounts}
                 />
             </div>
             <div className="file-panel-item">

@@ -3,9 +3,11 @@ import IconButton from '@mui/material/IconButton';
 import { useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { useGlobal } from "../GlobalContext";
+import { useFilter } from "../FilterContext";
 
-export default function ImportButton({ setElements, setKnowledge, setNodeCard, setObjects }) {
-    const { setFileImported, setObjectTypes, setObjectTypeChecked } = useGlobal();
+export default function ImportButton({ setElements, setKnowledge, setNodeCard, setObjects, setObjectTypeCounts, setActivityCounts }) {
+    const { setFileImported } = useGlobal();
+    const { setObjectTypes, setObjectTypeChecked, setProcesses, setProcessChecked } = useFilter();
 
     const fileInputRef = useRef(null);
 
@@ -49,8 +51,11 @@ export default function ImportButton({ setElements, setKnowledge, setNodeCard, s
             setObjectTypes(['all', ...data.objectTypes]);
             setNodeCard(data.nodes);
             setObjectTypeChecked(['all', ...data.objectTypes]);
-            setObjects(data.objects)
-
+            setObjects(data.objects);
+            setProcessChecked(['all', ...data.processes]);
+            setProcesses(['all', ...data.processes]);
+            setObjectTypeCounts(data.otcounts);
+            setActivityCounts(data.actcounts);
         } 
         catch (err) {
             console.error("Fail", err);

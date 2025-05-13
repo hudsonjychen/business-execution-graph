@@ -22,7 +22,7 @@ def map_process_to_object_type(ocel: OCEL) -> Dict[str, set[str]]:
 
     for key, group in ocel.relations.groupby(ocel.event_id_column):
         for pro in processes:
-            if pro in group[ocel.object_type_column].values:
+            if pro in group[ocel.object_id_column].values:
                 if pro not in process_object_type_mapping:
                     process_object_type_mapping[pro] = set()
                 for i in range(len(group)):
@@ -39,7 +39,7 @@ def map_process_to_event_activity(ocel: OCEL) -> Dict[str, set[str]]:
 
     for key, group in ocel.relations.groupby(ocel.event_activity):
         for pro in processes:
-            if pro in group[ocel.object_type_column].values:
+            if pro in group[ocel.object_id_column].values:
                 if pro not in process_event_activity_mapping:
                     process_event_activity_mapping[pro] = set()
                 process_event_activity_mapping[pro].add(key)

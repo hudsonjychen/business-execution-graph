@@ -40,7 +40,7 @@ def discover_process_dependency_graph(ocel: OCEL) -> Dict[str, Any]:
         obj_type = oid_to_type_map[obj]
 
         ocel_re: DataFrame = filtered_ocels[obj]
-        filtered_ocel_re = ocel_re.loc[ocel_re[ocel.object_type_column].isin(processes)]
+        filtered_ocel_re = ocel_re.loc[ocel_re[ocel.object_id_column].isin(processes)]
         filtered_ocel_re = filtered_ocel_re.sort_values(by='ocel:timestamp')
 
         #print(obj)
@@ -50,8 +50,8 @@ def discover_process_dependency_graph(ocel: OCEL) -> Dict[str, Any]:
 
         for i in range(len(grouped) - 1):
             (group1_key, group1), (group2_key, group2) = grouped[i], grouped[i + 1]
-            process1 = set(group1[ocel.object_type_column])
-            process2 = set(group2[ocel.object_type_column])
+            process1 = set(group1[ocel.object_id_column])
+            process2 = set(group2[ocel.object_id_column])
             for p1 in process1:
                 for p2 in process2:
                     if p1 != p2:
@@ -96,7 +96,7 @@ def discover_process_node_graph(ocel: OCEL) -> Dict[str, Any]:
 
     filtered_ocels = dict()
     for pro in processes:
-        filtered_ocel = filter_ocel_by_object_type(
+        filtered_ocel = filter_ocel_by_object_id(
             ocel,
             pro
         )

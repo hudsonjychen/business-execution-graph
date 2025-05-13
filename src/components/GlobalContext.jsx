@@ -5,9 +5,6 @@ const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
     const [mode, setMode] = useState("discovery");
     const [fileImported, setFileImported] = useState(null);
-    const [objectTypes, setObjectTypes] = useState([]);
-    const [objectTypeChecked, setObjectTypeChecked] = useState([]);
-    const [attributeTypeChecked, setAttributeTypeChecked] = useState('');
     const [pngDataUrl, setPngDataUrl] = useState(null);
 
     return (
@@ -15,9 +12,6 @@ export const GlobalProvider = ({ children }) => {
             value={{ 
                 mode, setMode, 
                 fileImported, setFileImported,
-                objectTypes, setObjectTypes, 
-                objectTypeChecked, setObjectTypeChecked,
-                attributeTypeChecked, setAttributeTypeChecked,
                 pngDataUrl, setPngDataUrl
             }}>
             {children}

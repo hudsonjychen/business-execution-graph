@@ -1,8 +1,8 @@
 from datetime import timedelta
 
 def get_obj_flow_time(ocel, group1, group2, t1, t2):
-    timestamp1 = group1[group1[ocel.object_type_column]==t1]['ocel:timestamp'].iloc[0]
-    timestamp2 = group2[group2[ocel.object_type_column]==t2]['ocel:timestamp'].iloc[0]
+    timestamp1 = group1[group1[ocel.object_id_column]==t1]['ocel:timestamp'].iloc[0]
+    timestamp2 = group2[group2[ocel.object_id_column]==t2]['ocel:timestamp'].iloc[0]
 
     return timestamp2 - timestamp1
 

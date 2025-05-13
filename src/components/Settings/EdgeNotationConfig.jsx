@@ -1,8 +1,9 @@
-import { FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { useGlobal } from "../GlobalContext";
+import { FormControl, MenuItem, Select } from '@mui/material';
+import { useSetting } from "../SettingContext";
 
-export default function EdgeNotationConfig( {notationTypes, notationTypeChecked, setNotationTypeChecked } ) {
-    const { mode, fileImported } = useGlobal();
+export default function EdgeNotationConfig() {
+    const notationTypes = ['objectType', 'totalObjectCount', 'averageFlowTime'];
+    const { notationTypeChecked, setNotationTypeChecked } = useSetting();
 
     const handleChange = (event) => {
         setNotationTypeChecked(event.target.value);
@@ -10,13 +11,11 @@ export default function EdgeNotationConfig( {notationTypes, notationTypeChecked,
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 200}} size='small' disabled={mode === 'knowledge' | !fileImported}>
-                <InputLabel id='edge-notation-config-label'>Edge Notation</InputLabel>
+            <FormControl sx={{ m: 1, width: 200}} size='small'>
                 <Select
                     labelId='edge-notation-config-label'
                     id='edge-notation-config'
                     value={notationTypeChecked}
-                    input={<OutlinedInput label='Notation Type' />}
                     onChange={handleChange}
                 >   
                     <MenuItem value="">

@@ -1,8 +1,10 @@
-import { FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { useGlobal } from "../GlobalContext";
+import { FormControl, MenuItem, Select } from '@mui/material';
+import { useSetting } from "../SettingContext";
 
-export default function NodeSizeConfig( {attributeTypes} ) {
-    const { mode, fileImported, attributeTypeChecked, setAttributeTypeChecked } = useGlobal();
+export default function NodeSizeConfig() {
+    const attributeTypes = ['objectCount', 'objectTypeCount'];
+
+    const { attributeTypeChecked, setAttributeTypeChecked } = useSetting();
 
     const handleChange = (event) => {
         setAttributeTypeChecked(event.target.value);
@@ -10,13 +12,11 @@ export default function NodeSizeConfig( {attributeTypes} ) {
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 200}} size='small' disabled={mode === 'knowledge' | !fileImported}>
-                <InputLabel id='node-size-config-label'>Node Size</InputLabel>
+            <FormControl sx={{ m: 1, width: 200}} size='small'>
                 <Select
                     labelId='node-size-config-label'
                     id='node-size-config'
                     value={attributeTypeChecked}
-                    input={<OutlinedInput label='Attribute Type' />}
                     onChange={handleChange}
                 >   
                     <MenuItem value="">

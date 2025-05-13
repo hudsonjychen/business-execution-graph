@@ -9,7 +9,7 @@ export default function ModeNavi() {
 
     return (
         <div className='mode-navi'>
-            <Box sx={{ width: 300, '& .MuiBottomNavigationAction-label': {
+            <Box sx={{ width: 250, '& .MuiBottomNavigationAction-label': {
                                         fontSize: '14px',
                                         '&.Mui-selected': {
                                             fontSize: '16px',

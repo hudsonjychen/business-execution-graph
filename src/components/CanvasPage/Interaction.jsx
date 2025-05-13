@@ -1,14 +1,44 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
+import { red, pink, purple, deepPurple, indigo, blue, lightBlue, cyan, teal, green, lightGreen, lime, yellow, amber, orange, deepOrange, grey } from '@mui/material/colors';
 import './Canvas.css'
 import NodeInfoCard from "./NodeInfoCard";
 import { useGlobal } from "../GlobalContext";
+import { useFilter } from "../FilterContext";
+import { useSetting } from "../SettingContext";
 
 export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {
         const objectType = element.data.objectType;
         return objectTypeChecked.some(obj => objectType.includes(obj));
     });
+};
+
+export const processFilter = (elements, processChecked) => {
+    const filteredNodes = [];
+
+    const filteredElements = elements.filter(element => {
+        if (element.data.label){
+            const process = element.data.label;
+            if (processChecked.includes(process)){
+                filteredNodes.push(element.data.id);
+                return true;
+            }
+        } else {
+            return true;
+        }
+    });
+
+    return filteredElements.filter(element => {
+        if (!element.data.label){
+            const source = element.data.source;
+            const target = element.data.target;
+            return filteredNodes.includes(source) && filteredNodes.includes(target);
+        } else {
+            return true;
+        }
+    });
+
 };
 
 const calculateNodeSize = (elements, attributeTypeChecked) => {
@@ -40,10 +70,12 @@ const calculateNodeSize = (elements, attributeTypeChecked) => {
     });
 
     return sizes;
-}
+};
 
-export default function Interaction({ elements, objectTypeChecked, notationTypeChecked, nodeCard }) {
-    const { attributeTypeChecked, setPngDataUrl } = useGlobal();
+export default function Interaction({ elements, nodeCard }) {
+    const { setPngDataUrl } = useGlobal();
+    const { objectTypeChecked, processChecked } = useFilter();
+    const { attributeTypeChecked, notationTypeChecked, selectedColor } = useSetting();
     
     const interactionRef = useRef(null);
     const [infoCard, setInfoCard] = useState(null);
@@ -51,8 +83,16 @@ export default function Interaction({ elements, objectTypeChecked, notationTypeC
     const [selectedNodeId, setSelectedNodeId] = useState(null);
     const selectedNodeRef = useRef(null);
 
+    const patternColorSet = [ blue, red, lightGreen, amber, deepPurple, lightBlue, orange, pink, green, purple ];
+    const colors = [
+        red, pink, purple, deepPurple,
+        indigo, blue, lightBlue, cyan,
+        teal, green, lightGreen, lime,
+        yellow, amber, orange, deepOrange
+    ];
+
     useEffect(() => {
-        const filteredElements = objectTypeFilter(elements, objectTypeChecked);
+        const filteredElements = processFilter(objectTypeFilter(elements, objectTypeChecked), processChecked);
 
         const cy = cytoscape(
         {
@@ -78,15 +118,37 @@ export default function Interaction({ elements, objectTypeChecked, notationTypeC
                         'line-color': '#ccc',
                         'target-arrow-color': '#ccc',
                         'target-arrow-shape': 'triangle',
+                        'arrow-scale': 2,
                         'curve-style': 'unbundled-bezier',
+                        'control-point-weight': 0.5,
                     }
                 }
             ],
             
             layout: {
-                name: 'circle'
+                name: 'circle',
+                nodeDimensionsIncludeLabels: false,
+                spacingFactor: 0.8,
+                startAngle: Math.PI,
             },
         });
+
+        if(selectedColor){
+            if(selectedColor === 'colorPattern'){
+                cy.nodes().forEach((node, index) => {
+                    node.style('background-color', patternColorSet[index][500]);
+                });
+            } else {
+                cy.nodes().forEach(node => {
+                    node.style('background-color', selectedColor);
+                });
+
+                cy.edges().forEach(edge => {
+                    edge.style('line-color', selectedColor);
+                    edge.style('target-arrow-color', selectedColor,)
+                });
+            }
+        };
 
         if(attributeTypeChecked != ''){
             const sizes = calculateNodeSize(elements, attributeTypeChecked)
@@ -142,7 +204,7 @@ export default function Interaction({ elements, objectTypeChecked, notationTypeC
         });
         setPngDataUrl(pngDataUrl);
 
-    }, [elements, objectTypeChecked, attributeTypeChecked, notationTypeChecked]);
+    }, [elements, selectedColor, processChecked, objectTypeChecked, attributeTypeChecked, notationTypeChecked]);
 
     useEffect(() => {
         let animationFrameId;

@@ -3,9 +3,7 @@ from pm4py.objects.ocel.obj import OCEL
 def get_object_types(ocel):
     object_types = set()
     for row in ocel.objects[ocel.object_type_column]:
-        if row.startswith('@process:'):
-            continue
-        else:
+        if not row == '@process':
             object_types.add(row)
     return object_types
 
@@ -18,7 +16,7 @@ def get_objects(ocel):
 
 def get_processes(ocel):
     processes = set()
-    for row in ocel.objects[ocel.object_type_column]:
+    for row in ocel.objects[ocel.object_id_column]:
         if row.startswith('@process:'):
             processes.add(row)
     return processes

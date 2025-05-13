@@ -12,12 +12,11 @@ export default function Prompt() {
                 mt: -8,
             }}
         >
-            <FileOpenOutlinedIcon sx={{ fontSize: 40, color: 'grey.500' }} />
+            <FileOpenOutlinedIcon sx={{ fontSize: 36, color: 'grey.400' }} />
             <Typography
                 sx={{
-                    fontSize: 38,
-                    fontWeight: 300,
-                    color: 'grey.500'
+                    fontSize: 32,
+                    color: 'grey.400'
                 }}
             >
                 Start by importing event data
