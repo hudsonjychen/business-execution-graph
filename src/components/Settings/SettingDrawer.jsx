@@ -65,7 +65,7 @@ export default function SettingDrawer() {
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography variant="subtitle1" color="text.secondary" mb={1}>
-                    Object Type Frequency
+                    Object Instance Frequency
                 </Typography>
                 <ObjectTypeFrequencyInput />
             </Stack>
@@ -74,7 +74,7 @@ export default function SettingDrawer() {
             </Typography>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography variant="subtitle1" color="text.secondary" mb={1}>
-                    Activity Frequency
+                    Activity Instance Frequency
                 </Typography>
                 <ActivityFrequencyInput />
             </Stack>

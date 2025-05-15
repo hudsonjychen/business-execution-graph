@@ -72,10 +72,53 @@ const calculateNodeSize = (elements, attributeTypeChecked) => {
     return sizes;
 };
 
+const getImportanceIndex = (elements, type) => {
+    const targetInstance = {};
+    const importanceIndex = {};
+    const targetList = [];
+
+    const nodeList = elements
+        .filter(element => element.data.label)
+        .map(element => element.data.id);
+    
+        const filteredList = elements.filter(element => !element.data.label);
+    if (type === 'incomingEdges'){
+        targetList.push(...filteredList.map(element => element.data.target));
+    } else if (type === 'outgoingEdges'){
+        targetList.push(...filteredList.map(element => element.data.source));
+    } else if (type === 'totalEdges'){
+        targetList.push(...filteredList.flatMap(element => [element.data.target, element.data.source]));
+    } else {
+        return null;
+    }
+
+    targetList.forEach(target => {
+        targetInstance[target] = (targetInstance[target] || 0) + 1;
+    });
+
+    for (const key in targetInstance) {
+        importanceIndex[key] = targetInstance[key] != 0 ? targetInstance[key] / targetList.length : 0;
+    }
+
+    nodeList.forEach(node => {
+        if (!Object.keys(importanceIndex).includes(node)) {
+            importanceIndex[node] = 0;
+        }
+    })
+    return importanceIndex;
+};
+
+const mapToLevel = (value, levels) => {
+    const target = value * 900;
+    return levels.reduce((prev, curr) =>
+        Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev
+    );
+};
+
 export default function Interaction({ elements, nodeCard }) {
-    const { setPngDataUrl } = useGlobal();
+    const { setPngDataUrl, setVosData } = useGlobal();
     const { objectTypeChecked, processChecked } = useFilter();
-    const { attributeTypeChecked, notationTypeChecked, selectedColor } = useSetting();
+    const { attributeTypeChecked, notationTypeChecked, selectedColor, colorLevelType } = useSetting();
     
     const interactionRef = useRef(null);
     const [infoCard, setInfoCard] = useState(null);
@@ -83,16 +126,14 @@ export default function Interaction({ elements, nodeCard }) {
     const [selectedNodeId, setSelectedNodeId] = useState(null);
     const selectedNodeRef = useRef(null);
 
-    const patternColorSet = [ blue, red, lightGreen, amber, deepPurple, lightBlue, orange, pink, green, purple ];
-    const colors = [
-        red, pink, purple, deepPurple,
-        indigo, blue, lightBlue, cyan,
-        teal, green, lightGreen, lime,
-        yellow, amber, orange, deepOrange
-    ];
+    const levels = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+
 
     useEffect(() => {
         const filteredElements = processFilter(objectTypeFilter(elements, objectTypeChecked), processChecked);
+        const importanceIndex = getImportanceIndex(filteredElements, colorLevelType);
+        console.log(importanceIndex);
+        setVosData(filteredElements);
 
         const cy = cytoscape(
         {
@@ -106,7 +147,7 @@ export default function Interaction({ elements, nodeCard }) {
                     style: {
                         'width': 60,
                         'height': 60,
-                        'background-color': '#666',
+                        'background-color': grey[700],
                         'label': 'data(label)'
                     }
                 },
@@ -115,8 +156,8 @@ export default function Interaction({ elements, nodeCard }) {
                     selector: 'edge',
                     style: {
                         'width': 3,
-                        'line-color': '#ccc',
-                        'target-arrow-color': '#ccc',
+                        'line-color': grey[400],
+                        'target-arrow-color': grey[400],
                         'target-arrow-shape': 'triangle',
                         'arrow-scale': 2,
                         'curve-style': 'unbundled-bezier',
@@ -133,22 +174,37 @@ export default function Interaction({ elements, nodeCard }) {
             },
         });
 
-        if(selectedColor){
-            if(selectedColor === 'colorPattern'){
-                cy.nodes().forEach((node, index) => {
-                    node.style('background-color', patternColorSet[index][500]);
+        if(importanceIndex){
+            if(selectedColor){
+                cy.nodes().forEach(node => {
+                    const level = mapToLevel(importanceIndex[node.data('id')], levels);
+                    node.style('background-color', selectedColor[level]);
+                });
+                cy.edges().forEach(edge => {
+                    edge.style('line-color', selectedColor[200]);
+                    edge.style('target-arrow-color', selectedColor[200],)
                 });
             } else {
                 cy.nodes().forEach(node => {
-                    node.style('background-color', selectedColor);
+                    const level = mapToLevel(importanceIndex[node.data('id')], levels);
+                    node.style('background-color', grey[level]);
                 });
-
                 cy.edges().forEach(edge => {
-                    edge.style('line-color', selectedColor);
-                    edge.style('target-arrow-color', selectedColor,)
+                    edge.style('line-color', grey[500]);
+                    edge.style('target-arrow-color', grey[500],)
                 });
             }
-        };
+        } else {
+            if(selectedColor){
+                cy.nodes().forEach(node => {
+                    node.style('background-color', selectedColor[500]);
+                });
+                cy.edges().forEach(edge => {
+                    edge.style('line-color', selectedColor[200]);
+                    edge.style('target-arrow-color', selectedColor[200],)
+                });
+            }
+        }
 
         if(attributeTypeChecked != ''){
             const sizes = calculateNodeSize(elements, attributeTypeChecked)
@@ -204,7 +260,11 @@ export default function Interaction({ elements, nodeCard }) {
         });
         setPngDataUrl(pngDataUrl);
 
-    }, [elements, selectedColor, processChecked, objectTypeChecked, attributeTypeChecked, notationTypeChecked]);
+        return () => {
+            cy.destroy();
+        };
+
+    }, [elements, selectedColor, colorLevelType, processChecked, objectTypeChecked, attributeTypeChecked, notationTypeChecked]);
 
     useEffect(() => {
         let animationFrameId;

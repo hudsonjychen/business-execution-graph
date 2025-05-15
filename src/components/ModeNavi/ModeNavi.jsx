@@ -22,8 +22,8 @@ export default function ModeNavi() {
                         setMode(newValue);
                     }}
                 >
-                    <BottomNavigationAction label="Discovery" value='discovery' />
-                    <BottomNavigationAction label="Knowledge" value='knowledge'/>
+                    <BottomNavigationAction label="Interaction Discovery" value='discovery' />
+                    <BottomNavigationAction label="Process Knowledge" value='knowledge'/>
                 </BottomNavigation>
             </Box>
         </div>

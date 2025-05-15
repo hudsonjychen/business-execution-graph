@@ -224,7 +224,7 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
     const selectedNodeRef = useRef(null);
     const { setPngDataUrl } = useGlobal();
     const { objectTypeChecked, processChecked } = useFilter();
-    const { nodeSize, nodeTypeShown, objectTypeFrequency, activityFrequency } = useSetting();
+    const { selectedColorPattern, nodeSize, nodeTypeShown, objectTypeFrequency, activityFrequency } = useSetting();
 
     const fKnowledge_obj_pro = processFilter(objectTypeFilter(knowledge, objectTypeChecked), processChecked);
     const fKnowledge_fre = frequencyFilter(fKnowledge_obj_pro, objectTypeFrequency, activityFrequency, objectTypeCounts, activityCounts);
@@ -247,7 +247,7 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
                     style: {
                         'width': nodeSize[0],
                         'height': nodeSize[0],
-                        'background-color': grey[800],
+                        'background-color': grey[700],
                         'label': 'data(label)'
                     }
                 },
@@ -276,8 +276,8 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
                     selector: 'edge',
                     style: {
                         'width': 3,
-                        'line-color': '#ccc',
-                        'target-arrow-color': '#ccc',
+                        'line-color': grey[400],
+                        'target-arrow-color': grey[400],
                         'target-arrow-shape': 'triangle',
                         'arrow-scale': 2,
                         'curve-style': 'unbundled-bezier',
@@ -290,6 +290,30 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
                 name: 'circle'
             },
         });
+
+        if(selectedColorPattern.process){
+            cy.nodes().forEach(node => {
+                if(node.data('category') === 'process'){
+                    node.style('background-color', selectedColorPattern.process[500]);
+                }
+            });
+        }
+        
+        if(selectedColorPattern.objectType){
+            cy.nodes().forEach(node => {
+                if(node.data('category') === 'object_type'){
+                    node.style('background-color', selectedColorPattern.objectType[500]);
+                }
+            });
+        }
+        
+        if(selectedColorPattern.activity){
+            cy.nodes().forEach(node => {
+                if(node.data('category') === 'activity'){
+                    node.style('background-color', selectedColorPattern.activity[500]);
+                }
+            });
+        }
 
         cy.on('tap', (event) => {
             if (event.target === cy) {
@@ -324,8 +348,12 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
             bg: '#ffffff'
         });
         setPngDataUrl(pngDataUrl);
+
+        return () => {
+            cy.destroy();
+        };
     
-    }, [knowledge, objectTypeChecked, processChecked, nodeSize, objectTypeFrequency, activityFrequency, nodeTypeShown]);
+    }, [knowledge, selectedColorPattern, objectTypeChecked, processChecked, nodeSize, objectTypeFrequency, activityFrequency, nodeTypeShown]);
 
     useEffect(() => {
         let animationFrameId;
