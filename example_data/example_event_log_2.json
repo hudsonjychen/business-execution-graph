@@ -84,11 +84,7 @@
             ]
         },
         {
-            "name": "@process:order management",
-            "attributes": []
-        },
-        {
-            "name": "@process:delivery management",
+            "name": "@process",
             "attributes": []
         }
     ],
@@ -110,7 +106,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -131,7 +127,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -152,7 +148,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -173,7 +169,7 @@
                 },
                 {
                     "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -194,7 +190,7 @@
                 },
                 {
                     "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -215,7 +211,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -236,7 +232,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -257,7 +253,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -277,8 +273,8 @@
                     "qualifier": "order"
                 },
                 {
-                    "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "objectId": "@process:warehouse management",
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -299,7 +295,7 @@
                 },
                 {
                     "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -319,8 +315,8 @@
                     "qualifier": "shipment"
                 },
                 {
-                    "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "objectId": "@process:return management",
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -341,7 +337,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -362,7 +358,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -383,7 +379,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -404,7 +400,7 @@
                 },
                 {
                     "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -425,7 +421,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -446,7 +442,7 @@
                 },
                 {
                     "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -467,7 +463,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -488,7 +484,7 @@
                 },
                 {
                     "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -509,7 +505,7 @@
                 },
                 {
                     "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -529,8 +525,12 @@
                     "qualifier": "order"
                 },
                 {
-                    "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "objectId": "@process:return management",
+                    "qualifier": "@process"
+                },
+                {
+                    "objectId": "@process:delivery management",
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -551,7 +551,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -571,8 +571,8 @@
                     "qualifier": "order"
                 },
                 {
-                    "objectId": "@process:delivery management",
-                    "qualifier": "@process:delivery management"
+                    "objectId": "@process:warehouse management",
+                    "qualifier": "@process"
                 }
             ]
         },
@@ -593,7 +593,7 @@
                 },
                 {
                     "objectId": "@process:order management",
-                    "qualifier": "@process:order management"
+                    "qualifier": "@process"
                 }
             ]
         }
@@ -634,12 +634,22 @@
         },
         {
             "id": "@process:order management",
-            "type": "@process:order management",
+            "type": "@process",
             "attributes": []
         },
         {
             "id": "@process:delivery management",
-            "type": "@process:delivery management",
+            "type": "@process",
+            "attributes": []
+        },
+        {
+            "id": "@process:warehouse management",
+            "type": "@process",
+            "attributes": []
+        },
+        {
+            "id": "@process:return management",
+            "type": "@process",
             "attributes": []
         },
         {
