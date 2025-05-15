@@ -61,6 +61,8 @@ Use the menu in the header to switch between the **Interaction Discovery** and *
 Utilize the **Object Type and Process Filters** located in the top-right corner of the page to easily refine the displayed interactions according to your preferences.
 #### Experiment with Color Palette
 Use the **Color Palette** tool to assign meaningful visual cues to node colors. Select a desired color, and the darkness of the node's color will represent the **intensity or number of related edges**. On the Process Knowledge page, color is used to differentiate between process nodes, object type nodes, and activity nodes.
+#### Interact with the Graph
+Engage with the graph by using the following interactions: zoom in and out to adjust the view, drag nodes to reposition them, and click on nodes to display their information cards.
 #### Discover More in Settings
 Additional functionalities are available in the settings drawer. Explore options ranging from assigning edge notations to applying advanced node filters.
 
