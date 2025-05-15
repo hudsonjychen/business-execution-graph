@@ -132,7 +132,6 @@ export default function Interaction({ elements, nodeCard }) {
     useEffect(() => {
         const filteredElements = processFilter(objectTypeFilter(elements, objectTypeChecked), processChecked);
         const importanceIndex = getImportanceIndex(filteredElements, colorLevelType);
-        console.log(importanceIndex);
         setVosData(filteredElements);
 
         const cy = cytoscape(

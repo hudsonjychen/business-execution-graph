@@ -40,9 +40,9 @@ cd InterProcess-Interactions-master
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate   # Macos:venv/bin/activate
+venv\Scripts\activate # MacOS:source venv/bin/activate
 pip install -r requirements.txt
-python run.py              # Start Flask server
+python run.py # Start Flask server
 ```
 
 ### 3. Set Up the Frontend
@@ -62,7 +62,7 @@ Utilize the **Object Type and Process Filters** located in the top-right corner 
 #### Experiment with Color Palette
 Use the **Color Palette** tool to assign meaningful visual cues to node colors. Select a desired color, and the darkness of the node's color will represent the **intensity or number of related edges**. On the Process Knowledge page, color is used to differentiate between process nodes, object type nodes, and activity nodes.
 #### Interact with the Graph
-Engage with the graph by using the following interactions: zoom in and out to adjust the view, drag nodes to reposition them, and click on nodes to display their information cards.
+Engage with the graph by using the following interactions: zoom in and out to adjust the view, drag nodes to reposition them, and click on nodes to display their **information cards**.
 #### Discover More in Settings
 Additional functionalities are available in the settings drawer. Explore options ranging from assigning edge notations to applying advanced node filters.
 
