@@ -3,8 +3,6 @@
 A tool aimed at exploring inter-process interactions from event data. 
 This project is built with a **Vite-powered React frontend** and a **Flask-based backend**.
 
----
-
 ## Project Structure
 
 ```bash
@@ -25,6 +23,12 @@ This project is built with a **Vite-powered React frontend** and a **Flask-based
 ```
 
 ## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) >= 16.x
+- [Python](https://www.python.org/) >= 3.8
+- [pip](https://pip.pypa.io/en/stable/)
 
 ### 1. Clone the Repository
 ```bash
@@ -47,4 +51,17 @@ cd frontend
 npm install
 npm run dev
 ```
+
+### 4. Explore the Application
+#### Import data
+Import the example event log located in the example_data\ directory by clicking the **Import** button in the top-left corner of the page.
+#### Navigate Between Views
+Use the menu in the header to switch between the **Interaction Discovery** and **Process Knowledge** pages, gaining deeper insights from the event data.
+#### Apply Filters
+Utilize the **Object Type and Process Filters** located in the top-right corner of the page to easily refine the displayed interactions according to your preferences.
+#### Experiment with Color Palette
+Use the **Color Palette** tool to assign meaningful visual cues to node colors. Select a desired color, and the darkness of the node's color will represent the **intensity or number of related edges**. On the Process Knowledge page, color is used to differentiate between process nodes, object type nodes, and activity nodes.
+#### Discover More in Settings
+Additional functionalities are available in the settings drawer. Explore options ranging from assigning edge notations to applying advanced node filters.
+
 
