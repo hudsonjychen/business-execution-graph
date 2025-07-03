@@ -84,8 +84,22 @@
             ]
         },
         {
-            "name": "@process",
-            "attributes": []
+            "name": "order management process",
+            "attributes": [
+                {
+                    "name": "is_process",
+                    "type": "boolen"
+                }
+            ]
+        },
+        {
+            "name": "delivery management process",
+            "attributes": [
+                {
+                    "name": "is_process",
+                    "type": "boolen"
+                }
+            ]
         }
     ],
     "events": [
@@ -629,14 +643,59 @@
             ]
         },
         {
-            "id": "@process:order management",
-            "type": "@process",
-            "attributes": []
+            "id": "omp1",
+            "type": "order management process",
+            "attributes": [
+                {
+                    "name": "is_process",
+                    "time": "2025-03-17T07:55:00Z",
+                    "value": "true"
+                }
+            ]
         },
         {
-            "id": "@process:delivery management",
-            "type": "@process",
-            "attributes": []
+            "id": "omp2",
+            "type": "order management process",
+            "attributes": [
+                {
+                    "name": "is_process",
+                    "time": "2025-03-17T08:25:00Z",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "id": "dmp1",
+            "type": "delivery management process",
+            "attributes": [
+                {
+                    "name": "is_process",
+                    "time": "2025-03-18T09:00:00Z",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "id": "dmp2",
+            "type": "delivery management process",
+            "attributes": [
+                {
+                    "name": "is_process",
+                    "time": "2025-03-18T10:00:00Z",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "id": "dmp3",
+            "type": "delivery management process",
+            "attributes": [
+                {
+                    "name": "is_process",
+                    "time": "2025-03-18T10:00:00Z",
+                    "value": "true"
+                }
+            ]
         },
         {
             "id": "o2",

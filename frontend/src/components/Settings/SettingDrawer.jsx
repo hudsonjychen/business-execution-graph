@@ -9,6 +9,7 @@ import "./SettingDrawer.css";
 import { ObjectTypeFrequencyInput, ActivityFrequencyInput } from "./FrequencyInput";
 import NodeSizeSlider from "./NodeSizeSlider";
 import NodeTypeFilter from "./NodeTypeFilter";
+import { SharedNodeFilter } from "./SharedNodeFilter";
 
 export default function SettingDrawer() {
     const { mode, fileImported } = useGlobal();
@@ -62,6 +63,12 @@ export default function SettingDrawer() {
                     Node Type
                 </Typography>
                 <NodeTypeFilter />
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Typography variant="subtitle1" color="text.secondary" mb={1}>
+                    Shared Status
+                </Typography>
+                <SharedNodeFilter />
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography variant="subtitle1" color="text.secondary" mb={1}>

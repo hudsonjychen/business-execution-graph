@@ -3,11 +3,11 @@ import tempfile
 from flask import Blueprint, jsonify, request
 import pm4py
 from .cache import cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedObjects, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
-from .interpm.algo.discovery import discover_process_dependency_graph, discover_process_node_graph
-from .interpm.algo.data_extractor import get_processes, get_object_types, get_objects, get_activities
-from .interpm.visualization.vis_converter import get_vis_data
-from .interpm.algo.mapping import map_object_id_to_type
-from .interpm.statistics.frequency_counting import object_type_frequency_counting, activity_frequency_counting
+from .interpm_v2.algo.inter_process_discovery import discover_interactions
+from .interpm_v2.algo.ocel_entity_extraction import get_process_types, get_object_types, get_objects, get_activities
+from .interpm_v2.visualization.vis_converter import get_vis_data
+from .interpm_v2.algo.ocel_mapping import map_object_id_to_type
+from .interpm_v2.statistics.frequency_counting import object_type_frequency_counting, activity_frequency_counting
 
 main = Blueprint('main', __name__)
 
@@ -22,15 +22,15 @@ def upload():
             file.save(temp.name)
             temp_path = temp.name
         log = pm4py.read_ocel2_json(temp_path)
-        pdg = discover_process_dependency_graph(log)
-        png = discover_process_node_graph(log)
-        objects = get_objects(log)
+        interactions = discover_interactions(log)
+        process_interactions = interactions['process_interactions']
+        process_data = interactions['process_data']
         object_types = get_object_types(log)
-        processes = get_processes(log)
+        processes = get_process_types(log)
         activities = get_activities(log)
         object_type_counts = object_type_frequency_counting(log)
         activity_counts = activity_frequency_counting(log)
-        elements, nodes, knowledge = get_vis_data(object_types, processes, activities, pdg, png)
+        elements, nodes, knowledge = get_vis_data(object_types, processes, activities, process_interactions, process_data)
         
         # Update cache
         cachedElements.clear()

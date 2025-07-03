@@ -12,6 +12,7 @@ export const SettingProvider = ({ children }) => {
     const [activityFrequency, setActivityFrequency] = useState(0);
     const [nodeTypeShown, setNodeTypeShown] = useState('both');
     const [colorLevelType, setColorLevelType] = useState('disabled');
+    const [sharedNodeShown, setSharedNodeShown] = useState('both')
 
     return (
         <SettingContext.Provider 
@@ -24,7 +25,8 @@ export const SettingProvider = ({ children }) => {
                 objectTypeFrequency, setObjectTypeFrequency,
                 activityFrequency, setActivityFrequency,
                 nodeTypeShown, setNodeTypeShown,
-                colorLevelType, setColorLevelType
+                colorLevelType, setColorLevelType,
+                sharedNodeShown, setSharedNodeShown
             }}>
             {children}
         </SettingContext.Provider>

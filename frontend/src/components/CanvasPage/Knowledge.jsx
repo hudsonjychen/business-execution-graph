@@ -197,6 +197,45 @@ export const nodeTypeFilter = (knowledge, nodeTypeShown) => {
     }); 
 }
 
+export const nodeSharedFilter = (knowledge, sharedNodeShown) => {
+    const nodeSharedNum = {}
+    knowledge.forEach(knl => {
+        if(knl.data.target) {
+            nodeSharedNum[knl.data.target] = (nodeSharedNum[knl.data.target] || 0) + 1;
+        }
+    })
+
+    if (sharedNodeShown === 'both'){
+        return knowledge;
+    } else if (sharedNodeShown === 'shared'){
+        return knowledge.filter(knl => {
+            if(knl.data.category){
+                if(knl.data.category === 'process'){
+                    return true
+                } else {
+                    return nodeSharedNum[knl.data.id] > 1;
+                }
+            } else {
+                return nodeSharedNum[knl.data.target] > 1;
+            }
+        })
+    } else if (sharedNodeShown === 'nonshared'){
+        return knowledge.filter(knl => {
+            if(knl.data.category){
+                if(knl.data.category === 'process'){
+                    return true
+                } else {
+                    return nodeSharedNum[knl.data.id] == 1;
+                }
+            } else {
+                return nodeSharedNum[knl.data.target] == 1;
+            }
+        })
+    }
+
+    console.log(nodeSharedNum);
+}
+
 const countsUpdate = (knowledge, objectTypeCounts, activityCounts) => {
     const updatedCount = {};
 
@@ -224,11 +263,11 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
     const selectedNodeRef = useRef(null);
     const { setPngDataUrl } = useGlobal();
     const { objectTypeChecked, processChecked } = useFilter();
-    const { selectedColorPattern, nodeSize, nodeTypeShown, objectTypeFrequency, activityFrequency } = useSetting();
+    const { selectedColorPattern, nodeSize, nodeTypeShown, objectTypeFrequency, activityFrequency, sharedNodeShown } = useSetting();
 
     const fKnowledge_obj_pro = processFilter(objectTypeFilter(knowledge, objectTypeChecked), processChecked);
     const fKnowledge_fre = frequencyFilter(fKnowledge_obj_pro, objectTypeFrequency, activityFrequency, objectTypeCounts, activityCounts);
-    const fKnowledge_node_type = nodeTypeFilter(fKnowledge_fre, nodeTypeShown);
+    const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_fre, nodeTypeShown), sharedNodeShown);
 
     const fKnowledge = fKnowledge_node_type;
     const updatedCount = countsUpdate(fKnowledge, objectTypeCounts, activityCounts);
@@ -353,7 +392,7 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
             cy.destroy();
         };
     
-    }, [knowledge, selectedColorPattern, objectTypeChecked, processChecked, nodeSize, objectTypeFrequency, activityFrequency, nodeTypeShown]);
+    }, [knowledge, selectedColorPattern, objectTypeChecked, processChecked, nodeSize, objectTypeFrequency, activityFrequency, nodeTypeShown, sharedNodeShown]);
 
     useEffect(() => {
         let animationFrameId;

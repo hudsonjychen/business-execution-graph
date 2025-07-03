@@ -156,8 +156,8 @@ export default function ColorPalette() {
             <Accordion sx={{ minWidth: 270 }}>
                 <AccordionSummary  
                     expandIcon={<ArrowDownwardOutlinedIcon />}
-                    aria-controls="process-node"
-                    id="process-node-header"
+                    aria-controls="object-type-node"
+                    id="object-type-node-header"
                 >
                     <Typography variant="body2" color="text.secondary">
                         Object Type Node
@@ -170,8 +170,8 @@ export default function ColorPalette() {
             <Accordion sx={{ minWidth: 270, mb: 2 }}>
                 <AccordionSummary  
                     expandIcon={<ArrowDownwardOutlinedIcon />}
-                    aria-controls="process-node"
-                    id="process-node-header"
+                    aria-controls="activity-node"
+                    id="activity-node-header"
                 >
                     <Typography variant="body2" color="text.secondary">
                         Activity Node

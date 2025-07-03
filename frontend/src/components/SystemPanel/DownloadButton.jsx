@@ -25,31 +25,53 @@ export default function DownloadButton() {
     }
 
     const handleVosExport = () => {
-        const idLabelMap = {};
+        const items = []
+        const links = []
         vosData.forEach(vd => {
-            if (vd.data.label) {
-                idLabelMap[vd.data.id] = vd.data.label;
+            if(vd.data.label){
+                const item = {
+                    "id": vd.data.id,
+                    "label": vd.data.label,
+                    "weights": {
+                        "object_type_count": vd.data.objectTypeCount,
+                        "object_count": vd.data.objectCount,
+                        "process_instance_count": vd.data.processInstanceCount
+                    }
+                }
+                items.push(item);
+            } else{
+                const link ={
+                    "source_id": vd.data.source,
+                    "target_id": vd.data.target,
+                    "strength": vd.data.totalObjectCount
+                }
+                links.push(link);
             }
+        })
+
+        items.forEach(item => {
+            item.x = Math.random() * 2 - 1;
+            item.y = Math.random() * 2 - 1;
         });
-        const dataArray = vosData
-            .filter(vd => vd.data.source && vd.data.target)
-            .map(vd => ({
-                Source: idLabelMap[vd.data.source],
-                Target: idLabelMap[vd.data.target]
-            }));
-        
-        const jsonStr = JSON.stringify(dataArray, null, 2);
 
+        const dataObject = {
+            "network":{
+                "items": items,
+                "links": links
+            }
+        }
+
+        const jsonStr = JSON.stringify(dataObject, null, 2);
         const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
 
+        const filename = "vosdata.json"
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'vos-export.json';
-        document.body.appendChild(a);
+        a.href = url;
+        a.download = filename;
         a.click();
 
-        document.body.removeChild(a);
-        URL.revokeObjectURL(a.href);
+        URL.revokeObjectURL(url);
     }
 
     return (
@@ -67,7 +89,7 @@ export default function DownloadButton() {
                 }}
             >
                 <MenuItem onClick={() => {handleClose(); handlePngDownload();}}>Download PNG</MenuItem>
-                <MenuItem disabled onClick={() => {handleClose(); handleVosExport();}}>Export as VOSviewer</MenuItem>
+                <MenuItem disabled={mode === 'knowledge'} onClick={() => {handleClose(); handleVosExport();}}>Export as VOSviewer</MenuItem>
             </Menu>
         </div>
     )

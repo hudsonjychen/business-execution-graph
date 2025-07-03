@@ -1,0 +1,1633 @@
+{
+  "eventTypes": [
+    {
+      "name": "create purchase request",
+      "attributes": [
+        {
+          "name": "requester_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "approve purchase request",
+      "attributes": [
+        {
+          "name": "approver_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "place order",
+      "attributes": [
+        {
+          "name": "customer_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "order confirmation",
+      "attributes": [
+        {
+          "name": "confirmation_code",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "payment initiated",
+      "attributes": [
+        {
+          "name": "transaction_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "payment confirmation",
+      "attributes": [
+        {
+          "name": "payment_method",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "prepare shipment",
+      "attributes": [
+        {
+          "name": "preparation_staff_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "start delivery",
+      "attributes": [
+        {
+          "name": "shipment_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "update delivery status",
+      "attributes": [
+        {
+          "name": "delivery_status",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "sign for delivery",
+      "attributes": [
+        {
+          "name": "recipient",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "request return",
+      "attributes": [
+        {
+          "name": "return_ticket_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "approve return",
+      "attributes": [
+        {
+          "name": "approval_staff_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "return order",
+      "attributes": [
+        {
+          "name": "return_reason",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "process refund",
+      "attributes": [
+        {
+          "name": "refund_id",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "objectTypes": [
+    {
+      "name": "purchase request",
+      "attributes": [
+        {
+          "name": "request_date",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "order",
+      "attributes": [
+        {
+          "name": "order_date",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "item",
+      "attributes": [
+        {
+          "name": "product_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "shipment",
+      "attributes": [
+        {
+          "name": "tracking_number",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "return",
+      "attributes": [
+        {
+          "name": "return_date",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "@process",
+      "attributes": []
+    }
+  ],
+  "events": [
+    {
+      "id": "pr1",
+      "type": "create purchase request",
+      "time": "2025-03-16T10:00:00Z",
+      "attributes": [
+        {
+          "name": "requester_id",
+          "value": "EMP001"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "req1",
+          "qualifier": "request"
+        },
+        {
+          "objectId": "@process:procurement",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "ap1",
+      "type": "approve purchase request",
+      "time": "2025-03-16T11:00:00Z",
+      "attributes": [
+        {
+          "name": "approver_id",
+          "value": "MGR005"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "req1",
+          "qualifier": "request"
+        },
+        {
+          "objectId": "@process:procurement",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e1",
+      "type": "place order",
+      "time": "2025-03-17T08:00:00Z",
+      "attributes": [
+        {
+          "name": "customer_id",
+          "value": "C12345"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o1",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "i1",
+          "qualifier": "includes"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e2",
+      "type": "order confirmation",
+      "time": "2025-03-17T08:05:00Z",
+      "attributes": [
+        {
+          "name": "confirmation_code",
+          "value": "CONF123"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o1",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "pay1",
+      "type": "payment initiated",
+      "time": "2025-03-17T08:08:00Z",
+      "attributes": [
+        {
+          "name": "transaction_id",
+          "value": "TRANS001"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o1",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e3",
+      "type": "payment confirmation",
+      "time": "2025-03-17T08:10:00Z",
+      "attributes": [
+        {
+          "name": "payment_method",
+          "value": "credit_card"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o1",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "prep1",
+      "type": "prepare shipment",
+      "time": "2025-03-18T08:30:00Z",
+      "attributes": [
+        {
+          "name": "preparation_staff_id",
+          "value": "PACK01"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o1",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "s1",
+          "qualifier": "creates"
+        },
+        {
+          "objectId": "@process:warehouse operations",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e4",
+      "type": "start delivery",
+      "time": "2025-03-18T09:00:00Z",
+      "attributes": [
+        {
+          "name": "shipment_id",
+          "value": "S123"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s1",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "ds1",
+      "type": "update delivery status",
+      "time": "2025-03-18T15:00:00Z",
+      "attributes": [
+        {
+          "name": "delivery_status",
+          "value": "in transit"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s1",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e5",
+      "type": "sign for delivery",
+      "time": "2025-03-19T12:00:00Z",
+      "attributes": [
+        {
+          "name": "recipient",
+          "value": "John Doe"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s1",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "rr1",
+      "type": "request return",
+      "time": "2025-03-20T15:00:00Z",
+      "attributes": [
+        {
+          "name": "return_ticket_id",
+          "value": "RET001"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o1",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "ret1",
+          "qualifier": "creates"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "ar1",
+      "type": "approve return",
+      "time": "2025-03-20T15:15:00Z",
+      "attributes": [
+        {
+          "name": "approval_staff_id",
+          "value": "RMGR02"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "ret1",
+          "qualifier": "return"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e6",
+      "type": "return order",
+      "time": "2025-03-20T15:30:00Z",
+      "attributes": [
+        {
+          "name": "return_reason",
+          "value": "damaged item"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o1",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "ret1",
+          "qualifier": "return"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "rf1",
+      "type": "process refund",
+      "time": "2025-03-21T10:00:00Z",
+      "attributes": [
+        {
+          "name": "refund_id",
+          "value": "REF001"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o1",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "ret1",
+          "qualifier": "related_to_return"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e7",
+      "type": "place order",
+      "time": "2025-03-17T08:30:00Z",
+      "attributes": [
+        {
+          "name": "customer_id",
+          "value": "C67890"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o2",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "i2",
+          "qualifier": "includes"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e8",
+      "type": "order confirmation",
+      "time": "2025-03-17T08:35:00Z",
+      "attributes": [
+        {
+          "name": "confirmation_code",
+          "value": "CONF456"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o2",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "pay2",
+      "type": "payment initiated",
+      "time": "2025-03-17T08:38:00Z",
+      "attributes": [
+        {
+          "name": "transaction_id",
+          "value": "TRANS002"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o2",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e9",
+      "type": "payment confirmation",
+      "time": "2025-03-17T08:40:00Z",
+      "attributes": [
+        {
+          "name": "payment_method",
+          "value": "paypal"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o2",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "prep2",
+      "type": "prepare shipment",
+      "time": "2025-03-18T09:30:00Z",
+      "attributes": [
+        {
+          "name": "preparation_staff_id",
+          "value": "PACK02"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o2",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "s2",
+          "qualifier": "creates"
+        },
+        {
+          "objectId": "@process:warehouse operations",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e10",
+      "type": "start delivery",
+      "time": "2025-03-18T10:00:00Z",
+      "attributes": [ {
+          "name": "shipment_id",
+          "value": "S456"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s2",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "ds2",
+      "type": "update delivery status",
+      "time": "2025-03-19T09:00:00Z",
+      "attributes": [
+        {
+          "name": "delivery_status",
+          "value": "out for delivery"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s2",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e11",
+      "type": "sign for delivery",
+      "time": "2025-03-19T14:00:00Z",
+      "attributes": [
+        {
+          "name": "recipient",
+          "value": "Alice Smith"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s2",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "rr2",
+      "type": "request return",
+      "time": "2025-03-20T16:30:00Z",
+      "attributes": [
+        {
+          "name": "return_ticket_id",
+          "value": "RET002"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o2",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "ret2",
+          "qualifier": "creates"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "ar2",
+      "type": "approve return",
+      "time": "2025-03-20T16:45:00Z",
+      "attributes": [
+        {
+          "name": "approval_staff_id",
+          "value": "RMGR03"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "ret2",
+          "qualifier": "return"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e12",
+      "type": "return order",
+      "time": "2025-03-20T17:00:00Z",
+      "attributes": [
+        {
+          "name": "return_reason",
+          "value": "wrong item sent"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o2",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "ret2",
+          "qualifier": "return"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "rf2",
+      "type": "process refund",
+      "time": "2025-03-22T11:00:00Z",
+      "attributes": [
+        {
+          "name": "refund_id",
+          "value": "REF002"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o2",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "ret2",
+          "qualifier": "related_to_return"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e13",
+      "type": "place order",
+      "time": "2025-03-18T09:15:00Z",
+      "attributes": [
+        {
+          "name": "customer_id",
+          "value": "C23456"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o3",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "i3",
+          "qualifier": "includes"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e14",
+      "type": "order confirmation",
+      "time": "2025-03-18T09:20:00Z",
+      "attributes": [
+        {
+          "name": "confirmation_code",
+          "value": "CONF789"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o3",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "pay3",
+      "type": "payment initiated",
+      "time": "2025-03-18T09:25:00Z",
+      "attributes": [
+        {
+          "name": "transaction_id",
+          "value": "TRANS003"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o3",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e15",
+      "type": "payment confirmation",
+      "time": "2025-03-18T09:30:00Z",
+      "attributes": [
+        {
+          "name": "payment_method",
+          "value": "debit_card"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o3",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "prep3",
+      "type": "prepare shipment",
+      "time": "2025-03-19T10:00:00Z",
+      "attributes": [
+        {
+          "name": "preparation_staff_id",
+          "value": "PACK03"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o3",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "s3",
+          "qualifier": "creates"
+        },
+        {
+          "objectId": "@process:warehouse operations",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e16",
+      "type": "place order",
+      "time": "2025-03-19T12:45:00Z",
+      "attributes": [
+        {
+          "name": "customer_id",
+          "value": "C98765"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o4",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "i4",
+          "qualifier": "includes"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e17",
+      "type": "order confirmation",
+      "time": "2025-03-19T12:50:00Z",
+      "attributes": [
+        {
+          "name": "confirmation_code",
+          "value": "CONF567"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o4",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "pay4",
+      "type": "payment initiated",
+      "time": "2025-03-19T12:53:00Z",
+      "attributes": [
+        {
+          "name": "transaction_id",
+          "value": "TRANS004"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o4",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e18",
+      "type": "payment confirmation",
+      "time": "2025-03-19T12:55:00Z",
+      "attributes": [
+        {
+          "name": "payment_method",
+          "value": "credit_card"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o4",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "prep4",
+      "type": "prepare shipment",
+      "time": "2025-03-20T09:40:00Z",
+      "attributes": [
+        {
+          "name": "preparation_staff_id",
+          "value": "PACK04"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o4",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "s4",
+          "qualifier": "creates"
+        },
+        {
+          "objectId": "@process:warehouse operations",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e19",
+      "type": "start delivery",
+      "time": "2025-03-20T10:10:00Z",
+      "attributes": [
+        {
+          "name": "shipment_id",
+          "value": "S789"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s4",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "ds3",
+      "type": "update delivery status",
+      "time": "2025-03-21T10:00:00Z",
+      "attributes": [
+        {
+          "name": "delivery_status",
+          "value": "in transit"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s4",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e20",
+      "type": "sign for delivery",
+      "time": "2025-03-21T15:20:00Z",
+      "attributes": [
+        {
+          "name": "recipient",
+          "value": "John Doe"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s4",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "rr3",
+      "type": "request return",
+      "time": "2025-03-22T16:00:00Z",
+      "attributes": [
+        {
+          "name": "return_ticket_id",
+          "value": "RET003"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o4",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "ret3",
+          "qualifier": "creates"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "ar3",
+      "type": "approve return",
+      "time": "2025-03-22T16:15:00Z",
+      "attributes": [
+        {
+          "name": "approval_staff_id",
+          "value": "RMGR01"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "ret3",
+          "qualifier": "return"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e21",
+      "type": "return order",
+      "time": "2025-03-22T16:30:00Z",
+      "attributes": [
+        {
+          "name": "return_reason",
+          "value": "damaged item"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o4",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "ret3",
+          "qualifier": "return"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "rf3",
+      "type": "process refund",
+      "time": "2025-03-23T10:30:00Z",
+      "attributes": [
+        {
+          "name": "refund_id",
+          "value": "REF003"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o4",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "ret3",
+          "qualifier": "related_to_return"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:return management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e22",
+      "type": "place order",
+      "time": "2025-03-20T08:10:00Z",
+      "attributes": [
+        {
+          "name": "customer_id",
+          "value": "C54321"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o5",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "i5",
+          "qualifier": "includes"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e23",
+      "type": "order confirmation",
+      "time": "2025-03-20T08:15:00Z",
+      "attributes": [
+        {
+          "name": "confirmation_code",
+          "value": "CONF987"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o5",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "pay5",
+      "type": "payment initiated",
+      "time": "2025-03-20T08:18:00Z",
+      "attributes": [
+        {
+          "name": "transaction_id",
+          "value": "TRANS005"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o5",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e24",
+      "type": "payment confirmation",
+      "time": "2025-03-20T08:20:00Z",
+      "attributes": [
+        {
+          "name": "payment_method",
+          "value": "bank_transfer"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o5",
+          "qualifier": "order"
+        },
+        {
+          "objectId": "@process:order management",
+          "qualifier": "@process"
+        },
+        {
+          "objectId": "@process:payment processing",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "prep5",
+      "type": "prepare shipment",
+      "time": "2025-03-21T09:00:00Z",
+      "attributes": [
+        {
+          "name": "preparation_staff_id",
+          "value": "PACK05"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "o5",
+          "qualifier": "for_order"
+        },
+        {
+          "objectId": "s5",
+          "qualifier": "creates"
+        },
+        {
+          "objectId": "@process:warehouse operations",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e25",
+      "type": "start delivery",
+      "time": "2025-03-21T09:30:00Z",
+      "attributes": [
+        {
+          "name": "shipment_id",
+          "value": "S999"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s5",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "ds4",
+      "type": "update delivery status",
+      "time": "2025-03-22T14:00:00Z",
+      "attributes": [
+        {
+          "name": "delivery_status",
+          "value": "en route"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s5",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    },
+    {
+      "id": "e26",
+      "type": "sign for delivery",
+      "time": "2025-03-23T11:00:00Z",
+      "attributes": [
+        {
+          "name": "recipient",
+          "value": "Jane Doe"
+        }
+      ],
+      "relationships": [
+        {
+          "objectId": "s5",
+          "qualifier": "shipment"
+        },
+        {
+          "objectId": "@process:delivery management",
+          "qualifier": "@process"
+        }
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "id": "req1",
+      "type": "purchase request",
+      "attributes": [
+        {
+          "name": "request_date",
+          "type": "string",
+          "time": "2025-03-16T09:55:00Z",
+          "value": "2025-03-16"
+        }
+      ]
+    },
+    {
+      "id": "o1",
+      "type": "order",
+      "attributes": [
+        {
+          "name": "order_date",
+          "type": "string",
+          "time": "2025-03-17T07:55:00Z",
+          "value": "2025-03-17"
+        }
+      ]
+    },
+    {
+      "id": "i1",
+      "type": "item",
+      "attributes": [
+        {
+          "name": "product_name",
+          "type": "string",
+          "time": "2025-03-17T07:55:00Z",
+          "value": "Laptop"
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "type": "shipment",
+      "attributes": [
+        {
+          "name": "tracking_number",
+          "type": "string",
+          "time": "2025-03-18T09:00:00Z",
+          "value": "TRK987654"
+        }
+      ]
+    },
+    {
+      "id": "@process:order management",
+      "type": "@process",
+      "attributes": []
+    },
+    {
+      "id": "@process:delivery management",
+      "type": "@process",
+      "attributes": []
+    },
+    {
+      "id": "@process:payment processing",
+      "type": "@process",
+      "attributes": []
+    },
+    {
+      "id": "@process:warehouse operations",
+      "type": "@process",
+      "attributes": []
+    },
+    {
+      "id": "@process:return management",
+      "type": "@process",
+      "attributes": []
+    },
+    {
+      "id": "@process:procurement",
+      "type": "@process",
+      "attributes": []
+    },
+    {
+      "id": "o2",
+      "type": "order",
+      "attributes": [
+        {
+          "name": "order_date",
+          "type": "string",
+          "time": "2025-03-17T08:25:00Z",
+          "value": "2025-03-17"
+        }
+      ]
+    },
+    {
+      "id": "i2",
+      "type": "item",
+      "attributes": [
+        {
+          "name": "product_name",
+          "type": "string",
+          "time": "2025-03-17T08:25:00Z",
+          "value": "Smartphone"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "type": "shipment",
+      "attributes": [
+        {
+          "name": "tracking_number",
+          "type": "string",
+          "time": "2025-03-18T10:00:00Z",
+          "value": "TRK654321"
+        }
+      ]
+    },
+    {
+      "id": "o3",
+      "type": "order",
+      "attributes": [
+        {
+          "name": "order_date",
+          "type": "string",
+          "time": "2025-03-18T09:10:00Z",
+          "value": "2025-03-18"
+        }
+      ]
+    },
+    {
+      "id": "i3",
+      "type": "item",
+      "attributes": [
+        {
+          "name": "product_name",
+          "type": "string",
+          "time": "2025-03-18T09:10:00Z",
+          "value": "Headphones"
+        }
+      ]
+    },
+    {
+      "id": "o4",
+      "type": "order",
+      "attributes": [
+        {
+          "name": "order_date",
+          "type": "string",
+          "time": "2025-03-19T12:40:00Z",
+          "value": "2025-03-19"
+        }
+      ]
+    },
+    {
+      "id": "i4",
+      "type": "item",
+      "attributes": [
+        {
+          "name": "product_name",
+          "type": "string",
+          "time": "2025-03-19T12:40:00Z",
+          "value": "Tablet"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "type": "shipment",
+      "attributes": [
+        {
+          "name": "tracking_number",
+          "type": "string",
+          "time": "2025-03-20T10:00:00Z",
+          "value": "TRK987654"
+        }
+      ]
+    },
+    {
+      "id": "o5",
+      "type": "order",
+      "attributes": [
+        {
+          "name": "order_date",
+          "type": "string",
+          "time": "2025-03-20T08:05:00Z",
+          "value": "2025-03-20"
+        }
+      ]
+    },
+    {
+      "id": "i5",
+      "type": "item",
+      "attributes": [
+        {
+          "name": "product_name",
+          "type": "string",
+          "time": "2025-03-20T08:05:00Z",
+          "value": "Smartwatch"
+        }
+      ]
+    },
+    {
+      "id": "ret1",
+      "type": "return",
+      "attributes": [
+        {
+          "name": "return_date",
+          "type": "string",
+          "time": "2025-03-20T15:00:00Z",
+          "value": "2025-03-20"
+        }
+      ]
+    },
+    {
+      "id": "ret2",
+      "type": "return",
+      "attributes": [
+        {
+          "name": "return_date",
+          "type": "string",
+          "time": "2025-03-20T16:30:00Z",
+          "value": "2025-03-20"
+        }
+      ]
+    },
+    {
+      "id": "ret3",
+      "type": "return",
+      "attributes": [
+        {
+          "name": "return_date",
+          "type": "string",
+          "time": "2025-03-22T16:00:00Z",
+          "value": "2025-03-22"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "type": "shipment",
+      "attributes": [
+        {
+          "name": "tracking_number",
+          "type": "string",
+          "time": "2025-03-20T10:10:00Z",
+          "value": "TRK112233"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "type": "shipment",
+      "attributes": [
+        {
+          "name": "tracking_number",
+          "type": "string",
+          "time": "2025-03-21T09:30:00Z",
+          "value": "TRK445566"
+        }
+      ]
+    }
+  ]
+}

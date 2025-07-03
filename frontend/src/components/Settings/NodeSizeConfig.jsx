@@ -2,7 +2,7 @@ import { FormControl, MenuItem, Select } from '@mui/material';
 import { useSetting } from "../SettingContext";
 
 export default function NodeSizeConfig() {
-    const attributeTypes = ['objectCount', 'objectTypeCount'];
+    const attributeTypes = ['objectCount', 'objectTypeCount', 'processInstanceCount'];
 
     const { attributeTypeChecked, setAttributeTypeChecked } = useSetting();
 
