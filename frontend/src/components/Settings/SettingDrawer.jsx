@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useGlobal } from "../GlobalContext";
-import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined';
-import { Box, Drawer, IconButton, Divider, Stack } from "@mui/material";
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';import { Box, Drawer, IconButton, Divider, Stack } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import EdgeNotationConfig from "./EdgeNotationConfig";
 import NodeSizeConfig from "./NodeSizeConfig";
@@ -117,13 +116,13 @@ export default function SettingDrawer() {
 
     return (
         <div>
-            <div className="setting-button">
+            <div>
                 <IconButton 
                     aria-label='Settings' 
                     onClick={toggleDrawer(true)} 
                     disabled={!fileImported}
                 >
-                    <HandymanOutlinedIcon fontSize="medium" />
+                    <SettingsOutlinedIcon fontSize="medium" />
                 </IconButton>
             </div>
             <Drawer anchor='right' open={open} onClose={toggleDrawer(false)}>

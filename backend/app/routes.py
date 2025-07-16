@@ -3,6 +3,7 @@ import tempfile
 import traceback
 from flask import Blueprint, jsonify, request
 import pm4py
+from werkzeug.exceptions import RequestEntityTooLarge
 from .cache import cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedObjects, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
 from .src.algo.inter_process_discovery import discover_interactions
 from .src.algo.ocel_entity_extraction import get_processes, get_object_types, get_objects, get_activities
@@ -66,6 +67,10 @@ def upload():
         print("Fail", e)
         traceback.print_exc()
         return jsonify({"status": "error", "message": str(e)}), 500
+
+@main.errorhandler(RequestEntityTooLarge)
+def handle_large_file(e):
+    return 'file too large', 413
 
 @main.route('/get_data', methods=['GET'])
 def get_data():

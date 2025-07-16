@@ -1,0 +1,44 @@
+import { Sheet, Stack } from "@mui/joy";
+import Filters from "./Filters";
+import Import from "./Import";
+import Download from "./Download";
+import ColorPalette from "./Settings/ColorPalette";
+import SettingDrawer from "./Settings/SettingDrawer";
+
+export default function Top({ setElements, setKnowledge, setNodeCard, setObjects, setObjectTypeCounts, setActivityCounts }) {
+    return (
+        <Sheet
+            variant="plain"
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                bgcolor: 'white',
+                borderBottom: '1.2px solid',
+                borderColor: 'neutral.outlinedBorder',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                height: 66,
+                width: '100%',
+            }}
+        >
+            <Stack direction='row' spacing={2} sx={{ ml: 4 }} >
+                <Import
+                    setElements={setElements} 
+                    setKnowledge={setKnowledge}
+                    setNodeCard={setNodeCard}
+                    setObjects={setObjects}
+                    setObjectTypeCounts={setObjectTypeCounts}
+                    setActivityCounts={setActivityCounts}
+                />
+                <Download />
+            </Stack>
+            <Stack direction='row' alignItems='center' spacing={1} sx={{ mr: 3 }}>
+                <Filters />
+                <ColorPalette />
+                <SettingDrawer />
+            </Stack>
+        </Sheet>
+    )
+}

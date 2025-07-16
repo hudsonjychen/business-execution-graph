@@ -1,11 +1,12 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
-import { red, pink, purple, deepPurple, indigo, blue, lightBlue, cyan, teal, green, lightGreen, lime, yellow, amber, orange, deepOrange, grey } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import './Canvas.css'
 import NodeInfoCard from "./NodeInfoCard";
 import { useGlobal } from "../GlobalContext";
 import { useFilter } from "../FilterContext";
 import { useSetting } from "../SettingContext";
+import { Box } from "@mui/joy";
 
 export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {
@@ -309,13 +310,11 @@ export default function Interaction({ elements, nodeCard }) {
     }, [infoCard]);
     
     return (
-        <div>
-            <div className="canvas-container">
-                <div 
-                    ref={interactionRef} 
-                    className="canvas"
-                />
-            </div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box 
+                ref={interactionRef} 
+                sx={{ width: 3200, height: 680 }}
+            />
             {
                 infoCard && (
                     <NodeInfoCard 
@@ -326,6 +325,6 @@ export default function Interaction({ elements, nodeCard }) {
                     />
                 )
             }
-        </div>
+        </Box>
     )
 }

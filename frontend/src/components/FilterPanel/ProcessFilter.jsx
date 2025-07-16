@@ -32,7 +32,7 @@ export default function ProcessFilter() {
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 200}} size='small' disabled={!fileImported}>
+            <FormControl sx={{ m: 1, width: 200}} size='small'>
                 <InputLabel id='process-filter-label'>Process</InputLabel>
                 <Select
                     labelId='process-filter-label'

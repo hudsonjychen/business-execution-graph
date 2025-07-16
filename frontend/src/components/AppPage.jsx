@@ -9,6 +9,8 @@ import CanvasPage from './CanvasPage/CanvasPage';
 import SettingDrawer from './Settings/SettingDrawer';
 import ColorPalette from './Settings/ColorPalette';
 
+import Top from './Top'
+
 export default function AppPage(){
     const [elements, setElements] = useState([]);
     const [nodeCard, setNodeCard] = useState({});
@@ -22,18 +24,15 @@ export default function AppPage(){
             <GlobalProvider>
                 <ModeNavi />
                 <FilterProvider>
-                    <SystemPanel 
-                        setElements={setElements} 
-                        setKnowledge={setKnowledge}
-                        setNodeCard={setNodeCard}
-                        setObjects={setObjects}
-                        setObjectTypeCounts={setObjectTypeCounts}
-                        setActivityCounts={setActivityCounts}
-                    />
-                    <FilterPanel />
                     <SettingProvider>
-                        <ColorPalette />
-                        <SettingDrawer />
+                        <Top 
+                            setElements={setElements} 
+                            setKnowledge={setKnowledge}
+                            setNodeCard={setNodeCard}
+                            setObjects={setObjects}
+                            setObjectTypeCounts={setObjectTypeCounts}
+                            setActivityCounts={setActivityCounts}
+                        />
                         <CanvasPage
                             elements={elements} 
                             nodeCard={nodeCard}

@@ -186,7 +186,7 @@ export default function ColorPalette() {
 
     return (
         <div>
-            <div className="palette-button">
+            <div>
                 <IconButton 
                     aria-label='Palette' 
                     onClick={handleClick} 
