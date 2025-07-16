@@ -1,10 +1,11 @@
 import os
 import tempfile
+import traceback
 from flask import Blueprint, jsonify, request
 import pm4py
 from .cache import cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedObjects, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
 from .interpm_v2.algo.inter_process_discovery import discover_interactions
-from .interpm_v2.algo.ocel_entity_extraction import get_process_types, get_object_types, get_objects, get_activities
+from .interpm_v2.algo.ocel_entity_extraction import get_processes, get_object_types, get_objects, get_activities
 from .interpm_v2.visualization.vis_converter import get_vis_data
 from .interpm_v2.algo.ocel_mapping import map_object_id_to_type
 from .interpm_v2.statistics.frequency_counting import object_type_frequency_counting, activity_frequency_counting
@@ -26,7 +27,7 @@ def upload():
         process_interactions = interactions['process_interactions']
         process_data = interactions['process_data']
         object_types = get_object_types(log)
-        processes = get_process_types(log)
+        processes = get_processes(log)
         activities = get_activities(log)
         object_type_counts = object_type_frequency_counting(log)
         activity_counts = activity_frequency_counting(log)
@@ -63,6 +64,7 @@ def upload():
 
     except Exception as e:
         print("Fail", e)
+        traceback.print_exc()
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @main.route('/get_data', methods=['GET'])

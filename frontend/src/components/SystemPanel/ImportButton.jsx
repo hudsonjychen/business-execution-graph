@@ -36,7 +36,7 @@ export default function ImportButton({ setElements, setKnowledge, setNodeCard, s
         formData.append("file", file);
 
         try {
-            const response = await fetch("http://localhost:5000/upload", {
+            const response = await fetch("http://localhost:5002/upload", {
                 method: "POST",
                 body: formData,
                 mode: 'cors'
@@ -45,7 +45,7 @@ export default function ImportButton({ setElements, setKnowledge, setNodeCard, s
             const result = await response.json();
             console.log("Succeed", result);
 
-            const res = await fetch("http://localhost:5000/get_data");
+            const res = await fetch("http://localhost:5002/get_data");
             const data = await res.json();
             setElements(data.elements);
             setKnowledge(data.knowledge);

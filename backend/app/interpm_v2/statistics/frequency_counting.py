@@ -1,11 +1,11 @@
-from ..algo.ocel_entity_extraction import get_process_types
+from ..algo.ocel_entity_extraction import get_processes
 from ..algo.ocel_filtering import filter_ocel_by_object_id
 
 
 def object_type_frequency_counting(ocel):
     object_type_frequency = dict()
 
-    processes = get_process_types(ocel)
+    processes = get_processes(ocel)
 
     for pro in processes:
         object_type_frequency[pro] = dict()
@@ -30,7 +30,7 @@ def object_type_frequency_counting(ocel):
 def activity_frequency_counting(ocel):
     activity_frequency = dict()
 
-    processes = get_process_types(ocel)
+    processes = get_processes(ocel)
 
     for pro in processes:
         activity_frequency[pro] = dict()

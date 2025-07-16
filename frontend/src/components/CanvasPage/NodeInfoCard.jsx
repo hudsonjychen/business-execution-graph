@@ -34,9 +34,6 @@ export default function NodeInfoCard( {top, left, selectedNodeId, nodeCard} ) {
                             {listObjectType}
                         </div>
                     </div>
-                    <Typography variant="body2" sx={{ fontSize: 14, color: '#555', marginBottom: '12px' }}>
-                        <span style={{ fontWeight: '500' }}>Process Instance Count:</span> {node.processInstanceCount}
-                    </Typography>
                     <div>
                         <Typography variant="body2" sx={{ fontSize: 14, color: '#555', fontWeight: '500' }}>
                             <span style={{ fontWeight: '500' }}>Activity:</span>

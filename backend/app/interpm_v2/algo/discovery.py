@@ -3,7 +3,7 @@ from typing import Dict, Any
 from pm4py.objects.ocel.obj import OCEL
 from .ocel_filtering import filter_ocel_by_object_id, filter_ocel_by_object_type
 from .ocel_mapping import map_object_id_to_type, map_process_type_to_activity
-from .ocel_entity_extraction import get_object_types, get_process_types, get_objects
+from .ocel_entity_extraction import get_object_types, get_processes, get_objects
 from ..statistics.pdg_statistics import get_obj_flow_time, update_pdg_count, update_pdg_flow_time
 
 def discover_process_dependency_graph(ocel: OCEL) -> Dict[str, Any]:
@@ -19,7 +19,7 @@ def discover_process_dependency_graph(ocel: OCEL) -> Dict[str, Any]:
     pdg = dict()
     flow_time = dict()
 
-    process_types = get_process_types(ocel)
+    processes = get_processes(ocel)
     objects = get_objects(ocel)
 
     oid_to_type_map = map_object_id_to_type(ocel)
@@ -36,15 +36,15 @@ def discover_process_dependency_graph(ocel: OCEL) -> Dict[str, Any]:
         obj_type = oid_to_type_map[obj]
 
         ocel_re = filtered_ocels[obj]
-        filtered_ocel_re = ocel_re.loc[ocel_re[ocel.object_type_column].isin(process_types)]
+        filtered_ocel_re = ocel_re.loc[ocel_re[ocel.object_type_column].isin(processes)]
         filtered_ocel_re = filtered_ocel_re.sort_values(by='ocel:timestamp')
 
         grouped = list(filtered_ocel_re.groupby(ocel.event_id_column, sort=False))
 
         for i in range(len(grouped) - 1):
             (group1_key, group1), (group2_key, group2) = grouped[i], grouped[i + 1]
-            process1 = set(group1[ocel.object_type_column])
-            process2 = set(group2[ocel.object_type_column])
+            process1 = set(group1[ocel.object_id_column])
+            process2 = set(group2[ocel.object_id_column])
             for p1 in process1:
                 for p2 in process2:
                     if p1 != p2:
@@ -80,7 +80,7 @@ def discover_process_node_graph(ocel: OCEL) -> Dict[str, Any]:
 
     # get object_types, objects, processes
     object_types = get_object_types(ocel)
-    processes = get_process_types(ocel)
+    processes = get_processes(ocel)
     objects = get_objects(ocel)
 
     object_id_type_mapping = map_object_id_to_type(ocel)

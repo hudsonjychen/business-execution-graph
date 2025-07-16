@@ -13,7 +13,6 @@ def get_vis_data(object_types, processes, activities, pdg, png):
                 "objectType": list(png[process]['object_type'].keys()),
                 "objectTypeCount": len(list(png[process]['object_type'].keys())),
                 "objectCount": png[process]['total_count'],
-                "processInstanceCount": png[process]['process_instances_count']
             }
         }
         pro_element = {
@@ -28,7 +27,6 @@ def get_vis_data(object_types, processes, activities, pdg, png):
             "totalObjectCount": png[process]['total_count'],
             "objectType": png[process]['object_type'],
             "activity": list(png[process]['activity']),
-            "processInstanceCount": png[process]['process_instances_count']
         }
         label_to_id[process] = str(node_id_counter)
         elements.append(element)

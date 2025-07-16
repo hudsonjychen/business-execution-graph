@@ -1,4 +1,4 @@
-# InterProcess Interactions
+# BEG (Business Execution Graph)
 
 A tool aimed at exploring inter-process interactions from event data. 
 This project is built with a **Vite-powered React frontend** and a **Flask-based backend**.

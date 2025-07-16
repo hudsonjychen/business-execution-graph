@@ -44,34 +44,15 @@ def get_objects(ocel: OCEL) -> Set[str]:
     )
 
 
-def get_process_types(ocel: OCEL) -> Set[str]:
+def get_processes(ocel: OCEL) -> Set[str]:
     """
     Returns the set of process types.
     """
     return _filter_column_values(
         ocel.relations,
-        target_column=ocel.object_type_column,
+        target_column=ocel.object_id_column,
         qualifier_value="process"
     )
-
-
-def get_process_instances(ocel: OCEL, process_type: str = None) -> Set[str]:
-    """
-    Returns the set of process instances.
-    """
-    if process_type is not None:
-        return _filter_column_values(
-            ocel.relations,
-            target_column=ocel.object_id_column,
-            qualifier_column=ocel.object_type_column,
-            qualifier_value=process_type,
-        )
-    else:
-        return _filter_column_values(
-            ocel.relations,
-            target_column=ocel.object_id_column,
-            qualifier_value="process"
-        )
 
 
 def get_activities(ocel: OCEL) -> Set[str]:
@@ -86,8 +67,3 @@ def get_events(ocel: OCEL) -> Set[str]:
     Returns the set of all unique event IDs from the event log.
     """
     return set(ocel.events[ocel.event_id_column].unique())
-
-
-if __name__ == '__main__':
-    log = pm4py.read_ocel2_json(r'C:\Users\Hudson Chen\Desktop\Thesis\example_data.json')
-    print(get_process_instances(log, 'order-management-process'))
