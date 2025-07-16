@@ -1,5 +1,5 @@
 from datetime import datetime
-from backend.app.interpm_v2.data.simulator import simulate
+from backend.app.src.data.simulator import simulate
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ from datetime import timedelta
 from typing import Dict, Any
 import pm4py
 from pm4py.objects.ocel.obj import OCEL
-from .ocel_filtering import filter_ocel_by_object_id, filter_ocel_by_object_type
+from .ocel_filtering import filter_ocel_by_object_id
 from .ocel_mapping import map_object_id_to_type, map_process_to_activity
 from .ocel_entity_extraction import get_activities, get_events, get_object_types, get_processes, get_objects
 from ..statistics.pdg_statistics import get_obj_flow_time, update_pdg_count, update_pdg_flow_time

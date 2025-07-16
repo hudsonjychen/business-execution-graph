@@ -4,11 +4,11 @@ import traceback
 from flask import Blueprint, jsonify, request
 import pm4py
 from .cache import cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedObjects, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
-from .interpm_v2.algo.inter_process_discovery import discover_interactions
-from .interpm_v2.algo.ocel_entity_extraction import get_processes, get_object_types, get_objects, get_activities
-from .interpm_v2.visualization.vis_converter import get_vis_data
-from .interpm_v2.algo.ocel_mapping import map_object_id_to_type
-from .interpm_v2.statistics.frequency_counting import object_type_frequency_counting, activity_frequency_counting
+from .src.algo.inter_process_discovery import discover_interactions
+from .src.algo.ocel_entity_extraction import get_processes, get_object_types, get_objects, get_activities
+from .src.visualization.vis_converter import get_vis_data
+from .src.algo.ocel_mapping import map_object_id_to_type
+from .src.statistics.frequency_counting import object_type_frequency_counting, activity_frequency_counting
 
 main = Blueprint('main', __name__)
 
