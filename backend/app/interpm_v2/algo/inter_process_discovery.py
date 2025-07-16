@@ -87,7 +87,7 @@ def _get_process_data(ocel: OCEL) -> Dict[str, Any]:
 
     filtered_ocels = dict()
     for pro in processes:
-        filtered_ocel = filter_ocel_by_object_type(
+        filtered_ocel = filter_ocel_by_object_id(
             ocel,
             pro
         )

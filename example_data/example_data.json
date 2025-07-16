@@ -93,11 +93,7 @@
             ]
         },
         {
-            "name": "order-management-process",
-            "attributes": []
-        },
-        {
-            "name": "delivery-management-process",
+            "name": "process",
             "attributes": []
         }
     ],
@@ -130,7 +126,7 @@
                     "qualifier": "item"
                 },
                 {
-                    "objectId": "omp1",
+                    "objectId": "order-management",
                     "qualifier": "process"
                 }
             ]
@@ -151,7 +147,7 @@
                     "qualifier": "order"
                 },
                 {
-                    "objectId": "omp1",
+                    "objectId": "order-management",
                     "qualifier": "process"
                 }
             ]
@@ -184,11 +180,11 @@
                     "qualifier": "item"
                 },
                 {
-                    "objectId": "omp1",
+                    "objectId": "order-management",
                     "qualifier": "process"
                 },
                 {
-                    "objectId": "dmp1",
+                    "objectId": "delivery-management",
                     "qualifier": "process"
                 }
             ]
@@ -209,7 +205,7 @@
                     "qualifier": "shipment"
                 },
                 {
-                    "objectId": "dmp1",
+                    "objectId": "delivery-management",
                     "qualifier": "process"
                 }
             ]
@@ -230,7 +226,7 @@
                     "qualifier": "shipment"
                 },
                 {
-                    "objectId": "dmp1",
+                    "objectId": "delivery-management",
                     "qualifier": "process"
                 }
             ]
@@ -259,7 +255,7 @@
                     "qualifier": "item"
                 },
                 {
-                    "objectId": "omp2",
+                    "objectId": "order-management",
                     "qualifier": "process"
                 }
             ]
@@ -280,7 +276,7 @@
                     "qualifier": "order"
                 },
                 {
-                    "objectId": "omp2",
+                    "objectId": "order-management",
                     "qualifier": "process"
                 }
             ]
@@ -376,18 +372,13 @@
             ]
         },
         {
-            "id": "omp1",
-            "type": "order-management-process",
+            "id": "order-management",
+            "type": "process",
             "attributes": []
         },
         {
-            "id": "omp2",
-            "type": "order-management-process",
-            "attributes": []
-        },
-        {
-            "id": "dmp1",
-            "type": "delivery-management-process",
+            "id": "delivery-management",
+            "type": "process",
             "attributes": []
         }
     ]
