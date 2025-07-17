@@ -4,6 +4,7 @@ import Import from "./Import";
 import Download from "./Download";
 import ColorPalette from "./Settings/ColorPalette";
 import SettingDrawer from "./Settings/SettingDrawer";
+import Mode from "./Mode";
 
 export default function Top({ setElements, setKnowledge, setNodeCard, setObjects, setObjectTypeCounts, setActivityCounts }) {
     return (
@@ -33,6 +34,9 @@ export default function Top({ setElements, setKnowledge, setNodeCard, setObjects
                     setActivityCounts={setActivityCounts}
                 />
                 <Download />
+            </Stack>
+            <Stack direction='row' justifyContent='flex-start' sx={{ width: 460 }}>
+                <Mode />
             </Stack>
             <Stack direction='row' alignItems='center' spacing={1} sx={{ mr: 3 }}>
                 <Filters />

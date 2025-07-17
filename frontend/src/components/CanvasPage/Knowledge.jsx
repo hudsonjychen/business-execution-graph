@@ -6,6 +6,7 @@ import { useFilter } from "../FilterContext";
 import { useSetting } from "../SettingContext";
 import { grey } from "@mui/material/colors";
 import KnowledgeNodeCard from "./KnowledgeNodeCard";
+import { Box } from "@mui/joy";
 
 export const objectTypeFilter = (knowledge, objectTypeChecked) => {
     const filteredNodes = [];
@@ -420,13 +421,11 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
     }, [infoCard]);
     
     return (
-        <div>
-            <div className="canvas-container">
-                <div 
-                    ref={knowledgeRef} 
-                    className="canvas"
-                />
-            </div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box 
+                ref={knowledgeRef} 
+                sx={{ width: 3200, height: 680 }}
+            />
             {
                 infoCard && (
                     <KnowledgeNodeCard
@@ -437,6 +436,6 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
                     />
                 )
             }
-        </div>
+        </Box>
     )
 }
