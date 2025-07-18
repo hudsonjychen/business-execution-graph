@@ -310,10 +310,21 @@ export default function Interaction({ elements, nodeCard }) {
     }, [infoCard]);
     
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box 
+            sx={{ 
+                position: 'fixed', 
+                top: 66, 
+                left: 0, 
+                right: 0, 
+                bottom: 94, 
+                width: '100vw', 
+                height: 'calc(100vh - 160px)', 
+                zIndex: '5' 
+            }}
+        >
             <Box 
                 ref={interactionRef} 
-                sx={{ width: 3200, height: 680 }}
+                sx={{ width: '100%', height: '100%', overflow: 'hidden' }}
             />
             {
                 infoCard && (

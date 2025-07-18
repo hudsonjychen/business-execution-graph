@@ -38,9 +38,10 @@ export default function Summary({ elements, knowledge, objects }) {
                 p: 2, 
                 position: 'fixed', 
                 right: 42, 
-                bottom: 48,
+                bottom: 36,
                 boxShadow: 'md',
-                borderRadius: 'lg' 
+                borderRadius: 'lg',
+                zIndex: '10' 
             }}
         >
             <Stack direction='row'>

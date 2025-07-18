@@ -11,7 +11,7 @@ export default function Mode() {
                 value={mode} 
                 onChange={
                     (event, newValue) => {
-                        setMode(newValue);
+                        setMode(newValue || mode);
                     }
                 }
             >
