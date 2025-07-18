@@ -4,7 +4,7 @@ from typing import Dict, Any, Set, List
 import pm4py
 from pm4py.objects.ocel.obj import OCEL
 from .ocel_filtering import filter_ocel_by_object_id
-from .ocel_mapping import map_object_id_to_type, map_process_to_activity
+from .ocel_mapping import map_object_id_to_type, map_process_to_activity, map_process_to_object_type
 from .ocel_entity_extraction import get_activities, get_events, get_object_types, get_processes, get_objects
 from ..statistics.pdg_statistics import get_obj_flow_time, update_pdg_count, update_pdg_flow_time
 
@@ -101,13 +101,14 @@ def _get_process_data(ocel: OCEL) -> Dict[str, Any]:
     processes = get_processes(ocel)
     objects = get_objects(ocel)
 
+    process_ot_mapping = map_process_to_object_type(ocel)
     object_id_type_mapping = map_object_id_to_type(ocel)
     process_event_activity_mapping = map_process_to_activity(ocel)
 
     for process in processes:
         process_data[process] = {
             'activity': process_event_activity_mapping[process],
-            'object_type': {ot: {'count': 0} for ot in object_types},
+            'object_type': dict(),
             'object': set(),
             'total_count': 0
         }
@@ -118,25 +119,27 @@ def _get_process_data(ocel: OCEL) -> Dict[str, Any]:
         eid = row[ocel.event_id_column]
         if oid in processes:
             event_to_processes[eid].add(oid)
-
+    print(event_to_processes)
+    print(object_id_type_mapping)
     for eid, group in ocel.relations.groupby(ocel.event_id_column, sort=False):
         related_processes = event_to_processes.get(eid)
         if not related_processes:
             continue
-
+        
         object_ids = group[ocel.object_id_column].tolist()
 
         for pro in related_processes:
-            oid_list = process_data[pro]['object']
-            for obj_id in object_ids:
-                if obj_id == pro or obj_id in oid_list:
+            for oid in object_ids:
+                if oid in processes:
                     continue
-
-                if obj_id in object_id_type_mapping:
-                    ot = object_id_type_mapping[obj_id]
+                ot = object_id_type_mapping[oid]
+                process_data[pro]['object'].add(oid)
+                process_data[pro]['total_count'] += 1
+                if ot in process_data[pro]['object_type']:
                     process_data[pro]['object_type'][ot]['count'] += 1
-                    oid_list.add(obj_id)
-                    process_data[pro]['total_count'] += 1
+                else:
+                    process_data[pro]['object_type'][ot] = {}
+                    process_data[pro]['object_type'][ot]['count'] = 1
 
     for pro in processes:
         process_data[pro]['object_type'] = {

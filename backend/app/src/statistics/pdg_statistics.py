@@ -15,7 +15,7 @@ def update_pdg_count(pdg, oid_to_type_map):
                     if oid_to_type_map[obj] == obj_type:
                         pdg[p1][p2]['object_type'][obj_type]['count'] += 1
 
-def update_pdg_flow_time(pdg, oid_to_type_map, flow_time):
+def update_pdg_flow_time_original(pdg, oid_to_type_map, flow_time):
     for p1 in pdg:
         for p2 in pdg[p1]:
             total_flow_time_count = 0
@@ -31,3 +31,43 @@ def update_pdg_flow_time(pdg, oid_to_type_map, flow_time):
                 total_sum_flow_time += sum_ot_flow_time
                 pdg[p1][p2]['object_type'][obj_type]['average_flow_time'] = sum_ot_flow_time / flow_time_count
             pdg[p1][p2]['average_flow_time'] = total_sum_flow_time / total_flow_time_count
+
+def is_valid_timedelta(td):
+    try:
+        return isinstance(td, timedelta) and abs(td.total_seconds()) < 3.2e9  # 小于100年
+    except:
+        return False
+
+def update_pdg_flow_time(pdg, oid_to_type_map, flow_time):
+    for p1 in pdg:
+        for p2 in pdg[p1]:
+            total_flow_time_count = 0
+            avg_total_flow_time = timedelta()
+            total_count = 0
+
+            for obj_type in pdg[p1][p2]['object_type']:
+                flow_time_count = 0
+                avg_ot_flow_time = timedelta()
+
+                for obj in pdg[p1][p2]['object']:
+                    if oid_to_type_map.get(obj) == obj_type:
+                        deltas = flow_time[p1][p2].get(obj, [])
+                        for delta in deltas:
+                            if is_valid_timedelta(delta):
+                                flow_time_count += 1
+                                avg_ot_flow_time += (delta - avg_ot_flow_time) / flow_time_count
+
+                pdg[p1][p2]['object_type'][obj_type]['average_flow_time'] = (
+                    avg_ot_flow_time if flow_time_count else timedelta()
+                )
+                total_flow_time_count += flow_time_count
+
+                if flow_time_count > 0:
+                    total_count += 1
+                    avg_total_flow_time += (
+                        (avg_ot_flow_time - avg_total_flow_time) / total_count
+                    )
+
+            pdg[p1][p2]['average_flow_time'] = (
+                avg_total_flow_time if total_flow_time_count else timedelta()
+            )
