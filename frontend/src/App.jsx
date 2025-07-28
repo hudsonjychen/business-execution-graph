@@ -1,5 +1,5 @@
 import AppPage from "./components/AppPage";
-import '/src/styles/App.css';
+import './App.css';
 
 
 export default function App() {

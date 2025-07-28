@@ -5,11 +5,11 @@ from flask import Blueprint, jsonify, request
 import pm4py
 from werkzeug.exceptions import RequestEntityTooLarge
 from .cache import cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedObjects, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
-from .src.algo.inter_process_discovery import discover_interactions
-from .src.algo.ocel_entity_extraction import get_processes, get_object_types, get_objects, get_activities
+from .src.algo.discovery import discover_interactions
+from .src.algo.get_entities import get_processes, get_object_types, get_activities
 from .src.visualization.vis_converter import get_vis_data
-from .src.algo.ocel_mapping import map_object_id_to_type
-from .src.statistics.frequency_counting import object_type_frequency_counting, activity_frequency_counting
+from .src.algo.map import map_object_id_to_type
+from .src.algo.count_frequency import object_type_frequency_counting, activity_frequency_counting
 
 main = Blueprint('main', __name__)
 
