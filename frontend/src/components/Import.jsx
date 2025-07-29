@@ -6,20 +6,26 @@ import { useGlobal } from "./GlobalContext";
 import { useFilter } from "./FilterContext";
 import useDataStore from "../store/useDataStore";
 import useStatusStore from "../store/useStatusStore";
+import useFilterStore from "../store/useFilterStore";
 
-export default function Import({ setElements, setKnowledge, setNodeCard, setObjects, setObjectTypeCounts, setActivityCounts }) {
+export default function Import({ setElements, setKnowledge, setNodeCard, setObjectTypeCounts, setActivityCounts }) {
     const { setFileImported } = useGlobal();
     const { setObjectTypes, setObjectTypeChecked, setProcesses, setProcessChecked } = useFilter();
+
+    const setLoadingStatus = useStatusStore(state => state.setLoadingStatus);
 
     const setFileInfo = useDataStore(state => state.setFileInfo);
     const clearFileInfo = useDataStore(state => state.clearFileInfo);
     const setPreloadData = useDataStore(state => state.setPreloadData);
     const clearPreloadData = useDataStore(state => state.clearPreloadData);
-    const setLoadingStatus = useStatusStore(state => state.setLoadingStatus);
     const setProcessData = useDataStore(state => state.setProcessData);
     const setInteractionData = useDataStore(state => state.setInteractionData);
     const clearInteractionData = useDataStore(state => state.clearInteractionData);
     const clearProcessData = useDataStore(state => state.clearProcessData);
+    const setObjectToType = useDataStore(state => state.setObjectToType);
+
+    const setSelectedObjectTypes = useFilterStore(state => state.setSelectedObjectTypes);
+    const setSelectedProcesses = useFilterStore(state => state.setSelectedProcesses);
 
     const fileInputRef = useRef(null);
 
@@ -56,14 +62,16 @@ export default function Import({ setElements, setKnowledge, setNodeCard, setObje
                     setLoadingStatus(data.ready);
                     setInteractionData(data.interactionData);
                     setProcessData(data.processData);
+                    setObjectToType(data.objectToType);
 
                     setElements(data.elements);
                     setKnowledge(data.knowledge);
                     setObjectTypes([...data.objectTypes]);
                     setNodeCard(data.nodes);
                     setObjectTypeChecked([...data.objectTypes]);
-                    setObjects(data.objects);
+                    setSelectedObjectTypes([...data.objectTypes]);
                     setProcessChecked([...data.processes]);
+                    setSelectedProcesses([...data.processes]);
                     setProcesses([...data.processes]);
                     setObjectTypeCounts(data.otcounts);
                     setActivityCounts(data.actcounts);

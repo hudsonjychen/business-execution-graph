@@ -10,7 +10,7 @@ import FileInfo from "../FileInfo";
 import useStatusStore from "../../store/useStatusStore";
 import { CircularProgress } from "@mui/joy";
 
-export default function CanvasPage({ elements, nodeCard, knowledge, objects, objectTypeCounts, activityCounts }) {
+export default function CanvasPage({ elements, nodeCard, knowledge, objectTypeCounts, activityCounts }) {
 
     const { mode, fileImported } = useGlobal();
     const loadingStatus = useStatusStore(state => state.loadingStatus);
@@ -18,11 +18,7 @@ export default function CanvasPage({ elements, nodeCard, knowledge, objects, obj
     return (
         <div>
             <FileInfo />
-            <Summary
-                elements={elements} 
-                knowledge={knowledge}
-                objects={objects}
-            />
+            <Summary />
             {!fileImported ? (
                 <Prompt />
             ) : (loadingStatus ? (
@@ -32,11 +28,6 @@ export default function CanvasPage({ elements, nodeCard, knowledge, objects, obj
                             elements={elements} 
                             nodeCard={nodeCard}
                         />
-                        <Box sx={{ position: 'absolute', top: 80, right: 30 }}>
-                            <Tooltip title={'Click a node to view its information card'}>
-                                <HelpOutlineIcon sx={{color: grey[600]}} />
-                            </Tooltip>
-                        </Box>
                     </div>
                 ) : mode === 'knowledge' ? (
                     <div>

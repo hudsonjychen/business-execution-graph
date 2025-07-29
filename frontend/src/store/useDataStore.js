@@ -16,6 +16,9 @@ const useDataStore = create((set) => ({
     processData: {},
     setProcessData: (data) => set({ processData: data }),
     clearProcessData: () => set({ processData: {} }),
+
+    objectToType: {},
+    setObjectToType: (data) => set({ objectToType: data }),
 }))
 
 export default useDataStore

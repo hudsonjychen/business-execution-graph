@@ -14,7 +14,7 @@ function summary(processData) {
     summary['objectTypeCount'] = uobjectTypeList.length;
     summary['objectCount'] = uobjectList.length;
 
-    return summary
+    return summary;
 }
 
 export default summary;

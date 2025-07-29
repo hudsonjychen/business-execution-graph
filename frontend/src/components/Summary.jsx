@@ -1,12 +1,9 @@
-import { useFilter } from "./FilterContext";
-import { objectTypeFilter } from './CanvasPage/Interaction'
 import { Card, Stack, Typography } from "@mui/joy";
 import { ObjectIcon, ProcessIcon } from "./CustomIcons";
 import useDataStore from "../store/useDataStore";
 import summary from "../functions/summary";
 
-export default function Summary({ elements, knowledge, objects }) {
-    const { processChecked, objectTypeChecked } = useFilter();
+export default function Summary() {
     const preloadData = useDataStore(state => state.preloadData);
     const processData = useDataStore(state => state.processData);
 

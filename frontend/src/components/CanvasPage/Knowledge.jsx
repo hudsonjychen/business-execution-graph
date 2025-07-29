@@ -1,11 +1,9 @@
 import cytoscape from "cytoscape";
-import { useState, useEffect, useRef } from "react";
-import './Canvas.css'
+import { useEffect, useRef } from "react";
 import { useGlobal } from "../GlobalContext";
 import { useFilter } from "../FilterContext";
 import { useSetting } from "../SettingContext";
 import { grey } from "@mui/material/colors";
-import KnowledgeNodeCard from "./KnowledgeNodeCard";
 import { Box } from "@mui/joy";
 
 export const objectTypeFilter = (knowledge, objectTypeChecked) => {
@@ -258,10 +256,6 @@ const countsUpdate = (knowledge, objectTypeCounts, activityCounts) => {
 
 export default function Knowledge({ knowledge, objectTypeCounts, activityCounts }) {
     const knowledgeRef = useRef(null);
-    const [infoCard, setInfoCard] = useState(null);
-    const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
-    const [selectedNodeLabel, setSelectedNodeLabel] = useState(null);
-    const selectedNodeRef = useRef(null);
     const { setPngDataUrl } = useGlobal();
     const { objectTypeChecked, processChecked } = useFilter();
     const { selectedColorPattern, nodeSize, nodeTypeShown, objectTypeFrequency, activityFrequency, sharedNodeShown } = useSetting();
@@ -271,7 +265,6 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
     const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_fre, nodeTypeShown), sharedNodeShown);
 
     const fKnowledge = fKnowledge_node_type;
-    const updatedCount = countsUpdate(fKnowledge, objectTypeCounts, activityCounts);
 
     useEffect(() => {
     
@@ -355,32 +348,6 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
             });
         }
 
-        cy.on('tap', (event) => {
-            if (event.target === cy) {
-                setInfoCard(null);
-            }
-        });
-
-        cy.on('tap', 'node', (event) => {
-            const node = event.target;
-            const category = node.data('category');
-            const label = node.data('label');
-            if(category !== 'process'){
-                selectedNodeRef.current = node;
-        
-                const pos = node.renderedPosition();
-
-                setSelectedNodeLabel(label);
-                
-                setInfoCard(true);
-            
-                setCardPosition({
-                    top: pos.y + 20,
-                    left: pos.x + 80,
-                });
-            }
-        });
-
         const pngDataUrl = cy.png({
             output: 'base64uri',
             full: true,
@@ -394,31 +361,6 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
         };
     
     }, [knowledge, selectedColorPattern, objectTypeChecked, processChecked, nodeSize, objectTypeFrequency, activityFrequency, nodeTypeShown, sharedNodeShown]);
-
-    useEffect(() => {
-        let animationFrameId;
-    
-        const updateCardPosition = () => {
-            if (infoCard && selectedNodeRef.current) {
-                const pos = selectedNodeRef.current.renderedPosition();
-                setCardPosition({
-                    top: pos.y + 20,
-                    left: pos.x + 80,
-                });
-                animationFrameId = requestAnimationFrame(updateCardPosition);
-            }
-        };
-    
-        if (infoCard) {
-            animationFrameId = requestAnimationFrame(updateCardPosition);
-        }
-    
-        return () => {
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-        };
-    }, [infoCard]);
     
     return (
         <Box 
@@ -437,16 +379,6 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
                 ref={knowledgeRef} 
                 sx={{ width: '100%', height: '100%', overflow: 'hidden' }}
             />
-            {
-                infoCard && (
-                    <KnowledgeNodeCard
-                        top={cardPosition.top} 
-                        left={cardPosition.left}
-                        selectedNodeLabel={selectedNodeLabel}
-                        updatedCount={updatedCount}
-                    />
-                )
-            }
         </Box>
     )
 }

@@ -6,7 +6,7 @@ import ColorPalette from "./ColorPalette";
 import Configurations from "./Configurations";
 import Mode from "./Mode";
 
-export default function Top({ setElements, setKnowledge, setNodeCard, setObjects, setObjectTypeCounts, setActivityCounts }) {
+export default function Top({ setElements, setKnowledge, setNodeCard, setObjectTypeCounts, setActivityCounts }) {
     return (
         <Sheet
             variant="plain"
@@ -29,7 +29,6 @@ export default function Top({ setElements, setKnowledge, setNodeCard, setObjects
                     setElements={setElements} 
                     setKnowledge={setKnowledge}
                     setNodeCard={setNodeCard}
-                    setObjects={setObjects}
                     setObjectTypeCounts={setObjectTypeCounts}
                     setActivityCounts={setActivityCounts}
                 />

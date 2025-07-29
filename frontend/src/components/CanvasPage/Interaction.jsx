@@ -1,13 +1,13 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
 import { grey } from '@mui/material/colors';
-import './Canvas.css'
 import NodeInfoCard from "./NodeInfoCard";
 import { useGlobal } from "../GlobalContext";
 import { useFilter } from "../FilterContext";
 import { useSetting } from "../SettingContext";
 import { Box } from "@mui/joy";
 import useConfigStore from "../../store/useConfigStore";
+import useFilterStore from "../../store/useFilterStore";
 
 export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {
@@ -141,6 +141,9 @@ export default function Interaction({ elements, nodeCard }) {
     const nodeSizeMetric = useConfigStore(state => state.nodeSizeMetric);
     const edgeNotationMetric = useConfigStore(state => state.edgeNotationMetric);
 
+    const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
+    const selectedProcesses = useFilterStore(state => state.selectedProcesses);
+
     const { setPngDataUrl, setVosData } = useGlobal();
     const { objectTypeChecked, processChecked } = useFilter();
     const { attributeTypeChecked, notationTypeChecked, colorLevelType } = useSetting();
@@ -155,7 +158,7 @@ export default function Interaction({ elements, nodeCard }) {
 
 
     useEffect(() => {
-        const filteredElements = processFilter(objectTypeFilter(elements, objectTypeChecked), processChecked);
+        const filteredElements = processFilter(objectTypeFilter(elements, selectedObjectTypes), selectedProcesses);
         const importanceIndex = getImportanceIndex(filteredElements, colorScheme);
         setVosData(filteredElements);
 
@@ -288,7 +291,7 @@ export default function Interaction({ elements, nodeCard }) {
             cy.destroy();
         };
 
-    }, [elements, selectedColor, colorScheme, processChecked, objectTypeChecked, nodeSizeMetric, edgeNotationMetric]);
+    }, [elements, selectedColor, colorScheme, selectedProcesses, selectedObjectTypes, nodeSizeMetric, edgeNotationMetric]);
 
     useEffect(() => {
         let animationFrameId;

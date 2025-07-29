@@ -9,7 +9,7 @@ from datetime import datetime
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from .src.util.json_adapter import convert_for_json
-from .cache import cachedFileInfo, cachedPreloadData, cachedInteractionData, cachedProcessData, cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedObjects, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
+from .cache import cachedFileInfo, cachedPreloadData, cachedInteractionData, cachedProcessData, cachedObjectToType, cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
 from .src.algo.discovery import discover
 from .src.algo.get_entities import get_processes, get_object_types, get_activities, get_objects
 from .src.visualization.vis_converter import get_vis_data
@@ -79,12 +79,18 @@ def data_process(log, task_id):
     interaction_data = discover_results["interaction_data"]
     process_data = discover_results["process_data"]
 
-    
-
+    # interaction data
     cachedInteractionData.clear()
     cachedInteractionData.update(convert_for_json(interaction_data))
+    # process data
     cachedProcessData.clear()
     cachedProcessData.update(convert_for_json(process_data))
+
+    # object to object type map data
+    object_to_type = map_object_id_to_type(log)
+    cachedObjectToType.clear()
+    cachedObjectToType.update(object_to_type)
+
 
     object_types = get_object_types(log)
     processes = get_processes(log)
@@ -106,8 +112,7 @@ def data_process(log, task_id):
     cachedObjectTypes.clear()
     cachedObjectTypes.extend(list(object_types))
 
-    cachedObjects.clear()
-    cachedObjects.update(map_object_id_to_type(log))
+
 
     cachedProcesses.clear()
     cachedProcesses.extend(list(processes))
@@ -133,11 +138,12 @@ def get_data(task_id):
             'ready': True,
             'interactionData': cachedInteractionData,
             'processData': cachedProcessData,
+            'objectToType': cachedObjectToType,
+            
             'elements': cachedElements,
             'nodes': cachedNodeCard,
             'knowledge': cachedKnowledge,
             'objectTypes': cachedObjectTypes,
-            'objects': cachedObjects,
             'processes': cachedProcesses,
             'otcounts': cachedObjectTypeCounts,
             'actcounts': cachedActivityCounts

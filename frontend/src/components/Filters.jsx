@@ -1,10 +1,13 @@
-import { useFilter } from "./FilterContext";
 import { Box, Stack, Select, Option, Checkbox } from '@mui/joy';
 import useDataStore from "../store/useDataStore";
+import useFilterStore from "../store/useFilterStore";
 
 export default function Filters() {
-    const { processChecked, setProcessChecked, objectTypeChecked, setObjectTypeChecked } = useFilter();
     const preloadData = useDataStore(state => state.preloadData);
+    const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
+    const selectedProcesses = useFilterStore(state => state.selectedProcesses);
+    const setSelectedObjectTypes = useFilterStore(state => state.setSelectedObjectTypes);
+    const setSelectedProcesses = useFilterStore(state => state.setSelectedProcesses);
 
     let processOptions = [], objectTypeOptions = [];
 
@@ -25,15 +28,15 @@ export default function Filters() {
                 <Select
                     multiple
                     placeholder={'Object Types...'}
-                    value={objectTypeChecked}
+                    value={selectedObjectTypes}
                     sx={{ width: '14rem' }}
-                    onChange={(e, newValue) => setObjectTypeChecked(newValue)}
+                    onChange={(e, newValue) => setSelectedObjectTypes(newValue)}
                     
                 >
                     {objectTypeOptions.map((item) => (
                         <Option key={item} value={item}>
                             <Checkbox
-                                checked={objectTypeChecked.includes(item)}
+                                checked={selectedObjectTypes.includes(item)}
                                 sx={{ pointerEvents: 'none', mr: 1 }}
                             />
                             {item}
@@ -43,14 +46,14 @@ export default function Filters() {
                 <Select
                     multiple
                     placeholder={'Processes...'}
-                    value={processChecked}
+                    value={selectedProcesses}
                     sx={{ width: '14rem' }}
-                    onChange={(e, newValue) => setProcessChecked(newValue)}
+                    onChange={(e, newValue) => setSelectedProcesses(newValue)}
                 >
                     {processOptions.map((item) => (
                         <Option key={item} value={item}>
                             <Checkbox
-                                checked={processChecked.includes(item)}
+                                checked={selectedProcesses.includes(item)}
                                 sx={{ pointerEvents: 'none', mr: 1 }}
                             />
                             {item}
