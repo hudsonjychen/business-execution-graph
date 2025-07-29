@@ -85,11 +85,15 @@ function filterProcessData(selectedObjectTypes, selectedProcesses, processData, 
             }
         }
 
+        if (Object.keys(filteredObjectType) < 1) continue;
+
         const total_count = Object.values(filteredObjectType).reduce((acc, cur) => acc + cur.count, 0);
 
         const filteredObjects = originalNode.object.filter(obj =>
             selectedObjectTypes.includes(objectToType[obj])
         );
+
+        if (filteredObjects.length < 1) continue;
 
         const filteredNode = {
             ...originalNode,

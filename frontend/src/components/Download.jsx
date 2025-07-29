@@ -1,5 +1,5 @@
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
-import { useGlobal } from "./GlobalContext";
+import { useGlobal } from "../contexts/GlobalContext";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';

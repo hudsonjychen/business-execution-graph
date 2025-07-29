@@ -1,9 +1,10 @@
 import { Box, Stack, Select, Option, Checkbox } from '@mui/joy';
 import useDataStore from "../store/useDataStore";
 import useFilterStore from "../store/useFilterStore";
+import getEntityList from '../functions/entityList';
 
 export default function Filters() {
-    const preloadData = useDataStore(state => state.preloadData);
+    const processData = useDataStore(state => state.processData);
     const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
     const setSelectedObjectTypes = useFilterStore(state => state.setSelectedObjectTypes);
@@ -11,9 +12,10 @@ export default function Filters() {
 
     let processOptions = [], objectTypeOptions = [];
 
-    if(Object.keys(preloadData).length > 0) {
-        processOptions = preloadData.processList
-        objectTypeOptions = preloadData.objectTypeListAll
+    if (Object.keys(processData).length > 0) {
+        const { objectTypeList, activityList, processList } = getEntityList(processData);
+        processOptions = processList;
+        objectTypeOptions = objectTypeList;
     }
 
     return (

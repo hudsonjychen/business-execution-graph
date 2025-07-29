@@ -9,7 +9,7 @@ from datetime import datetime
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from .src.util.json_adapter import convert_for_json
-from .cache import cachedFileInfo, cachedPreloadData, cachedInteractionData, cachedProcessData, cachedObjectToType, cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
+from .cache import cachedFileInfo, cachedPreloadData, cachedInteractionData, cachedProcessData, cachedObjectToType, cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedProcesses
 from .src.algo.discovery import discover
 from .src.algo.get_entities import get_processes, get_object_types, get_activities, get_objects
 from .src.visualization.vis_converter import get_vis_data
@@ -111,16 +111,8 @@ def data_process(log, task_id):
     cachedObjectTypes.clear()
     cachedObjectTypes.extend(list(object_types))
 
-
-
     cachedProcesses.clear()
     cachedProcesses.extend(list(processes))
-
-    cachedObjectTypeCounts.clear()
-    cachedObjectTypeCounts.update(object_type_counts)
-
-    cachedActivityCounts.clear()
-    cachedActivityCounts.update(activity_counts)
 
     task_status[task_id] = True
 
@@ -143,8 +135,6 @@ def get_data(task_id):
             'knowledge': cachedKnowledge,
             'objectTypes': cachedObjectTypes,
             'processes': cachedProcesses,
-            'otcounts': cachedObjectTypeCounts,
-            'actcounts': cachedActivityCounts
         })
     else:
         return jsonify({'ready': False})

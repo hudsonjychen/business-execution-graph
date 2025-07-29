@@ -1,8 +1,7 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef } from "react";
-import { useGlobal } from "../GlobalContext";
-import { useFilter } from "../FilterContext";
-import { useSetting } from "../SettingContext";
+import { useGlobal } from "../../contexts/GlobalContext";
+import { useSetting } from "../../contexts/SettingContext";
 import { grey } from "@mui/material/colors";
 import { Box } from "@mui/joy";
 import useFilterStore from "../../store/useFilterStore";
@@ -80,72 +79,6 @@ export const processFilter = (knowledge, processChecked) => {
         }
     })
 };
-
-export const frequencyFilter = (knowledge, objectTypeFrequency, activityFrequency, objectTypeCounts, activityCounts) => {
-    
-    const otCounts = {};
-    const actCounts = {};
-    const filteredNodes = [];
-    const sourceNodes = [];
-
-    knowledge.forEach(knl => {
-        if(knl.data.category === 'process'){
-            filteredNodes.push(knl.data.id);
-            const otCount = objectTypeCounts[knl.data.label]
-            const actCount = activityCounts[knl.data.label]
-            for (const [ot, count] of Object.entries(otCount)) {
-                otCounts[ot] = (otCounts[ot] || 0) + count
-            }
-            for (const [act, count] of Object.entries(actCount)) {
-                actCounts[act] = (actCounts[act] || 0) + count
-            }
-        }
-    })
-
-    let filteredKnowledge = knowledge.filter(knl => {
-        if(knl.data.category === 'object_type'){
-            if (!objectTypeFrequency || otCounts[knl.data.label] >= objectTypeFrequency){
-                filteredNodes.push(knl.data.id);
-                return true;
-            } else {
-                return false;
-            }
-        }
-        if(knl.data.category === 'activity'){
-            if (!activityFrequency || actCounts[knl.data.label] >= activityFrequency){
-                filteredNodes.push(knl.data.id);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return true;
-        }
-    })
-
-    filteredKnowledge = filteredKnowledge.filter(fknl => {
-        if (!fknl.data.category){
-            const source = fknl.data.source;
-            const target = fknl.data.target;
-            if (filteredNodes.includes(source) && filteredNodes.includes(target)) {
-                sourceNodes.push(source);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return true;
-        }
-    });
-
-    return filteredKnowledge.filter(fknl => {
-        if (fknl.data.category === 'process'){
-            return sourceNodes.includes(fknl.data.id);
-        } else {
-            return true;
-        }
-    });
-}
 
 export const nodeTypeFilter = (knowledge, nodeTypeShown) => {
     const filteredNodes = [];
@@ -237,26 +170,7 @@ export const nodeSharedFilter = (knowledge, sharedNodeShown) => {
     console.log(nodeSharedNum);
 }
 
-const countsUpdate = (knowledge, objectTypeCounts, activityCounts) => {
-    const updatedCount = {};
-
-    for(const knl of knowledge){
-        if(knl.data.category === 'process'){
-            const otCount = objectTypeCounts[knl.data.label];
-            const actCount = activityCounts[knl.data.label];
-            for(const [ot, count] of Object.entries(otCount)){
-                updatedCount[ot] = (updatedCount[ot] || 0) + count;
-            }
-            for(const [act, count] of Object.entries(actCount)){
-                updatedCount[act] = (updatedCount[act] || 0) + count;
-            }
-        }
-    }
-
-    return updatedCount;
-}
-
-export default function Knowledge({ knowledge, objectTypeCounts, activityCounts }) {
+export default function Knowledge({ knowledge }) {
     const knowledgeRef = useRef(null);
     const { setPngDataUrl } = useGlobal();
     const { selectedColorPattern, nodeSize, nodeTypeShown, objectTypeFrequency, activityFrequency, sharedNodeShown } = useSetting();
@@ -265,8 +179,7 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
 
     const fKnowledge_obj_pro = processFilter(objectTypeFilter(knowledge, selectedObjectTypes), selectedProcesses);
-    const fKnowledge_fre = frequencyFilter(fKnowledge_obj_pro, objectTypeFrequency, activityFrequency, objectTypeCounts, activityCounts);
-    const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_fre, nodeTypeShown), sharedNodeShown);
+    const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_obj_pro, nodeTypeShown), sharedNodeShown);
 
     const fKnowledge = fKnowledge_node_type;
 

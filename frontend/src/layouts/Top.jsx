@@ -29,8 +29,6 @@ export default function Top({ setElements, setKnowledge, setNodeCard, setObjectT
                     setElements={setElements} 
                     setKnowledge={setKnowledge}
                     setNodeCard={setNodeCard}
-                    setObjectTypeCounts={setObjectTypeCounts}
-                    setActivityCounts={setActivityCounts}
                 />
                 <Download />
             </Stack>

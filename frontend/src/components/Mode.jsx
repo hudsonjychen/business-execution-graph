@@ -1,5 +1,5 @@
 import { Box, Button, ToggleButtonGroup } from "@mui/joy";
-import { useGlobal } from "./GlobalContext";
+import { useGlobal } from "../contexts/GlobalContext";
 
 export default function Mode() {
     const { mode, setMode, fileImported } = useGlobal();

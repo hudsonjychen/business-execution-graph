@@ -1,16 +1,13 @@
-import { useGlobal } from "../GlobalContext";
-import Prompt from "./Prompt";
-import Interaction from "./Interaction";
-import Knowledge from "./Knowledge";
-import { Tooltip, Box } from "@mui/material";
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { grey } from "@mui/material/colors";
-import Summary from "../Summary";
-import FileInfo from "../FileInfo";
-import useStatusStore from "../../store/useStatusStore";
+import { useGlobal } from "../contexts/GlobalContext";
+import Prompt from "../components/Prompt";
+import Interaction from "../components/CanvasPage/Interaction";
+import Knowledge from "../components/CanvasPage/Knowledge";
+import Summary from "../components/Summary";
+import FileInfo from "../components/FileInfo";
+import useStatusStore from "../store/useStatusStore";
 import { CircularProgress } from "@mui/joy";
 
-export default function CanvasPage({ elements, nodeCard, knowledge, objectTypeCounts, activityCounts }) {
+export default function CanvasPage({ elements, nodeCard, knowledge }) {
 
     const { mode, fileImported } = useGlobal();
     const loadingStatus = useStatusStore(state => state.loadingStatus);
@@ -33,8 +30,6 @@ export default function CanvasPage({ elements, nodeCard, knowledge, objectTypeCo
                     <div>
                         <Knowledge 
                             knowledge={knowledge}
-                            objectTypeCounts={objectTypeCounts}
-                            activityCounts={activityCounts}
                         />
                     </div>
                 ) : null ) : (

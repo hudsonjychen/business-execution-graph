@@ -2,15 +2,13 @@ import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import { useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Button } from '@mui/joy';
-import { useGlobal } from "./GlobalContext";
-import { useFilter } from "./FilterContext";
+import { useGlobal } from "../contexts/GlobalContext";
 import useDataStore from "../store/useDataStore";
 import useStatusStore from "../store/useStatusStore";
 import useFilterStore from "../store/useFilterStore";
 
-export default function Import({ setElements, setKnowledge, setNodeCard, setObjectTypeCounts, setActivityCounts }) {
+export default function Import({ setElements, setKnowledge, setNodeCard }) {
     const { setFileImported } = useGlobal();
-    const { setObjectTypes, setObjectTypeChecked, setProcesses, setProcessChecked } = useFilter();
 
     const setLoadingStatus = useStatusStore(state => state.setLoadingStatus);
 
@@ -66,15 +64,9 @@ export default function Import({ setElements, setKnowledge, setNodeCard, setObje
 
                     setElements(data.elements);
                     setKnowledge(data.knowledge);
-                    setObjectTypes([...data.objectTypes]);
                     setNodeCard(data.nodes);
-                    setObjectTypeChecked([...data.objectTypes]);
                     setSelectedObjectTypes([...data.objectTypes]);
-                    setProcessChecked([...data.processes]);
                     setSelectedProcesses([...data.processes]);
-                    setProcesses([...data.processes]);
-                    setObjectTypeCounts(data.otcounts);
-                    setActivityCounts(data.actcounts);
                     clearInterval(intervalId);
                 }
             } catch (err) {
@@ -85,10 +77,6 @@ export default function Import({ setElements, setKnowledge, setNodeCard, setObje
 
     const handleChange = async (event) => {
         setLoadingStatus(false);
-        setProcessChecked([]);
-        setProcesses([]);
-        setObjectTypeChecked([]);
-        setObjectTypes([]);
 
         clearFileInfo();
         clearPreloadData();
