@@ -1,7 +1,7 @@
 import { useGlobal } from "../contexts/GlobalContext";
 import Prompt from "../components/Prompt";
-import Interaction from "../components/CanvasPage/Interaction";
-import Knowledge from "../components/CanvasPage/Knowledge";
+import Interaction from "../components/Interaction";
+import Knowledge from "../components/Knowledge";
 import Summary from "../components/Summary";
 import FileInfo from "../components/FileInfo";
 import useStatusStore from "../store/useStatusStore";

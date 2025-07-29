@@ -2,10 +2,10 @@ import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
 import { grey } from '@mui/material/colors';
 import NodeInfoCard from "./NodeInfoCard";
-import { useGlobal } from "../../contexts/GlobalContext";
+import { useGlobal } from "../contexts/GlobalContext";
 import { Box } from "@mui/joy";
-import useConfigStore from "../../store/useConfigStore";
-import useFilterStore from "../../store/useFilterStore";
+import useConfigStore from "../store/useConfigStore";
+import useFilterStore from "../store/useFilterStore";
 
 export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {

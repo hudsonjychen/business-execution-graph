@@ -1,10 +1,10 @@
 import { Sheet, Stack } from "@mui/joy";
-import Filters from "./Filters";
-import Import from "./Import";
-import Download from "./Download";
-import ColorPalette from "./ColorPalette";
-import Configurations from "./Configurations";
-import Mode from "./Mode";
+import Filters from "../components/Filters";
+import Import from "../components/Import";
+import Download from "../components/Download";
+import ColorPalette from "../components/ColorPalette";
+import Configurations from "../components/Configurations";
+import Mode from "../components/Mode";
 
 export default function Top({ setElements, setKnowledge, setNodeCard, setObjectTypeCounts, setActivityCounts }) {
     return (
