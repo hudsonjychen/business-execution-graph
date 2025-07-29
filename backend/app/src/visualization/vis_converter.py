@@ -104,5 +104,9 @@ def get_vis_data(object_types, processes, activities, pdg, png):
                     }
                 }
                 knowledge.append(edge_element)
+    
+    print(elements)
+    print(nodes)
+    print(knowledge)
 
     return elements, nodes, knowledge

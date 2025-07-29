@@ -27,6 +27,38 @@ export default function ImportButton({ setElements, setKnowledge, setNodeCard, s
         fileInputRef.current.click();
     };
 
+    const pollData = (taskId) => {
+        console.log("Polling with taskId:", taskId);
+
+        if (!taskId) {
+            console.error("taskId is undefined in pollData");
+            return;
+        }
+
+        const intervalId = setInterval(async () => {
+            try {
+                const res = await fetch(`http://localhost:5002/get_data/${taskId}`);
+                if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+                const data = await res.json();
+                if (data.ready) {
+                    setElements(data.elements);
+                    setKnowledge(data.knowledge);
+                    setObjectTypes(['all', ...data.objectTypes]);
+                    setNodeCard(data.nodes);
+                    setObjectTypeChecked(['all', ...data.objectTypes]);
+                    setObjects(data.objects);
+                    setProcessChecked(['all', ...data.processes]);
+                    setProcesses(['all', ...data.processes]);
+                    setObjectTypeCounts(data.otcounts);
+                    setActivityCounts(data.actcounts);
+                    clearInterval(intervalId);
+                }
+            } catch (err) {
+                console.error("Polling error", err);
+            }
+        }, 2000);
+    };
+
     const handleChange = async (event) => {
         const file = event.target.files[0];
         if(file){
@@ -43,20 +75,8 @@ export default function ImportButton({ setElements, setKnowledge, setNodeCard, s
             });
         
             const result = await response.json();
-            console.log("Succeed", result);
-
-            const res = await fetch("http://localhost:5002/get_data");
-            const data = await res.json();
-            setElements(data.elements);
-            setKnowledge(data.knowledge);
-            setObjectTypes(['all', ...data.objectTypes]);
-            setNodeCard(data.nodes);
-            setObjectTypeChecked(['all', ...data.objectTypes]);
-            setObjects(data.objects);
-            setProcessChecked(['all', ...data.processes]);
-            setProcesses(['all', ...data.processes]);
-            setObjectTypeCounts(data.otcounts);
-            setActivityCounts(data.actcounts);
+            console.log(result.taskId);
+            pollData(result.taskId);
         } 
         catch (err) {
             console.error("Fail", err);

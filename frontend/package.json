@@ -13,14 +13,16 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/roboto": "^5.1.1",
-    "@mui/icons-material": "^6.4.5",
+    "@mui/icons-material": "^7.2.0",
     "@mui/joy": "^5.0.0-beta.52",
-    "@mui/material": "^6.4.4",
+    "@mui/material": "^7.2.0",
     "cytoscape": "^3.31.1",
     "depcheck": "^1.4.7",
     "react": "^19.0.0",
+    "react-color": "^2.19.3",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.7.0"
+    "react-router-dom": "^7.7.0",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

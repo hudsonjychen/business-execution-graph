@@ -1,8 +1,17 @@
 import { useFilter } from "./FilterContext";
 import { Box, Stack, Select, Option, Checkbox } from '@mui/joy';
+import useDataStore from "../store/useDataStore";
 
 export default function Filters() {
-    const { processes, processChecked, setProcessChecked, objectTypes, objectTypeChecked, setObjectTypeChecked } = useFilter();
+    const { processChecked, setProcessChecked, objectTypeChecked, setObjectTypeChecked } = useFilter();
+    const preloadData = useDataStore(state => state.preloadData);
+
+    let processOptions = [], objectTypeOptions = [];
+
+    if(Object.keys(preloadData).length > 0) {
+        processOptions = preloadData.processList
+        objectTypeOptions = preloadData.objectTypeListAll
+    }
 
     return (
         <Box sx={{ m: 2, width: '28rem' }}>
@@ -21,7 +30,7 @@ export default function Filters() {
                     onChange={(e, newValue) => setObjectTypeChecked(newValue)}
                     
                 >
-                    {objectTypes.map((item) => (
+                    {objectTypeOptions.map((item) => (
                         <Option key={item} value={item}>
                             <Checkbox
                                 checked={objectTypeChecked.includes(item)}
@@ -38,7 +47,7 @@ export default function Filters() {
                     sx={{ width: '14rem' }}
                     onChange={(e, newValue) => setProcessChecked(newValue)}
                 >
-                    {processes.map((item) => (
+                    {processOptions.map((item) => (
                         <Option key={item} value={item}>
                             <Checkbox
                                 checked={processChecked.includes(item)}

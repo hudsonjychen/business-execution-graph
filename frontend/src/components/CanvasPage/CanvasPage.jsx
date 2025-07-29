@@ -6,12 +6,18 @@ import { Tooltip, Box } from "@mui/material";
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { grey } from "@mui/material/colors";
 import Summary from "../Summary";
+import FileInfo from "../FileInfo";
+import useStatusStore from "../../store/useStatusStore";
+import { CircularProgress } from "@mui/joy";
 
 export default function CanvasPage({ elements, nodeCard, knowledge, objects, objectTypeCounts, activityCounts }) {
+
     const { mode, fileImported } = useGlobal();
+    const loadingStatus = useStatusStore(state => state.loadingStatus);
 
     return (
         <div>
+            <FileInfo />
             <Summary
                 elements={elements} 
                 knowledge={knowledge}
@@ -19,7 +25,7 @@ export default function CanvasPage({ elements, nodeCard, knowledge, objects, obj
             />
             {!fileImported ? (
                 <Prompt />
-            ) : (
+            ) : (loadingStatus ? (
                 mode === 'discovery' ? (
                     <div>
                         <Interaction 
@@ -40,7 +46,9 @@ export default function CanvasPage({ elements, nodeCard, knowledge, objects, obj
                             activityCounts={activityCounts}
                         />
                     </div>
-                ) : null
+                ) : null ) : (
+                    <CircularProgress />
+                )
             )}
         </div>
     )

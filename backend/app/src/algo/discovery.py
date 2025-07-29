@@ -184,12 +184,12 @@ def _get_overview_data(ocel: OCEL) -> Dict[str, Any]:
     return overview_data
 
 
-def discover_interactions(ocel: OCEL) -> Dict[str, Any]:
-    ocel_interactions = dict()
+def discover(ocel: OCEL) -> Dict[str, Any]:
+    discover_results = dict()
     
-    ocel_interactions["process_interactions"] = _discover_process_interactions(ocel)
-    ocel_interactions["process_data"] = _get_process_data(ocel)
+    discover_results["interaction_data"] = _discover_process_interactions(ocel)
+    discover_results["process_data"] = _get_process_data(ocel)
 
-    print(ocel_interactions)
+    print(discover_results)
 
-    return ocel_interactions
+    return discover_results

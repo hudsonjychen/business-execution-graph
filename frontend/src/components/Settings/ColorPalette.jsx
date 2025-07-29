@@ -69,7 +69,7 @@ export default function ColorPalette() {
         return(
             <Box
                 sx={{display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 60px)',
+                    gridTemplateColumns: 'repeat(8, 30px)',
                     gap: 0,
                     mb: 2,
                 }}
@@ -81,8 +81,8 @@ export default function ColorPalette() {
                             onClick={() => handleSelect(color, object)}
                             sx={{
                                 minWidth: 0,
-                                width: 60,
-                                height: 60,
+                                width: 30,
+                                height: 30,
                                 bgcolor: color[500],
                                 borderRadius: 0,
                             }}
@@ -124,7 +124,7 @@ export default function ColorPalette() {
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row" alignItems="center">
                 <Button variant="outlined" onClick={handleReset}>
-                    Reset Setting
+                    Reset
                 </Button>
             </Stack>
         </Box>

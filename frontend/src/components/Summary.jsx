@@ -2,31 +2,25 @@ import { useFilter } from "./FilterContext";
 import { objectTypeFilter } from './CanvasPage/Interaction'
 import { Card, Stack, Typography } from "@mui/joy";
 import { ObjectIcon, ProcessIcon } from "./CustomIcons";
+import useDataStore from "../store/useDataStore";
+import summary from "../functions/summary";
 
 export default function Summary({ elements, knowledge, objects }) {
-    const { objectTypeChecked } = useFilter();
+    const { processChecked, objectTypeChecked } = useFilter();
+    const preloadData = useDataStore(state => state.preloadData);
+    const processData = useDataStore(state => state.processData);
+
+    console.log(processData);
+    
     let processCount = 0, objectTypeCount = 0, objectCount = 0;
 
-    if(elements){
-        const filteredElements = objectTypeFilter(elements, objectTypeChecked);
+    if(Object.keys(preloadData).length > 0) {
+        processCount = preloadData.processList.length
+    }
 
-        filteredElements.forEach(element => {
-            if(element['data']['label']){
-                processCount += 1;
-            }
-        });
-
-        knowledge.forEach(element => {
-            if(element['data']['category'] === 'object_type' && objectTypeChecked.includes(element['data']['label'])){
-                objectTypeCount += 1;
-            }
-        });
-
-        Object.entries(objects).forEach(([obj, type]) => {
-            if (objectTypeChecked.includes(type)) {
-                objectCount += 1;
-            }
-        });
+    if(Object.keys(processData).length > 0) {
+        objectTypeCount = summary(processData).objectTypeCount;
+        objectCount = summary(processData).objectCount;
     }
 
     return (

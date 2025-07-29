@@ -19,7 +19,7 @@ export default function Mode() {
                     Interactions Discovery
                 </Button>
                 <Button value='knowledge'>
-                    Process Knowledge
+                    Entity Relations
                 </Button>
             </ToggleButtonGroup>
         </Box>

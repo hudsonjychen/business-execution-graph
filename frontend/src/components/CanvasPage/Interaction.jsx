@@ -7,6 +7,7 @@ import { useGlobal } from "../GlobalContext";
 import { useFilter } from "../FilterContext";
 import { useSetting } from "../SettingContext";
 import { Box } from "@mui/joy";
+import useConfigStore from "../../store/useConfigStore";
 
 export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {
@@ -135,9 +136,14 @@ const mapToLevel = (value, levels) => {
 };
 
 export default function Interaction({ elements, nodeCard }) {
+    const colorScheme = useConfigStore(state => state.colorScheme);
+    const selectedColor = useConfigStore(state => state.selectedColor);
+    const nodeSizeMetric = useConfigStore(state => state.nodeSizeMetric);
+    const edgeNotationMetric = useConfigStore(state => state.edgeNotationMetric);
+
     const { setPngDataUrl, setVosData } = useGlobal();
     const { objectTypeChecked, processChecked } = useFilter();
-    const { attributeTypeChecked, notationTypeChecked, selectedColor, colorLevelType } = useSetting();
+    const { attributeTypeChecked, notationTypeChecked, colorLevelType } = useSetting();
     
     const interactionRef = useRef(null);
     const [infoCard, setInfoCard] = useState(null);
@@ -150,7 +156,7 @@ export default function Interaction({ elements, nodeCard }) {
 
     useEffect(() => {
         const filteredElements = processFilter(objectTypeFilter(elements, objectTypeChecked), processChecked);
-        const importanceIndex = getImportanceIndex(filteredElements, colorLevelType);
+        const importanceIndex = getImportanceIndex(filteredElements, colorScheme);
         setVosData(filteredElements);
 
         const cy = cytoscape(
@@ -224,8 +230,8 @@ export default function Interaction({ elements, nodeCard }) {
             }
         }
 
-        if(attributeTypeChecked != ''){
-            const sizes = calculateNodeSize(elements, attributeTypeChecked)
+        if(nodeSizeMetric != ''){
+            const sizes = calculateNodeSize(elements, nodeSizeMetric)
 
             cy.nodes().forEach(node => {
                 const nodeId = node.id();
@@ -238,10 +244,10 @@ export default function Interaction({ elements, nodeCard }) {
             });
         };
 
-        if(notationTypeChecked != ''){
+        if(edgeNotationMetric != ''){
             cy.edges().forEach(edge => {
-                if (notationTypeChecked) {
-                    edge.style('label', edge.data(notationTypeChecked));
+                if (edgeNotationMetric) {
+                    edge.style('label', edge.data(edgeNotationMetric));
                 } else {
                     edge.style('label', '');
                 }
@@ -282,7 +288,7 @@ export default function Interaction({ elements, nodeCard }) {
             cy.destroy();
         };
 
-    }, [elements, selectedColor, colorLevelType, processChecked, objectTypeChecked, attributeTypeChecked, notationTypeChecked]);
+    }, [elements, selectedColor, colorScheme, processChecked, objectTypeChecked, nodeSizeMetric, edgeNotationMetric]);
 
     useEffect(() => {
         let animationFrameId;

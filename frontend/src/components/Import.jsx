@@ -4,10 +4,22 @@ import { styled } from '@mui/material/styles';
 import { Box, Button } from '@mui/joy';
 import { useGlobal } from "./GlobalContext";
 import { useFilter } from "./FilterContext";
+import useDataStore from "../store/useDataStore";
+import useStatusStore from "../store/useStatusStore";
 
 export default function Import({ setElements, setKnowledge, setNodeCard, setObjects, setObjectTypeCounts, setActivityCounts }) {
     const { setFileImported } = useGlobal();
     const { setObjectTypes, setObjectTypeChecked, setProcesses, setProcessChecked } = useFilter();
+
+    const setFileInfo = useDataStore(state => state.setFileInfo);
+    const clearFileInfo = useDataStore(state => state.clearFileInfo);
+    const setPreloadData = useDataStore(state => state.setPreloadData);
+    const clearPreloadData = useDataStore(state => state.clearPreloadData);
+    const setLoadingStatus = useStatusStore(state => state.setLoadingStatus);
+    const setProcessData = useDataStore(state => state.setProcessData);
+    const setInteractionData = useDataStore(state => state.setInteractionData);
+    const clearInteractionData = useDataStore(state => state.clearInteractionData);
+    const clearProcessData = useDataStore(state => state.clearProcessData);
 
     const fileInputRef = useRef(null);
 
@@ -27,7 +39,54 @@ export default function Import({ setElements, setKnowledge, setNodeCard, setObje
         fileInputRef.current.click();
     };
 
+    const pollData = (taskId) => {
+        console.log("Polling with taskId:", taskId);
+
+        if (!taskId) {
+            console.error("taskId is undefined in pollData");
+            return;
+        }
+
+        const intervalId = setInterval(async () => {
+            try {
+                const res = await fetch(`http://localhost:5002/get_data/${taskId}`);
+                if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+                const data = await res.json();
+                if (data.ready) {
+                    setLoadingStatus(data.ready);
+                    setInteractionData(data.interactionData);
+                    setProcessData(data.processData);
+
+                    setElements(data.elements);
+                    setKnowledge(data.knowledge);
+                    setObjectTypes([...data.objectTypes]);
+                    setNodeCard(data.nodes);
+                    setObjectTypeChecked([...data.objectTypes]);
+                    setObjects(data.objects);
+                    setProcessChecked([...data.processes]);
+                    setProcesses([...data.processes]);
+                    setObjectTypeCounts(data.otcounts);
+                    setActivityCounts(data.actcounts);
+                    clearInterval(intervalId);
+                }
+            } catch (err) {
+                console.error("Polling error", err);
+            }
+        }, 500);
+    };
+
     const handleChange = async (event) => {
+        setLoadingStatus(false);
+        setProcessChecked([]);
+        setProcesses([]);
+        setObjectTypeChecked([]);
+        setObjectTypes([]);
+
+        clearFileInfo();
+        clearPreloadData();
+        clearInteractionData();
+        clearProcessData();
+
         const file = event.target.files[0];
         if(file){
             setFileImported(true);
@@ -43,20 +102,12 @@ export default function Import({ setElements, setKnowledge, setNodeCard, setObje
             });
         
             const result = await response.json();
-            console.log("Succeed", result);
+            console.log(result.taskId);
+            
+            setFileInfo(result.fileInfo);
+            setPreloadData(result.preloadData);
 
-            const res = await fetch("http://localhost:5002/get_data");
-            const data = await res.json();
-            setElements(data.elements);
-            setKnowledge(data.knowledge);
-            setObjectTypes(data.objectTypes);
-            setNodeCard(data.nodes);
-            setObjectTypeChecked(data.objectTypes);
-            setObjects(data.objects);
-            setProcessChecked(data.processes);
-            setProcesses(data.processes);
-            setObjectTypeCounts(data.otcounts);
-            setActivityCounts(data.actcounts);
+            pollData(result.taskId);
         } 
         catch (err) {
             console.error("Fail", err);
