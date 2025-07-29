@@ -1,11 +1,20 @@
 def get_object_type_list(process_data):
-    object_type_list = set()
+    ots = set()
     for process in process_data:
-        object_type_list.add(process_data[process]['object_type'].keys())
-    return list(object_type_list)
+        keys_list = list(process_data[process]['object_type'].keys())
+        ots.add(tuple(keys_list))
+    return [list(ot) for ot in ots]
 
 def get_object_list(process_data):
-    object_list = set()
+    os = set()
     for process in process_data:
-        object_list.add(process_data[process]['object'])
-    return list(object_list)
+        obj_list = process_data[process]['object']
+        os.add(tuple(obj_list))
+    return [list(o) for o in os]
+
+def get_activity_list(process_data):
+    acts = set()
+    for process in process_data:
+        act_list = process_data[process]['activity']
+        acts.add(tuple(act_list))
+    return [list(act) for act in acts]

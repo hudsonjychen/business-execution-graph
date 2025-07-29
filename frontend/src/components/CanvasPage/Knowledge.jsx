@@ -5,6 +5,7 @@ import { useFilter } from "../FilterContext";
 import { useSetting } from "../SettingContext";
 import { grey } from "@mui/material/colors";
 import { Box } from "@mui/joy";
+import useFilterStore from "../../store/useFilterStore";
 
 export const objectTypeFilter = (knowledge, objectTypeChecked) => {
     const filteredNodes = [];
@@ -81,6 +82,7 @@ export const processFilter = (knowledge, processChecked) => {
 };
 
 export const frequencyFilter = (knowledge, objectTypeFrequency, activityFrequency, objectTypeCounts, activityCounts) => {
+    
     const otCounts = {};
     const actCounts = {};
     const filteredNodes = [];
@@ -257,10 +259,12 @@ const countsUpdate = (knowledge, objectTypeCounts, activityCounts) => {
 export default function Knowledge({ knowledge, objectTypeCounts, activityCounts }) {
     const knowledgeRef = useRef(null);
     const { setPngDataUrl } = useGlobal();
-    const { objectTypeChecked, processChecked } = useFilter();
     const { selectedColorPattern, nodeSize, nodeTypeShown, objectTypeFrequency, activityFrequency, sharedNodeShown } = useSetting();
+    
+    const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
+    const selectedProcesses = useFilterStore(state => state.selectedProcesses);
 
-    const fKnowledge_obj_pro = processFilter(objectTypeFilter(knowledge, objectTypeChecked), processChecked);
+    const fKnowledge_obj_pro = processFilter(objectTypeFilter(knowledge, selectedObjectTypes), selectedProcesses);
     const fKnowledge_fre = frequencyFilter(fKnowledge_obj_pro, objectTypeFrequency, activityFrequency, objectTypeCounts, activityCounts);
     const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_fre, nodeTypeShown), sharedNodeShown);
 
@@ -360,7 +364,7 @@ export default function Knowledge({ knowledge, objectTypeCounts, activityCounts 
             cy.destroy();
         };
     
-    }, [knowledge, selectedColorPattern, objectTypeChecked, processChecked, nodeSize, objectTypeFrequency, activityFrequency, nodeTypeShown, sharedNodeShown]);
+    }, [knowledge, selectedColorPattern, selectedObjectTypes, selectedProcesses, nodeSize, objectTypeFrequency, activityFrequency, nodeTypeShown, sharedNodeShown]);
     
     return (
         <Box 

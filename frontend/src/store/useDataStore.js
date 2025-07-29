@@ -19,6 +19,7 @@ const useDataStore = create((set) => ({
 
     objectToType: {},
     setObjectToType: (data) => set({ objectToType: data }),
+    
 }))
 
 export default useDataStore

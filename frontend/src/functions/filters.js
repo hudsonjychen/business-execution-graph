@@ -107,3 +107,5 @@ function filterProcessData(selectedObjectTypes, selectedProcesses, processData, 
 
     return filteredProcessData
 }
+
+export {filterInteractionData, filterProcessData};

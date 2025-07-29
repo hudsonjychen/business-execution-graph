@@ -145,8 +145,6 @@ export default function Interaction({ elements, nodeCard }) {
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
 
     const { setPngDataUrl, setVosData } = useGlobal();
-    const { objectTypeChecked, processChecked } = useFilter();
-    const { attributeTypeChecked, notationTypeChecked, colorLevelType } = useSetting();
     
     const interactionRef = useRef(null);
     const [infoCard, setInfoCard] = useState(null);

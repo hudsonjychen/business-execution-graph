@@ -91,7 +91,6 @@ def data_process(log, task_id):
     cachedObjectToType.clear()
     cachedObjectToType.update(object_to_type)
 
-
     object_types = get_object_types(log)
     processes = get_processes(log)
     activities = get_activities(log)
@@ -139,7 +138,6 @@ def get_data(task_id):
             'interactionData': cachedInteractionData,
             'processData': cachedProcessData,
             'objectToType': cachedObjectToType,
-            
             'elements': cachedElements,
             'nodes': cachedNodeCard,
             'knowledge': cachedKnowledge,
