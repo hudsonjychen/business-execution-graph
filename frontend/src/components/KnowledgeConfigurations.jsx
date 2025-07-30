@@ -10,7 +10,9 @@ export default function KnowledgeConfigurations() {
     const clearKnowledgeGraphConfig = useConfigStore(state => state.clearKnowledgeGraphConfig);
 
     const showingNodeTypes = ['both', 'objectType', 'activity'];
+    const showingNodeTypeLabels = ['Both', 'Object Type', 'Activity'];
     const nodeSharingStatus = ['both', 'shared', 'nonshared'];
+    const nodeSharingStatusLabels = ['Both', 'Shared', 'Non-shared'];
 
     const Panel = () => (
         <Box sx={{ m: 2, width: 328 }}>
@@ -32,15 +34,15 @@ export default function KnowledgeConfigurations() {
                     value={showingNodeType}
                     onChange={(e, newValue) => setShowingNodeType(newValue)}
                 >
-                    {showingNodeTypes.map(item => (
+                    {showingNodeTypes.map((item, index) => (
                         <Option key={item} value={item}>
-                            {item}
+                            {showingNodeTypeLabels[index]}
                         </Option>
                     ))}
                 </Select>
             </Stack>
             <Typography level="body-sm" mb={2}>
-                Configure what node types are shown on the graph.
+                Configure which node types are displayed on the graph.
             </Typography>
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
                 <Typography level="title-md">
@@ -53,15 +55,15 @@ export default function KnowledgeConfigurations() {
                     value={nodeSharing}
                     onChange={(e, newValue) => setNodeSharing(newValue)}
                 >
-                    {nodeSharingStatus.map(item => (
+                    {nodeSharingStatus.map((item, index) => (
                         <Option key={item} value={item}>
-                            {item}
+                            {nodeSharingStatusLabels[index]}
                         </Option>
                     ))}
                 </Select>
             </Stack>
             <Typography level="body-sm" mb={5}>
-                Configure if only shared nodes, or non-shared nodes, or all nodes are shown on the graph. 
+                Configure whether to display only shared nodes, only non-shared nodes, or all nodes on the graph. 
             </Typography>
             <Stack direction="row" alignItems="center">
                 <Button level="solid" onClick={() => clearKnowledgeGraphConfig()}>

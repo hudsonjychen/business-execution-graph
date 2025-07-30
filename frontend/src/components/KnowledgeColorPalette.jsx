@@ -108,7 +108,7 @@ export default function KnowledgeColorPalette() {
                 Color Palette
             </Typography>
             <Typography level="body-sm" mb={2}>
-                Assign colors for nodes of different types to help visualization.
+                Set colors for node types to distinguish them visually.
             </Typography>
             <Stack alignItems="center" justifyContent="center" mb={3}>
                 <NodeTypeControl />

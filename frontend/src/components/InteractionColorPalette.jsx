@@ -10,6 +10,8 @@ export default function InteractionColorPalette() {
     const clearInteractionColorConfig = useConfigStore(state => state.clearInteractionColorConfig);
 
     const schemeTypes = ['disabled', 'incomingEdges', 'outgoingEdges', 'totalEdges'];
+    const schemeTypeLabels = ['Disabled', 'Incoming Edges', 'Outgoing Edges', 'Total Edges'];
+
     const colors = [
         red, pink, purple, deepPurple,
         indigo, blue, lightBlue, cyan,
@@ -60,7 +62,7 @@ export default function InteractionColorPalette() {
                 Color Palette
             </Typography>
             <Typography level="body-sm" mb={2}>
-                Select a color for nodes in the interactions.
+                Set node color for interaction visualization.
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
@@ -74,15 +76,16 @@ export default function InteractionColorPalette() {
                     value={colorScheme}
                     onChange={(e, newValue) => setColorScheme(newValue)}
                 >
-                    {schemeTypes.map(item => (
+                    {schemeTypes.map((item, index) => (
                         <Option key={item} value={item}>
-                            {item}
+                            {schemeTypeLabels[index]}
                         </Option>
                     ))}
                 </Select>
             </Stack>
             <Typography level="body-sm" mb={2}>
-                Darker nodes can indicate a higher proportion of incoming, outgoing, or total edges.
+                Darker nodes indicate higher importance based on the proportion of their incoming, outgoing, or total edges. 
+                <br />Select a metric to enable color scheme.           
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Stack alignItems="flex-start" mb={5} spacing={2}>
