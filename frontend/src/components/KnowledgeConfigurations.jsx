@@ -1,38 +1,38 @@
-import { Box, Menu, MenuButton, IconButton, Typography, Divider, Tooltip, Stack, Button, Select, Option, Dropdown } from "@mui/joy";
+import { Box, Menu, MenuButton, IconButton, Typography, Divider, Stack, Button, Select, Option, Dropdown } from "@mui/joy";
 import ArchitectureOutlinedIcon from '@mui/icons-material/ArchitectureOutlined';
 import useConfigStore from "../store/useConfigStore";
 
-export default function Configurations() {
-    const nodeSizeMetric = useConfigStore(state => state.nodeSizeMetric);
-    const setNodeSizeMetric = useConfigStore(state => state.setNodeSizeMetric);
-    const edgeNotationMetric = useConfigStore(state => state.edgeNotationMetric);
-    const setEdgeNotationMetric = useConfigStore(state => state.setEdgeNotationMetric);
-    const clearInteractionGraphConfig = useConfigStore(state => state.clearInteractionGraphConfig);
+export default function KnowledgeConfigurations() {
+    const showingNodeType = useConfigStore(state => state.showingNodeType);
+    const setShowingNodeType = useConfigStore(state => state.setShowingNodeType);
+    const nodeSharing = useConfigStore(state => state.nodeSharing);
+    const setNodeSharing = useConfigStore(state => state.setNodeSharing);
+    const clearKnowledgeGraphConfig = useConfigStore(state => state.clearKnowledgeGraphConfig);
 
-    const nodeSizeMetrics = ['none', 'objectCount', 'objectTypeCount'];
-    const edgeNotationMetrics = ['none', 'objectType', 'totalObjectCount', 'averageFlowTime'];
+    const showingNodeTypes = ['both', 'objectType', 'activity'];
+    const nodeSharingStatus = ['both', 'shared', 'nonshared'];
 
     const Panel = () => (
-        <Box sx={{ m: 2, width: 318 }}>
+        <Box sx={{ m: 2, width: 328 }}>
             <Typography level="h4" mb={1}>
                 Graph Customization
             </Typography>
             <Typography level="body-sm" mb={2}>
-                Customize settings for the interaction graph.
+                Customize settings for the knowledge graph.
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
                 <Typography level="title-md">
-                    Node Size
+                    Showing Node Types
                 </Typography>
                 <Select 
-                    sx={{ width: '12rem' }} 
+                    sx={{ width: '10rem' }} 
                     slotProps={{ listbox: { disablePortal: true }}}
-                    defaultValue='none'
-                    value={nodeSizeMetric}
-                    onChange={(e, newValue) => setNodeSizeMetric(newValue)}
+                    defaultValue='both'
+                    value={showingNodeType}
+                    onChange={(e, newValue) => setShowingNodeType(newValue)}
                 >
-                    {nodeSizeMetrics.map(item => (
+                    {showingNodeTypes.map(item => (
                         <Option key={item} value={item}>
                             {item}
                         </Option>
@@ -40,20 +40,20 @@ export default function Configurations() {
                 </Select>
             </Stack>
             <Typography level="body-sm" mb={2}>
-                Please select a metric to determine the node sizes.
+                Configure what node types are shown on the graph.
             </Typography>
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
                 <Typography level="title-md">
-                    Edge Notation
+                    Node Share Status
                 </Typography>
                 <Select 
-                    sx={{ width: '12rem' }} 
+                    sx={{ width: '10rem' }} 
                     slotProps={{ listbox: { disablePortal: true }}}
-                    defaultValue='none'
-                    value={edgeNotationMetric}
-                    onChange={(e, newValue) => setEdgeNotationMetric(newValue)}
+                    defaultValue='both'
+                    value={nodeSharing}
+                    onChange={(e, newValue) => setNodeSharing(newValue)}
                 >
-                    {edgeNotationMetrics.map(item => (
+                    {nodeSharingStatus.map(item => (
                         <Option key={item} value={item}>
                             {item}
                         </Option>
@@ -61,10 +61,10 @@ export default function Configurations() {
                 </Select>
             </Stack>
             <Typography level="body-sm" mb={5}>
-                Please select a metric to assign edge annotations.
+                Configure if only shared nodes, or non-shared nodes, or all nodes are shown on the graph. 
             </Typography>
             <Stack direction="row" alignItems="center">
-                <Button level="solid" onClick={() => clearInteractionGraphConfig()}>
+                <Button level="solid" onClick={() => clearKnowledgeGraphConfig()}>
                     Reset
                 </Button>
             </Stack>

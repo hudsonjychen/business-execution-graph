@@ -14,7 +14,6 @@ from .src.algo.discovery import discover
 from .src.algo.get_entities import get_processes, get_object_types, get_activities, get_objects
 from .src.visualization.vis_converter import get_vis_data
 from .src.algo.map import map_object_id_to_type
-from .src.algo.count_frequency import object_type_frequency_counting, activity_frequency_counting
 
 main = Blueprint('main', __name__)
 
@@ -94,8 +93,6 @@ def data_process(log, task_id):
     object_types = get_object_types(log)
     processes = get_processes(log)
     activities = get_activities(log)
-    object_type_counts = object_type_frequency_counting(log)
-    activity_counts = activity_frequency_counting(log)
     elements, nodes, knowledge = get_vis_data(object_types, processes, activities, interaction_data, process_data)
     
     # Update cache

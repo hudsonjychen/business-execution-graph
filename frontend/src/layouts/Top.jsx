@@ -2,11 +2,16 @@ import { Sheet, Stack } from "@mui/joy";
 import Filters from "../components/Filters";
 import Import from "../components/Import";
 import Download from "../components/Download";
-import ColorPalette from "../components/ColorPalette";
-import Configurations from "../components/Configurations";
+import InteractionColorPalette from "../components/InteractionColorPalette";
+import InteractionConfigurations from "../components/InteractionConfigurations";
 import Mode from "../components/Mode";
+import { useGlobal } from "../contexts/GlobalContext";
+import KnowledgeColorPalette from "../components/KnowledgeColorPalette";
+import KnowledgeConfigurations from "../components/KnowledgeConfigurations";
 
-export default function Top({ setElements, setKnowledge, setNodeCard, setObjectTypeCounts, setActivityCounts }) {
+export default function Top({ setElements, setKnowledge, setNodeCard }) {
+    const { mode } = useGlobal();
+
     return (
         <Sheet
             variant="plain"
@@ -37,8 +42,19 @@ export default function Top({ setElements, setKnowledge, setNodeCard, setObjectT
             </Stack>
             <Stack direction='row' alignItems='center' spacing={1} sx={{ mr: 3 }}>
                 <Filters />
-                <ColorPalette />
-                <Configurations />
+                {
+                    mode === 'discovery' ? (
+                        <Stack direction='row' alignItems='center' spacing={1}>
+                            <InteractionColorPalette />
+                            <InteractionConfigurations />
+                        </Stack>
+                    ) : (
+                        <Stack direction='row' alignItems='center' spacing={1}>
+                            <KnowledgeColorPalette />
+                            <KnowledgeConfigurations />
+                        </Stack>
+                    )
+                }
             </Stack>
         </Sheet>
     )

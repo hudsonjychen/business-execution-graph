@@ -1,7 +1,6 @@
 import cytoscape from "cytoscape";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { grey } from '@mui/material/colors';
-import NodeInfoCard from "./NodeInfoCard";
 import { useGlobal } from "../contexts/GlobalContext";
 import { Box } from "@mui/joy";
 import useConfigStore from "../store/useConfigStore";
@@ -112,12 +111,6 @@ const getImportanceIndex = (elements, type) => {
         }
     }
 
-    /**
-    for (const key in targetInstance) {
-        importanceIndex[key] = targetInstance[key] / targetList.length;
-    }
-    */
-
     nodeList.forEach(node => {
         if (!Object.keys(importanceIndex).includes(node)) {
             importanceIndex[node] = 0;
@@ -145,10 +138,6 @@ export default function Interaction({ elements, nodeCard }) {
     const { setPngDataUrl, setVosData } = useGlobal();
     
     const interactionRef = useRef(null);
-    const [infoCard, setInfoCard] = useState(null);
-    const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
-    const [selectedNodeId, setSelectedNodeId] = useState(null);
-    const selectedNodeRef = useRef(null);
 
     const levels = [50, 100, 200, 300, 400, 500, 600, 700, 800];
 
@@ -253,28 +242,6 @@ export default function Interaction({ elements, nodeCard }) {
             });
         };
 
-        cy.on('tap', (event) => {
-            if (event.target === cy) {
-                setInfoCard(null);
-            }
-        });
-
-        cy.on('tap', 'node', (event) => {
-            const node = event.target;
-            selectedNodeRef.current = node;
-        
-            const pos = node.renderedPosition();
-
-            setSelectedNodeId(node.id());
-        
-            setInfoCard(true);
-        
-            setCardPosition({
-                top: pos.y + 20,
-                left: pos.x + 80,
-            });
-        });
-
         const pngDataUrl = cy.png({
             output: 'base64uri',
             full: true,
@@ -288,31 +255,6 @@ export default function Interaction({ elements, nodeCard }) {
         };
 
     }, [elements, selectedColor, colorScheme, selectedProcesses, selectedObjectTypes, nodeSizeMetric, edgeNotationMetric]);
-
-    useEffect(() => {
-        let animationFrameId;
-    
-        const updateCardPosition = () => {
-            if (infoCard && selectedNodeRef.current) {
-                const pos = selectedNodeRef.current.renderedPosition();
-                setCardPosition({
-                    top: pos.y + 20,
-                    left: pos.x + 80,
-                });
-                animationFrameId = requestAnimationFrame(updateCardPosition);
-            }
-        };
-    
-        if (infoCard) {
-            animationFrameId = requestAnimationFrame(updateCardPosition);
-        }
-    
-        return () => {
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-        };
-    }, [infoCard]);
     
     return (
         <Box 
@@ -331,16 +273,6 @@ export default function Interaction({ elements, nodeCard }) {
                 ref={interactionRef} 
                 sx={{ width: '100%', height: '100%', overflow: 'hidden' }}
             />
-            {
-                infoCard && (
-                    <NodeInfoCard 
-                        top={cardPosition.top} 
-                        left={cardPosition.left}
-                        selectedNodeId={selectedNodeId}
-                        nodeCard={nodeCard}
-                    />
-                )
-            }
         </Box>
     )
 }

@@ -1,10 +1,10 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef } from "react";
 import { useGlobal } from "../contexts/GlobalContext";
-import { useSetting } from "../contexts/SettingContext";
 import { grey } from "@mui/material/colors";
 import { Box } from "@mui/joy";
 import useFilterStore from "../store/useFilterStore";
+import useConfigStore from "../store/useConfigStore";
 
 export const objectTypeFilter = (knowledge, objectTypeChecked) => {
     const filteredNodes = [];
@@ -173,13 +173,17 @@ export const nodeSharedFilter = (knowledge, sharedNodeShown) => {
 export default function Knowledge({ knowledge }) {
     const knowledgeRef = useRef(null);
     const { setPngDataUrl } = useGlobal();
-    const { selectedColorPattern, nodeSize, nodeTypeShown, objectTypeFrequency, activityFrequency, sharedNodeShown } = useSetting();
     
     const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
 
+    const colorSet = useConfigStore(state => state.colorSet);
+
+    const showingNodeType = useConfigStore(state => state.showingNodeType);
+    const nodeSharing = useConfigStore(state => state.nodeSharing);
+
     const fKnowledge_obj_pro = processFilter(objectTypeFilter(knowledge, selectedObjectTypes), selectedProcesses);
-    const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_obj_pro, nodeTypeShown), sharedNodeShown);
+    const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_obj_pro, showingNodeType), nodeSharing);
 
     const fKnowledge = fKnowledge_node_type;
 
@@ -195,8 +199,8 @@ export default function Knowledge({ knowledge }) {
                 {
                     selector: 'node[category="process"]',
                     style: {
-                        'width': nodeSize[0],
-                        'height': nodeSize[0],
+                        'width': 90,
+                        'height': 90,
                         'background-color': grey[700],
                         'label': 'data(label)'
                     }
@@ -205,8 +209,8 @@ export default function Knowledge({ knowledge }) {
                 {
                     selector: 'node[category="object_type"]',
                     style: {
-                        'width': nodeSize[1],
-                        'height': nodeSize[1],
+                        'width': 50,
+                        'height': 50,
                         'background-color': grey[500],
                         'label': 'data(label)'
                     }
@@ -215,8 +219,8 @@ export default function Knowledge({ knowledge }) {
                 {
                     selector: 'node[category="activity"]',
                     style: {
-                        'width': nodeSize[2],
-                        'height': nodeSize[2],
+                        'width': 30,
+                        'height': 30,
                         'background-color': grey[300],
                         'label': 'data(label)'
                     }
@@ -241,26 +245,26 @@ export default function Knowledge({ knowledge }) {
             },
         });
 
-        if(selectedColorPattern.process){
+        if(colorSet.process){
             cy.nodes().forEach(node => {
                 if(node.data('category') === 'process'){
-                    node.style('background-color', selectedColorPattern.process[500]);
+                    node.style('background-color', colorSet.process[500]);
                 }
             });
         }
         
-        if(selectedColorPattern.objectType){
+        if(colorSet.objectType){
             cy.nodes().forEach(node => {
                 if(node.data('category') === 'object_type'){
-                    node.style('background-color', selectedColorPattern.objectType[500]);
+                    node.style('background-color', colorSet.objectType[500]);
                 }
             });
         }
         
-        if(selectedColorPattern.activity){
+        if(colorSet.activity){
             cy.nodes().forEach(node => {
                 if(node.data('category') === 'activity'){
-                    node.style('background-color', selectedColorPattern.activity[500]);
+                    node.style('background-color', colorSet.activity[500]);
                 }
             });
         }
@@ -277,7 +281,7 @@ export default function Knowledge({ knowledge }) {
             cy.destroy();
         };
     
-    }, [knowledge, selectedColorPattern, selectedObjectTypes, selectedProcesses, nodeSize, objectTypeFrequency, activityFrequency, nodeTypeShown, sharedNodeShown]);
+    }, [knowledge, colorSet, selectedObjectTypes, selectedProcesses, showingNodeType, nodeSharing]);
     
     return (
         <Box 

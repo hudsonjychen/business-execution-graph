@@ -1,15 +1,18 @@
-import { Box, Menu, MenuButton, IconButton, Typography, Divider, Tooltip, Stack, Button, Select, Option, Dropdown } from "@mui/joy";
+import { Box, Menu, MenuButton, IconButton, Typography, Divider, Tooltip, Stack, Button, Select, Option, Dropdown, Radio, RadioGroup } from "@mui/joy";
 import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import { red, pink, purple, deepPurple, indigo, blue, lightBlue, cyan, teal, green, lightGreen, lime, yellow, amber, orange, deepOrange } from '@mui/material/colors';
 import useConfigStore from "../store/useConfigStore";
+import { useState } from "react";
 
-export default function ColorPalette() {
-    const colorScheme = useConfigStore(state => state.colorScheme);
-    const setColorScheme = useConfigStore(state => state.setColorScheme);
-    const setSelectedColor = useConfigStore(state => state.setSelectedColor);
-    const clearInteractionColorConfig = useConfigStore(state => state.clearInteractionColorConfig);
+export default function KnowledgeColorPalette() {
+    const [selectedType, setSelectedType] = useState('process');
+    
+    const setColorSet = useConfigStore(state => state.setColorSet);
+    const clearKnowledgeColorConfig = useConfigStore(state => state.clearKnowledgeColorConfig);
 
-    const schemeTypes = ['disabled', 'incomingEdges', 'outgoingEdges', 'totalEdges'];
+    const nodeTypes = ['process', 'objectType', 'activity'];
+    const nodeTypeLabels = ['Process', 'Object Type', 'Activity'];
+
     const colors = [
         red, pink, purple, deepPurple,
         indigo, blue, lightBlue, cyan,
@@ -24,6 +27,51 @@ export default function ColorPalette() {
         'Yellow', 'Amber', 'Orange', 'Deep Orange'
     ];
 
+    const NodeTypeControl = () => {
+        return (
+            <RadioGroup
+                orientation="horizontal"
+                value={selectedType}
+                onChange={(event) => setSelectedType(event.target.value)}
+                sx={{
+                    minHeight: 42,
+                    padding: '4px',
+                    borderRadius: '12px',
+                    bgcolor: 'neutral.softBg',
+                    '--RadioGroup-gap': '4px',
+                    '--Radio-actionRadius': '8px',
+                }}
+            >
+                {nodeTypes.map((item, index) => (
+                    <Radio
+                        key={item}
+                        color="neutral"
+                        value={item}
+                        disableIcon
+                        label={
+                            <Typography level="title-sm">{nodeTypeLabels[index]}</Typography>
+                        }
+                        variant="plain"
+                        sx={{ px: 2, alignItems: 'center' }}
+                        slotProps={{
+                            action: ({ checked }) => ({
+                                sx: {
+                                    ...(checked && {
+                                        bgcolor: 'background.surface',
+                                        boxShadow: 'sm',
+                                        '&:hover': {
+                                        bgcolor: 'background.surface',
+                                        },
+                                    }),
+                                },
+                            }),
+                        }}
+                    />
+                ))}
+            </RadioGroup>
+        )
+    }
+
     const ColorPicker = () => {
         return(
             <Box
@@ -36,7 +84,7 @@ export default function ColorPalette() {
                     <Tooltip key={index} title={colorNames[index]} placement="right">
                         <Button
                             key={index}
-                            onClick={() => setSelectedColor(color)}
+                            onClick={() => setColorSet(selectedType, color)}
                             sx={{
                                 padding: 0,
                                 width: 36,
@@ -60,31 +108,11 @@ export default function ColorPalette() {
                 Color Palette
             </Typography>
             <Typography level="body-sm" mb={2}>
-                Select a color for nodes in the interactions.
+                Assign colors for nodes of different types to help visualization.
             </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
-                <Typography level="title-md">
-                    Color Scheme
-                </Typography>
-                <Select 
-                    sx={{ width: '12rem' }} 
-                    slotProps={{ listbox: { disablePortal: true }}}
-                    defaultValue='none'
-                    value={colorScheme}
-                    onChange={(e, newValue) => setColorScheme(newValue)}
-                >
-                    {schemeTypes.map(item => (
-                        <Option key={item} value={item}>
-                            {item}
-                        </Option>
-                    ))}
-                </Select>
+            <Stack alignItems="center" justifyContent="center" mb={3}>
+                <NodeTypeControl />
             </Stack>
-            <Typography level="body-sm" mb={2}>
-                Darker nodes can indicate a higher proportion of incoming, outgoing, or total edges.
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
             <Stack alignItems="flex-start" mb={5} spacing={2}>
                 <Typography level="title-md">
                     Color Selector
@@ -94,7 +122,7 @@ export default function ColorPalette() {
                 </Box>
             </Stack>
             <Stack direction="row" alignItems="center">
-                <Button level="solid" onClick={() => clearInteractionColorConfig()}>
+                <Button level="solid" onClick={() => clearKnowledgeColorConfig()}>
                     Reset
                 </Button>
             </Stack>
