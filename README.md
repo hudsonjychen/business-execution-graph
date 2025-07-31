@@ -13,7 +13,6 @@ This project is built with a **Vite-powered React frontend** and a **Flask-based
 │ └── requirements.txt # Python dependencies
 ├── frontend/ # Frontend (Vite + React)
 │ ├── src/ # Frontend source code
-│ ├── public/ # Static assets
 │ ├── index.html # App entry
 │ ├── vite.config.js # Vite config
 │ └── package.json # Node dependencies
@@ -32,15 +31,24 @@ This project is built with a **Vite-powered React frontend** and a **Flask-based
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/hudsonjychen/InterProcess-Interactions.git
-cd InterProcess-Interactions-master
+git clone https://github.com/hudsonjychen/business-execution-graph.git
+cd business-execution-graph
 ```
 
 ### 2. Set Up the Backend
+#### Windows
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate # MacOS:source venv/bin/activate
+venv\Scripts\activate
+pip install -r requirements.txt
+python run.py # Start Flask server
+```
+#### macOS
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 python run.py # Start Flask server
 ```

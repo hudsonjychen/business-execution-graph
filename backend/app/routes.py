@@ -3,14 +3,21 @@ import tempfile
 import traceback
 from flask import Blueprint, jsonify, request
 import pm4py
-from .cache import cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedObjects, cachedProcesses, cachedActivityCounts, cachedObjectTypeCounts
-from .src.algo.inter_process_discovery import discover_interactions
-from .src.algo.ocel_entity_extraction import get_processes, get_object_types, get_objects, get_activities
+import threading
+import uuid
+from datetime import datetime
+from werkzeug.exceptions import RequestEntityTooLarge
+
+from .src.util.json_adapter import convert_for_json
+from .cache import cachedFileInfo, cachedPreloadData, cachedInteractionData, cachedProcessData, cachedObjectToType, cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedProcesses
+from .src.algo.discovery import discover
+from .src.algo.get_entities import get_processes, get_object_types, get_activities, get_objects
 from .src.visualization.vis_converter import get_vis_data
-from .src.algo.ocel_mapping import map_object_id_to_type
-from .src.statistics.frequency_counting import object_type_frequency_counting, activity_frequency_counting
+from .src.algo.map import map_object_id_to_type
 
 main = Blueprint('main', __name__)
+
+task_status = {}
 
 @main.route('/upload', methods=['POST'])
 def upload():
@@ -22,60 +29,109 @@ def upload():
         with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as temp:
             file.save(temp.name)
             temp_path = temp.name
+
+        filename = file.filename
+        size = round(os.path.getsize(temp_path) / 1024 / 1024, 2)
+        uploadtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        cachedFileInfo['filename'] = filename
+        cachedFileInfo['size'] = size
+        cachedFileInfo['uploadtime'] = uploadtime
+
         log = pm4py.read_ocel2_json(temp_path)
-        interactions = discover_interactions(log)
-        process_interactions = interactions['process_interactions']
-        process_data = interactions['process_data']
-        object_types = get_object_types(log)
-        processes = get_processes(log)
-        activities = get_activities(log)
-        object_type_counts = object_type_frequency_counting(log)
-        activity_counts = activity_frequency_counting(log)
-        elements, nodes, knowledge = get_vis_data(object_types, processes, activities, process_interactions, process_data)
-        
-        # Update cache
-        cachedElements.clear()
-        cachedElements.extend(elements)
 
-        cachedNodeCard.clear()
-        cachedNodeCard.update(nodes)
+        cachedPreloadData.clear()
+        cachedPreloadData.update(data_preload(log))
 
-        cachedKnowledge.clear()
-        cachedKnowledge.extend(knowledge)
-
-        cachedObjectTypes.clear()
-        cachedObjectTypes.extend(list(object_types))
-
-        cachedObjects.clear()
-        cachedObjects.update(map_object_id_to_type(log))
-
-        cachedProcesses.clear()
-        cachedProcesses.extend(list(processes))
-
-        cachedObjectTypeCounts.clear()
-        cachedObjectTypeCounts.update(object_type_counts)
-
-        cachedActivityCounts.clear()
-        cachedActivityCounts.update(activity_counts)
+        task_id = str(uuid.uuid4())
+        threading.Thread(target=data_process, args=(log, task_id)).start()
 
         os.remove(temp_path)
 
-        return jsonify({"status": "success"})
+        # preload data
+        return jsonify({
+            'fileInfo': cachedFileInfo,
+            'preloadData': cachedPreloadData,
+            'taskId': task_id
+        })
 
     except Exception as e:
         print("Fail", e)
         traceback.print_exc()
         return jsonify({"status": "error", "message": str(e)}), 500
 
-@main.route('/get_data', methods=['GET'])
-def get_data():
-    return jsonify({
-        'elements': cachedElements,
-        'nodes': cachedNodeCard,
-        'knowledge': cachedKnowledge,
-        'objectTypes': cachedObjectTypes,
-        'objects': cachedObjects,
-        'processes': cachedProcesses,
-        'otcounts': cachedObjectTypeCounts,
-        'actcounts': cachedActivityCounts
-    })
+
+def data_preload(log):
+
+    preload_data = {
+        'objectTypeListAll': list(get_object_types(log)),
+        'processList': list(get_processes(log)),
+        'objectListAll': list(get_objects(log))
+    }
+
+    return preload_data
+
+
+def data_process(log, task_id):
+
+    discover_results = discover(log)
+    interaction_data = discover_results["interaction_data"]
+    process_data = discover_results["process_data"]
+
+    # interaction data
+    cachedInteractionData.clear()
+    cachedInteractionData.update(convert_for_json(interaction_data))
+    # process data
+    cachedProcessData.clear()
+    cachedProcessData.update(convert_for_json(process_data))
+
+    # object to object type map data
+    object_to_type = map_object_id_to_type(log)
+    cachedObjectToType.clear()
+    cachedObjectToType.update(object_to_type)
+
+    object_types = get_object_types(log)
+    processes = get_processes(log)
+    activities = get_activities(log)
+    elements, nodes, knowledge = get_vis_data(object_types, processes, activities, interaction_data, process_data)
+    
+    # Update cache
+    cachedElements.clear()
+    cachedElements.extend(elements)
+
+    cachedNodeCard.clear()
+    cachedNodeCard.update(nodes)
+
+    cachedKnowledge.clear()
+    cachedKnowledge.extend(knowledge)
+
+    cachedObjectTypes.clear()
+    cachedObjectTypes.extend(list(object_types))
+
+    cachedProcesses.clear()
+    cachedProcesses.extend(list(processes))
+
+    task_status[task_id] = True
+
+
+@main.errorhandler(RequestEntityTooLarge)
+def handle_large_file(e):
+    return 'file too large', 413
+
+
+@main.route('/get_data/<task_id>', methods=['GET'])
+def get_data(task_id):
+    if task_id in task_status:
+        return jsonify({
+            'ready': True,
+            'interactionData': cachedInteractionData,
+            'processData': cachedProcessData,
+            'objectToType': cachedObjectToType,
+            'elements': cachedElements,
+            'nodes': cachedNodeCard,
+            'knowledge': cachedKnowledge,
+            'objectTypes': cachedObjectTypes,
+            'processes': cachedProcesses,
+        })
+    else:
+        return jsonify({'ready': False})
