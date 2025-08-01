@@ -17,10 +17,10 @@ export default function InteractionConfigurations() {
     const Panel = () => (
         <Box sx={{ m: 2, width: 328 }}>
             <Typography level="h4" mb={1}>
-                Graph Customization
+                Graph Configurations
             </Typography>
             <Typography level="body-sm" mb={2}>
-                Customize settings for the interaction graph.
+                Configure for the interaction graph.
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>

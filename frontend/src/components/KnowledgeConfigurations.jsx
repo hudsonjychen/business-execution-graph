@@ -17,10 +17,10 @@ export default function KnowledgeConfigurations() {
     const Panel = () => (
         <Box sx={{ m: 2, width: 328 }}>
             <Typography level="h4" mb={1}>
-                Graph Customization
+                Graph Configurations
             </Typography>
             <Typography level="body-sm" mb={2}>
-                Customize settings for the knowledge graph.
+                Configure the knowledge graph.
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
