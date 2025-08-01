@@ -73,7 +73,12 @@ The **Business Execution Graph** offers rich interactions and options to help yo
 **Zoom in/out** and **drag nodes** to freely explore the graph layout.
 Use the **filters** in the top-right corner to filter by object types and processes, allowing you to customize the view for analysis.
 
+Let’s take an example. Suppose you’re not interested in the `Export Management` process. You can deselect it from the **process filter**, and the interaction graph will update accordingly. The `Export Management` node and its connected edges will be removed, making the relationships among the remaining three processes simpler.
+
 ![Filters 1](./images/filters-1.png)
+
+The same applies to the **object type filter**. When you deselect one or more object types, the process nodes or edges not related to any selected object types will be removed.
+
 ![Filters 2](./images/filters-2.png)
 
 Additional tools in the top-right corner include the **color palette** and **graph configuration** (compass icon) buttons, which provide advanced customization options.
