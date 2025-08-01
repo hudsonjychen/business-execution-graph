@@ -72,6 +72,10 @@ The **Business Execution Graph** offers rich interactions and options to help yo
 
 **Zoom in/out** and **drag nodes** to freely explore the graph layout.
 Use the **filters** in the top-right corner to filter by object types and processes, allowing you to customize the view for analysis.
+
+![Filters 1](./images/filters-1.png)
+![Filters 2](./images/filters-2.png)
+
 Additional tools in the top-right corner include the **color palette** and **graph configuration** (compass icon) buttons, which provide advanced customization options.
 
 ### Color Palette
