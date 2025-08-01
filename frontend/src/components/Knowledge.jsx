@@ -167,7 +167,6 @@ export const nodeSharedFilter = (knowledge, sharedNodeShown) => {
         })
     }
 
-    console.log(nodeSharedNum);
 }
 
 export default function Knowledge({ knowledge }) {

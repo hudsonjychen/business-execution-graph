@@ -10,14 +10,11 @@ export default function Summary() {
     const objectToType = useDataStore(state => state.objectToType);
     const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
-
-    console.log(processData);
     
     let processCount = 0, objectTypeCount = 0, objectCount = 0;
 
     if(Object.keys(processData).length > 0 && selectedObjectTypes.length > 0 && selectedProcesses.length > 0) {
         const filteredProcessData = filterProcessData(selectedObjectTypes, selectedProcesses, processData, objectToType);
-        console.log(filteredProcessData);
         objectTypeCount = summary(filteredProcessData).objectTypeCount;
         objectCount = summary(filteredProcessData).objectCount;
         processCount = Object.keys(filteredProcessData).length;
