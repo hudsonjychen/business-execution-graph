@@ -1,25 +1,30 @@
 # BEG (Business Execution Graph)
 
-A tool aimed at exploring inter-process interactions from event data. 
-This project is built with a **Vite-powered React frontend** and a **Flask-based backend**.
+Business Execution Graph is the companion tool of [Procellar](https://github.com/hudsonjychen/procellar). It is a part of our framework that enhances analytical power of object-centric process mining (OCPM). You can learn more about our initiative in our paper.
+
+**"Process-Level Aggregation and Analysis of Object-Centric Event Data"**  
+*Shahrzad Khayatbashi, Majid Rafiei, Jiayuan Chen, and Amin Jalali*
+
+Submitted to the [10th International Workshop on Process Querying, Manipulation, and Intelligence (PQMI 2025)](http://processquerying.com/pqmi2025/)
+
+To take a look at our case study, please go to [Process-Level-OCPM](https://github.com/shahrzadkhayatbashi/Process-Level-OCPM).
+
 
 ## Project Structure
 
-```bash
-.
-├── backend/ # Flask backend (Python)
-│ ├── app/ # Backend source code
-│ ├── run.py # Entry point
-│ └── requirements.txt # Python dependencies
-├── frontend/ # Frontend (Vite + React)
-│ ├── src/ # Frontend source code
-│ ├── index.html # App entry
-│ ├── vite.config.js # Vite config
-│ └── package.json # Node dependencies
-├── example_data/ # Example event logs for demo or test
-├── .gitignore
-└── README.md
-```
+- `backend/app` - Backend source code
+- `backend/requirements.txt` - Requirements txt for setting up
+- `backend/run.py` - Entry point for starting the Flask server
+- `documentation` - Documentation for Business Execution Graph
+- `example-data` - Example process enriched OCEL
+- `frontend/src` - Frontend source code
+- `frontend/package.json` - Frontend dependencies and build scripts
+- `README.md` - README
+
+## Documentation
+Refer to the documentation for a quick start and comprehensive information.
+
+
 
 ## Getting Started
 
