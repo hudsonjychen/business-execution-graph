@@ -1,5 +1,5 @@
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
-import { Box, Typography } from '@mui/joy';
+import { Box, Typography } from '@mui/joy'
 
 export default function Prompt() {
     return (

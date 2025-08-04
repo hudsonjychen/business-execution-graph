@@ -1,4 +1,4 @@
-def get_vis_data(object_types, processes, activities, interaction_data, process_data):
+def get_vis_data(object_types, processes, activities, pdg, png):
     elements = []
     knowledge = []
     nodes = {}
@@ -10,9 +10,9 @@ def get_vis_data(object_types, processes, activities, interaction_data, process_
             "data": {
                 "id": str(node_id_counter),
                 "label": process,
-                "objectType": process_data[process]['object_type_list'],
-                "objectTypeCount": len(process_data[process]['object_type_list']),
-                "objectCount": process_data[process]['total_object_count'],
+                "objectType": list(png[process]['object_type'].keys()),
+                "objectTypeCount": len(list(png[process]['object_type'].keys())),
+                "objectCount": png[process]['total_count'],
             }
         }
         pro_element = {
@@ -24,10 +24,9 @@ def get_vis_data(object_types, processes, activities, interaction_data, process_
         }
         node = {
             "label": process,
-            "objectType": process_data[process]['object_type'],
-            "activity": process_data[process]['activity'],
-            "totalObjectCount": process_data[process]['total_object_count'],
-            "totalEventCount": process_data[process]['total_event_count'],
+            "totalObjectCount": png[process]['total_count'],
+            "objectType": png[process]['object_type'],
+            "activity": list(png[process]['activity']),
         }
         label_to_id[process] = str(node_id_counter)
         elements.append(element)
@@ -35,12 +34,12 @@ def get_vis_data(object_types, processes, activities, interaction_data, process_
         nodes[node_id_counter] = node
         node_id_counter += 1
 
-    for source in interaction_data:
-        for target in interaction_data[source]:
+    for source in pdg:
+        for target in pdg[source]:
             source_id = label_to_id.get(source)
             target_id = label_to_id.get(target)
 
-            object_type = f"{list(interaction_data[source][target]['object_type'].keys())}"
+            object_type = f"{list(pdg[source][target]['object_type'].keys())}"
 
             if source_id is not None and target_id is not None:
                 edge = {
@@ -48,8 +47,8 @@ def get_vis_data(object_types, processes, activities, interaction_data, process_
                         "id": f"{source_id}-{target_id}",
                         "source": source_id,
                         "target": target_id,
-                        "totalObjectCount": interaction_data[source][target]['total_count'],
-                        "averageFlowTime": str(interaction_data[source][target]['average_flow_time']),
+                        "totalObjectCount": pdg[source][target]['total_count'],
+                        "averageFlowTime": str(pdg[source][target]['average_flow_time']),
                         "objectType": object_type,
                     }
                 }
@@ -79,11 +78,11 @@ def get_vis_data(object_types, processes, activities, interaction_data, process_
         label_to_id[at] = str(node_id_counter)
         node_id_counter += 1
 
-    for process in process_data:
+    for process in png:
         for ot in object_types:
             source_id = label_to_id.get(process)
             target_id = label_to_id.get(ot)
-            if ot in process_data[process]['object_type_list']:
+            if ot in list(png[process]['object_type'].keys()):
                 edge_element = {
                     "data": {
                         "id": f"{source_id}-{target_id}",
@@ -96,7 +95,7 @@ def get_vis_data(object_types, processes, activities, interaction_data, process_
         for at in activities:
             source_id = label_to_id.get(process)
             target_id = label_to_id.get(at)
-            if at in process_data[process]['activity_list']:
+            if at in png[process]['activity']:
                 edge_element = {
                     "data": {
                         "id": f"{source_id}-{target_id}",

@@ -100,7 +100,7 @@ def data_process(log, task_id):
     cachedElements.extend(elements)
 
     cachedNodeCard.clear()
-    cachedNodeCard.update(convert_for_json(nodes))
+    cachedNodeCard.update(nodes)
 
     cachedKnowledge.clear()
     cachedKnowledge.extend(knowledge)
