@@ -1,10 +1,12 @@
 import cytoscape from "cytoscape";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { grey } from '@mui/material/colors';
 import { useGlobal } from "../contexts/GlobalContext";
 import { Box } from "@mui/joy";
+import useDataStore from "../store/useDataStore";
 import useConfigStore from "../store/useConfigStore";
 import useFilterStore from "../store/useFilterStore";
+import ProcessCard from "./ProcessCard";
 
 export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {
@@ -127,6 +129,13 @@ const mapToLevel = (value, levels) => {
 };
 
 export default function Interaction({ elements, nodeCard }) {
+    const [cyInstance, setCyInstance] = useState(null);
+    const [selectedNode, setSelectedNode] = useState(null);
+    const [nodePosition, setNodePosition] = useState({ x: 0, y: 0 });
+    const cardRef = useRef();
+
+    const processData = useDataStore(state => state.processData);
+    
     const colorScheme = useConfigStore(state => state.colorScheme);
     const selectedColor = useConfigStore(state => state.selectedColor);
     const nodeSizeMetric = useConfigStore(state => state.nodeSizeMetric);
@@ -249,6 +258,7 @@ export default function Interaction({ elements, nodeCard }) {
             bg: '#ffffff'
         });
         setPngDataUrl(pngDataUrl);
+        setCyInstance(cy);
 
         return () => {
             cy.destroy();
@@ -256,6 +266,54 @@ export default function Interaction({ elements, nodeCard }) {
 
     }, [elements, selectedColor, colorScheme, selectedProcesses, selectedObjectTypes, nodeSizeMetric, edgeNotationMetric]);
     
+    useEffect(() => {
+        if (!cyInstance) return;
+
+        const handleTap = (event) => {
+            const node = event.target;
+
+            if (node.isNode && node.isNode()) {
+                const pos = node.renderedPosition();
+                const id = node.data('id');
+                const label = node.data('label');
+                setSelectedNode({ id, label });
+                setNodePosition(pos);
+            }
+        };
+
+        const handleClickOutside = (e) => {
+            if (cardRef.current && !cardRef.current.contains(e.target)) {
+                setSelectedNode(null);
+            }
+        };
+
+        cyInstance.on('tap', 'node', handleTap);
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            cyInstance.removeListener('tap', 'node', handleTap);
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [cyInstance]);
+
+    useEffect(() => {
+        if (!cyInstance || !selectedNode) return;
+
+        const node = cyInstance.$id(selectedNode.id);
+        const updatePosition = () => {
+            const pos = node.renderedPosition();
+            setNodePosition(pos);
+        };
+
+        node.on('position', updatePosition);
+        cyInstance.on('render', updatePosition);
+
+        return () => {
+            node.removeListener('position', updatePosition);
+            cyInstance.removeListener('render', updatePosition);
+        };
+    }, [cyInstance, selectedNode]);
+
     return (
         <Box 
             sx={{ 
@@ -273,6 +331,17 @@ export default function Interaction({ elements, nodeCard }) {
                 ref={interactionRef} 
                 sx={{ width: '100%', height: '100%', overflow: 'hidden' }}
             />
+            {
+                selectedNode && (
+                    <ProcessCard 
+                        cardRef={cardRef}
+                        processLabel={selectedNode.label}
+                        processInfo={processData[selectedNode.label]}
+                        position={nodePosition}
+                        interactionRef={interactionRef}
+                    />
+                )
+            }
         </Box>
     )
 }

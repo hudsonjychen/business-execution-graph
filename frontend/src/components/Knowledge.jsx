@@ -5,6 +5,7 @@ import { grey } from "@mui/material/colors";
 import { Box } from "@mui/joy";
 import useFilterStore from "../store/useFilterStore";
 import useConfigStore from "../store/useConfigStore";
+import ProcessChip from "./ProcessChip";
 
 export const objectTypeFilter = (knowledge, objectTypeChecked) => {
     const filteredNodes = [];
@@ -295,6 +296,7 @@ export default function Knowledge({ knowledge }) {
                 zIndex: '5' 
             }}
         >
+            <ProcessChip processLabel='Export Management' />
             <Box 
                 ref={knowledgeRef} 
                 sx={{ width: '100%', height: '100%', overflow: 'hidden' }}

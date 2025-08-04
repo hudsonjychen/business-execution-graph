@@ -21,8 +21,7 @@ function getElements(
     const filteredProcessData = filterProcessData(
         selectedObjectTypes, 
         selectedProcesses, 
-        processData, 
-        objectToType
+        processData 
     );
 
     const {interactionElements, knowledgeElements} = getVisData(
