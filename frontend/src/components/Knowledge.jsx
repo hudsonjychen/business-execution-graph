@@ -5,6 +5,7 @@ import { grey } from "@mui/material/colors";
 import { Box } from "@mui/joy";
 import useFilterStore from "../store/useFilterStore";
 import useConfigStore from "../store/useConfigStore";
+import useSelectorStore from "../store/useSelectorStore";
 import ProcessChip from "./ProcessChip";
 
 export const objectTypeFilter = (knowledge, objectTypeChecked) => {
@@ -182,10 +183,17 @@ export default function Knowledge({ knowledge }) {
     const showingNodeType = useConfigStore(state => state.showingNodeType);
     const nodeSharing = useConfigStore(state => state.nodeSharing);
 
-    const fKnowledge_obj_pro = processFilter(objectTypeFilter(knowledge, selectedObjectTypes), selectedProcesses);
-    const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_obj_pro, showingNodeType), nodeSharing);
+    const focusingNode = useSelectorStore(state => state.focusingNode);
 
-    const fKnowledge = fKnowledge_node_type;
+    let fKnowledge;
+
+    if (!focusingNode) {
+        const fKnowledge_obj_pro = processFilter(objectTypeFilter(knowledge, selectedObjectTypes), selectedProcesses);
+        const fKnowledge_node_type = nodeSharedFilter(nodeTypeFilter(fKnowledge_obj_pro, showingNodeType), nodeSharing);
+        fKnowledge = fKnowledge_node_type;
+    } else {
+        fKnowledge = processFilter(knowledge, [focusingNode]);
+    }
 
     useEffect(() => {
     
@@ -281,7 +289,7 @@ export default function Knowledge({ knowledge }) {
             cy.destroy();
         };
     
-    }, [knowledge, colorSet, selectedObjectTypes, selectedProcesses, showingNodeType, nodeSharing]);
+    }, [knowledge, colorSet, selectedObjectTypes, selectedProcesses, showingNodeType, nodeSharing, focusingNode]);
     
     return (
         <Box 
@@ -296,7 +304,11 @@ export default function Knowledge({ knowledge }) {
                 zIndex: '5' 
             }}
         >
-            <ProcessChip processLabel='Export Management' />
+            {
+                focusingNode && (
+                    <ProcessChip processLabel={focusingNode} />
+                )
+            }
             <Box 
                 ref={knowledgeRef} 
                 sx={{ width: '100%', height: '100%', overflow: 'hidden' }}

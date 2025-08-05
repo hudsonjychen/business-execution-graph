@@ -1,10 +1,18 @@
 import { Card, Box, Stack, Typography, List, ListItem, Button } from "@mui/joy";
 import { ActivityIcon, ObjectIcon } from "../util/CustomIcons";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom';
+import { useGlobal } from "../contexts/GlobalContext";
 import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
+import useSelectorStore from "../store/useSelectorStore";
+import useStatusStore from "../store/useStatusStore";
+
 
 const CardTemplate = ({ processLabel, processInfo }) => {
+    
+    const setFocusingNode = useSelectorStore(state => state.setFocusingNode);
+    const setMode = useStatusStore(state => state.setMode);
+
     return (
         <Card sx={{ width: 220 }}>
             <Box>
@@ -96,6 +104,24 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                     </Typography>
                 </ListItem>
             </List>
+
+            <Box>
+                <Button 
+                    onClick={() => {
+                        setFocusingNode(processLabel);
+                        setMode('knowledge');
+                    }}
+                    variant="soft"
+                    color="success"
+                    startDecorator={<ArrowOutwardRoundedIcon sx={{ fontSize: 16 }}/>}
+                    size="sm"
+                    sx={{
+                        fontSize: 12
+                    }}
+                >
+                    Focus
+                </Button>
+            </Box>
 
         </Card>
     )

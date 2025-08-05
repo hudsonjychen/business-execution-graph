@@ -8,9 +8,11 @@ import Mode from "../components/Mode";
 import { useGlobal } from "../contexts/GlobalContext";
 import KnowledgeColorPalette from "../components/KnowledgeColorPalette";
 import KnowledgeConfigurations from "../components/KnowledgeConfigurations";
+import useStatusStore from "../store/useStatusStore";
+
 
 export default function Top({ setElements, setKnowledge, setNodeCard }) {
-    const { mode } = useGlobal();
+    const mode = useStatusStore(state => state.mode);
 
     return (
         <Sheet

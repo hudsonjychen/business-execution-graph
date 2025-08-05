@@ -9,8 +9,9 @@ import { CircularProgress } from "@mui/joy";
 
 export default function CanvasPage({ elements, nodeCard, knowledge }) {
 
-    const { mode, fileImported } = useGlobal();
+    const { fileImported } = useGlobal();
     const loadingStatus = useStatusStore(state => state.loadingStatus);
+    const mode = useStatusStore(state => state.mode);
 
     return (
         <div>
