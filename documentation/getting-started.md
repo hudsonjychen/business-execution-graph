@@ -147,9 +147,9 @@ Switch to the **Entity Relations view** using the switcher in the center of the 
 
 ![Entity Relations](./images/entity-relations.png)
 
-This view shows relationships between entities: large to small nodes represent **Processes**, **Object Types**, and **Activities (Event Types)**.
+This view shows relationships between entities: large to small nodes represent **Processes**, **Object Types**, and **Event Types (Activities)**.
 
-Object types and activities are connected to their related processes.
+Object types and event types are connected to their related processes.
 
 You can also **zoom**, **drag nodes**, and use **filters** — identical to those in the **Interactions Discovery view** — to customize the display.
 
@@ -166,7 +166,7 @@ In this mode, **filters** and **graph configurations** are disabled.
 A chip appears in the bottom-left corner, showing the name of the focused process. To exit focus mode, click the **delete** icon next to the process name.
 
 ### Color Palette
-Use the menu to assign different colors to each node type (**Process**, **Object Type**, and **Activity**) to help visually distinguish them.
+Use the menu to assign different colors to each node type (**Process**, **Object Type**, and **Event Type (Activity)**) to help visually distinguish them.
 
 ![Color Palette Entity Relations](./images/color-palette-entity-relations.png)
 
@@ -175,7 +175,7 @@ Click **Reset** to restore default color settings.
 ### Graph Configurations
 In the menu, you can:
 
-- `Showing Node Types`: Choose to display both Object Types and Activities, or only one of them (e.g., only Object Types).
+- `Showing Node Types`: Choose to display both Object Types and Event Types, or only one of them (e.g., only Object Types).
 - `Node Share Status`: Filter nodes based on whether they are shared (related to multiple processes) or non-shared (related to only one process). Options include: `Both`, `Shared`, and `Non-shared`.
 
 ![Configs Entity Relations](./images/configs-entity-relations.png)
