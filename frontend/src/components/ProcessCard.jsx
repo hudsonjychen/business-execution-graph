@@ -45,7 +45,7 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                             }}
                         >
                             <Typography level="body-sm">
-                                {ot}
+                                #  {ot}
                             </Typography>
                             <Typography level="body-sm">
                                 {obj.length}
@@ -67,7 +67,7 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                 <Stack direction='row' alignItems='center' spacing={0.5}>
                     <ActivityIcon fontSize='md'/>
                     <Typography level="title-sm">
-                        Activities
+                        Event Types
                     </Typography>
                 </Stack>
                 <Typography level="body-sm" variant="soft" mr={2}>
@@ -87,7 +87,7 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                             }}
                         >
                             <Typography level="body-sm">
-                                {act}
+                                #  {act}
                             </Typography>
                             <Typography level="body-sm">
                                 {e.length}
