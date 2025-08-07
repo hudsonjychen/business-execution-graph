@@ -2,9 +2,10 @@ from datetime import timedelta
 from collections import defaultdict
 from typing import Dict, Any, Set, List
 from pm4py.objects.ocel.obj import OCEL
-from .map import map_object_id_to_type, map_process_to_activity
-from .get_entities import get_activities, get_events, get_object_types, get_processes, get_objects
+from .map import map_object_id_to_type, map_process_to_event, map_process_to_object
+from .get_entities import get_processes
 from .update_stats import update_process_interactions_count, update_process_interactions_flow_time
+
 
 def _build_object_event_streams(ocel: OCEL, processes: Set[str]) -> Dict[str, List[Dict]]:
     streams = defaultdict(list)
@@ -99,89 +100,22 @@ def _get_process_data(ocel: OCEL) -> Dict[str, Any]:
 
     processes = get_processes(ocel)
 
-    object_id_type_mapping = map_object_id_to_type(ocel)
-    process_event_activity_mapping = map_process_to_activity(ocel)
+    process_event_mapping = map_process_to_event(ocel)
+    process_object_mapping = map_process_to_object(ocel)
 
     for process in processes:
+        event = process_event_mapping[process]
+        object = process_object_mapping[process]
         process_data[process] = {
-            'activity': process_event_activity_mapping[process],
-            'object_type': dict(),
-            'object': set(),
-            'total_count': 0
-        }
-
-    event_to_processes = defaultdict(set)
-    for _, row in ocel.relations.iterrows():
-        oid = row[ocel.object_id_column]
-        eid = row[ocel.event_id_column]
-        if oid in processes:
-            event_to_processes[eid].add(oid)
-    print(event_to_processes)
-    print(object_id_type_mapping)
-    for eid, group in ocel.relations.groupby(ocel.event_id_column, sort=False):
-        related_processes = event_to_processes.get(eid)
-        if not related_processes:
-            continue
-        
-        object_ids = group[ocel.object_id_column].tolist()
-
-        for pro in related_processes:
-            for oid in object_ids:
-                if oid in processes:
-                    continue
-                ot = object_id_type_mapping[oid]
-                process_data[pro]['object'].add(oid)
-                process_data[pro]['total_count'] += 1
-                if ot in process_data[pro]['object_type']:
-                    process_data[pro]['object_type'][ot]['count'] += 1
-                else:
-                    process_data[pro]['object_type'][ot] = {}
-                    process_data[pro]['object_type'][ot]['count'] = 1
-
-    for pro in processes:
-        process_data[pro]['object_type'] = {
-            ot: v for ot, v in process_data[pro]['object_type'].items() if v['count'] > 0
+            'activity': event,
+            'activity_list': list(event.keys()),
+            'total_event_count': sum(len(act) for act in event.values()),
+            'object_type': object,
+            'object_type_list': list(object.keys()),
+            'total_object_count': sum(len(ot) for ot in object.values())
         }
 
     return process_data
-
-
-def _get_overview_data(ocel: OCEL) -> Dict[str, Any]:
-    """
-    Get overview data from an object-centric event log (OCEL).
-    """
-    overview_data = dict()
-
-    object_types = get_object_types(ocel)
-    objects = get_objects(ocel)
-    processes = get_processes(ocel)
-    activities = get_activities(ocel)
-    events = get_events(ocel)
-
-    overview_data = {
-        "processes": {
-            "list": processes,
-            "count": len(processes)
-        },
-        "object_types": {
-            "list": object_types,
-            "count": len(object_types)
-        },
-        "objects": {
-            "list": objects,
-            "count": len(objects)
-        },
-        "activities": {
-            "list": activities,
-            "count": len(activities)
-        },
-        "event": {
-            "list": events,
-            "count": len(events)
-        }
-    }
-
-    return overview_data
 
 
 def discover(ocel: OCEL) -> Dict[str, Any]:

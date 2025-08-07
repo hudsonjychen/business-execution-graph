@@ -4,8 +4,8 @@ function summary(processData) {
     const objectList = [];
 
     for (const process in processData) {
-        objectTypeList.push(...Object.keys(processData[process].object_type));
-        objectList.push(...processData[process].object);
+        objectTypeList.push(...processData[process].object_type_list);
+        objectList.push(...Object.values(processData[process].object_type).flat());
     }
 
     const uobjectTypeList = [...new Set(objectTypeList)];

@@ -70,7 +70,7 @@ function filterInteractionData(selectedObjectTypes, selectedProcesses, interacti
 }
 
 
-function filterProcessData(selectedObjectTypes, selectedProcesses, processData, objectToType) {
+function filterProcessData(selectedObjectTypes, selectedProcesses, processData) {
     const filteredProcessData = {};
 
     for (const p in processData) {
@@ -85,21 +85,16 @@ function filterProcessData(selectedObjectTypes, selectedProcesses, processData, 
             }
         }
 
-        if (Object.keys(filteredObjectType) < 1) continue;
+        if (Object.keys(filteredObjectType).length < 1) continue;
 
-        const total_count = Object.values(filteredObjectType).reduce((acc, cur) => acc + cur.count, 0);
-
-        const filteredObjects = originalNode.object.filter(obj =>
-            selectedObjectTypes.includes(objectToType[obj])
-        );
-
-        if (filteredObjects.length < 1) continue;
+        const objectTypeList = Object.keys(filteredObjectType)
+        const totalObjectCount = Object.values(filteredObjectType).reduce((acc, cur) => acc + cur.length, 0);
 
         const filteredNode = {
             ...originalNode,
             object_type: filteredObjectType,
-            total_count,
-            object: filteredObjects,
+            object_type_list: objectTypeList,
+            total_object_count: totalObjectCount,
         };
 
         if (!filteredProcessData[p]) {

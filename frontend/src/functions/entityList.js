@@ -3,20 +3,18 @@ function getEntityList(processData) {
     const activitySet = new Set();
     const processSet = new Set();
 
-    for (const key in processData) {
-        const section = processData[key];
+    for (const process in processData) {
+        const section = processData[process];
 
-        if (section.object_type) {
-            for (const type in section.object_type) {
-                objectTypeSet.add(type);
-            }
+        if (section.object_type_list) {
+            section.object_type_list.forEach(type => objectTypeSet.add(type));
         }
 
-        if (section.activity && Array.isArray(section.activity)) {
-            section.activity.forEach(act => activitySet.add(act));
+        if (section.activity_list) {
+            section.activity_list.forEach(activity => activitySet.add(activity));
         }
 
-        processSet.add(key);
+        processSet.add(process);
     };
 
     const objectTypeList = Array.from(objectTypeSet);
