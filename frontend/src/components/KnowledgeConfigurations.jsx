@@ -17,7 +17,7 @@ export default function KnowledgeConfigurations() {
     const disabled = mode === 'knowledge' && focusingNode;
 
     const showingNodeTypes = ['both', 'objectType', 'activity'];
-    const showingNodeTypeLabels = ['Both', 'Object Type', 'Activity'];
+    const showingNodeTypeLabels = ['Both', 'Object Type', 'Event Type'];
     const nodeSharingStatus = ['both', 'shared', 'nonshared'];
     const nodeSharingStatusLabels = ['Both', 'Shared', 'Non-shared'];
 
