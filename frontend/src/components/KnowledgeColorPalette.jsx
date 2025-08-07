@@ -11,7 +11,7 @@ export default function KnowledgeColorPalette() {
     const clearKnowledgeColorConfig = useConfigStore(state => state.clearKnowledgeColorConfig);
 
     const nodeTypes = ['process', 'objectType', 'activity'];
-    const nodeTypeLabels = ['Process', 'Object Type', 'Activity'];
+    const nodeTypeLabels = ['Process', 'Object Type', 'Event Type'];
 
     const colors = [
         red, pink, purple, deepPurple,

@@ -1,5 +1,7 @@
 import { Box, Stack, Select, Option, Checkbox } from '@mui/joy';
 import useDataStore from "../store/useDataStore";
+import useStatusStore from "../store/useStatusStore";
+import useSelectorStore from "../store/useSelectorStore";
 import useFilterStore from "../store/useFilterStore";
 import getEntityList from '../functions/entityList';
 
@@ -9,6 +11,10 @@ export default function Filters() {
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
     const setSelectedObjectTypes = useFilterStore(state => state.setSelectedObjectTypes);
     const setSelectedProcesses = useFilterStore(state => state.setSelectedProcesses);
+
+    const mode = useStatusStore(state => state.mode);
+    const focusingNode = useSelectorStore(state => state.focusingNode);
+    const disabled = mode === 'knowledge' && focusingNode;
 
     let processOptions = [], objectTypeOptions = [];
 
@@ -28,6 +34,7 @@ export default function Filters() {
                 sx={{ pt: 1, pb: 1 }}
             >
                 <Select
+                    disabled={disabled}
                     multiple
                     placeholder={'Object Types...'}
                     value={selectedObjectTypes}
@@ -46,6 +53,7 @@ export default function Filters() {
                     ))}
                 </Select>
                 <Select
+                    disabled={disabled}
                     multiple
                     placeholder={'Processes...'}
                     value={selectedProcesses}

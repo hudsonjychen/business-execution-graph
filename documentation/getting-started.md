@@ -122,10 +122,28 @@ After the settings and configurations, the interaction graph now looks more info
 
 ![Interactions](./images/interactions.png)
 
+### Process Node Card
+
+Click on a **process node** to open its **process node card**. The **process node card** displays detailed information about the entities related to the selected process, including:
+
+- `Number of object types`
+- `List of object types`
+- `Count of objects for each type`
+- `Total object count`
+- `Number of event types (activities)`
+- `List of event types (activities)`
+- `Object counts per event type (activity)`
+- `Total event count`
+
+This information helps you understand the composition and structure of the process in greater detail.
+
+![Process Node Card](./images/process-card.png)
+
+At the bottom of the **process node card**, you’ll find a **Focus** button. Click it to enable **process focus**, which navigates you to the **Entity Relations view** in **focus mode**. This view will be explained in the next section.
 
 ## Entity Relations View
 
-Switch to the **Entity Relations view** using the switcher in the center of the header.
+Switch to the **Entity Relations view** using the switcher in the center of the header or click on **Focus** button at the bottom of a process node card.
 
 ![Entity Relations](./images/entity-relations.png)
 
@@ -136,6 +154,16 @@ Object types and activities are connected to their related processes.
 You can also **zoom**, **drag nodes**, and use **filters** — identical to those in the **Interactions Discovery view** — to customize the display.
 
 The **color palette** and **graph configuration** menus are available in the top-right corner, with different options tailored to this view.
+
+### Process Focus
+
+When **process focus** mode is enabled, only the selected process and its related entities are displayed. This provides a clear and focused view of the process, making it easier to explore its entity relationships.
+
+In this mode, **filters** and **graph configurations** are disabled.
+
+![Process Focus](./images/process-focus.png)
+
+A chip appears in the bottom-left corner, showing the name of the focused process. To exit focus mode, click the **delete** icon next to the process name.
 
 ### Color Palette
 Use the menu to assign different colors to each node type (**Process**, **Object Type**, and **Activity**) to help visually distinguish them.

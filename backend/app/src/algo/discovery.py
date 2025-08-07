@@ -124,6 +124,4 @@ def discover(ocel: OCEL) -> Dict[str, Any]:
     discover_results["interaction_data"] = _discover_process_interactions(ocel)
     discover_results["process_data"] = _get_process_data(ocel)
 
-    print(discover_results)
-
     return discover_results

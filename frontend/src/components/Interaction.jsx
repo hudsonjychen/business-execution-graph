@@ -8,6 +8,7 @@ import useConfigStore from "../store/useConfigStore";
 import useFilterStore from "../store/useFilterStore";
 import ProcessCard from "./ProcessCard";
 
+
 export const objectTypeFilter = (elements, objectTypeChecked) => {
     return elements.filter(element => {
         const objectType = element.data.objectType;
@@ -129,6 +130,7 @@ const mapToLevel = (value, levels) => {
 };
 
 export default function Interaction({ elements, nodeCard }) {
+
     const [cyInstance, setCyInstance] = useState(null);
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodePosition, setNodePosition] = useState({ x: 0, y: 0 });

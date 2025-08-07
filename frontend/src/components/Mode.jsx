@@ -1,8 +1,12 @@
 import { Box, Button, ToggleButtonGroup } from "@mui/joy";
 import { useGlobal } from "../contexts/GlobalContext";
+import useStatusStore from "../store/useStatusStore";
+
 
 export default function Mode() {
-    const { mode, setMode, fileImported } = useGlobal();
+    const { fileImported } = useGlobal();
+    const mode = useStatusStore(state => state.mode);
+    const setMode = useStatusStore(state => state.setMode);
 
     return (
         <Box>

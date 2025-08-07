@@ -1,6 +1,9 @@
 import { Box, Menu, MenuButton, IconButton, Typography, Divider, Stack, Button, Select, Option, Dropdown } from "@mui/joy";
 import ArchitectureOutlinedIcon from '@mui/icons-material/ArchitectureOutlined';
 import useConfigStore from "../store/useConfigStore";
+import useStatusStore from "../store/useStatusStore";
+import useSelectorStore from "../store/useSelectorStore";
+
 
 export default function KnowledgeConfigurations() {
     const showingNodeType = useConfigStore(state => state.showingNodeType);
@@ -9,8 +12,12 @@ export default function KnowledgeConfigurations() {
     const setNodeSharing = useConfigStore(state => state.setNodeSharing);
     const clearKnowledgeGraphConfig = useConfigStore(state => state.clearKnowledgeGraphConfig);
 
+    const mode = useStatusStore(state => state.mode);
+    const focusingNode = useSelectorStore(state => state.focusingNode);
+    const disabled = mode === 'knowledge' && focusingNode;
+
     const showingNodeTypes = ['both', 'objectType', 'activity'];
-    const showingNodeTypeLabels = ['Both', 'Object Type', 'Activity'];
+    const showingNodeTypeLabels = ['Both', 'Object Type', 'Event Type'];
     const nodeSharingStatus = ['both', 'shared', 'nonshared'];
     const nodeSharingStatusLabels = ['Both', 'Shared', 'Non-shared'];
 
@@ -76,6 +83,7 @@ export default function KnowledgeConfigurations() {
     return (
         <Dropdown>
             <MenuButton
+                disabled={disabled}
                 slots={{ root: IconButton }}
                 slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}
             >

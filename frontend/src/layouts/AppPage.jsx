@@ -21,7 +21,7 @@ export default function AppPage(){
                     nodeCard={nodeCard}
                     knowledge={knowledge}
                 />
-´            </GlobalProvider>
+            </GlobalProvider>
         </div>
   )
 }
