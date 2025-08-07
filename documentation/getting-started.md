@@ -124,7 +124,7 @@ After the settings and configurations, the interaction graph now looks more info
 
 ### Process Node Card
 
-Click on a **process node** to open its **process card**. The **process card** displays detailed information about the entities related to the selected process, including:
+Click on a **process node** to open its **process node card**. The **process node card** displays detailed information about the entities related to the selected process, including:
 
 - `Number of object types`
 - `List of object types`
@@ -137,13 +137,13 @@ Click on a **process node** to open its **process card**. The **process card** d
 
 This information helps you understand the composition and structure of the process in greater detail.
 
-![Process Card](./images/process-card.png)
+![Process Node Card](./images/process-card.png)
 
-At the bottom of the **process card**, you’ll find a **Focus** button. Click it to enable **process focus**, which navigates you to the **Entity Relations view** in **focus mode**. This view will be explained in the next section.
+At the bottom of the **process node card**, you’ll find a **Focus** button. Click it to enable **process focus**, which navigates you to the **Entity Relations view** in **focus mode**. This view will be explained in the next section.
 
 ## Entity Relations View
 
-Switch to the **Entity Relations view** using the switcher in the center of the header or click on **Focus** button at the bottom of a process card.
+Switch to the **Entity Relations view** using the switcher in the center of the header or click on **Focus** button at the bottom of a process node card.
 
 ![Entity Relations](./images/entity-relations.png)
 
@@ -155,7 +155,7 @@ You can also **zoom**, **drag nodes**, and use **filters** — identical to thos
 
 The **color palette** and **graph configuration** menus are available in the top-right corner, with different options tailored to this view.
 
-### Node Focus
+### Process Focus
 
 When **process focus** mode is enabled, only the selected process and its related entities are displayed. This provides a clear and focused view of the process, making it easier to explore its entity relationships.
 
