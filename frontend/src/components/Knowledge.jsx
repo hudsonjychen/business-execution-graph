@@ -1,5 +1,5 @@
 import cytoscape from "cytoscape";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGlobal } from "../contexts/GlobalContext";
 import { grey } from "@mui/material/colors";
 import { Box } from "@mui/joy";
@@ -174,6 +174,7 @@ export const nodeSharedFilter = (knowledge, sharedNodeShown) => {
 export default function Knowledge({ knowledge }) {
     const knowledgeRef = useRef(null);
     const { setPngDataUrl } = useGlobal();
+    const [cyInstance, setCyInstance] = useState(null);
     
     const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
@@ -253,43 +254,69 @@ export default function Knowledge({ knowledge }) {
             },
         });
 
-        if(colorSet.process){
-            cy.nodes().forEach(node => {
-                if(node.data('category') === 'process'){
-                    node.style('background-color', colorSet.process[500]);
-                }
-            });
-        }
-        
-        if(colorSet.objectType){
-            cy.nodes().forEach(node => {
-                if(node.data('category') === 'object_type'){
-                    node.style('background-color', colorSet.objectType[500]);
-                }
-            });
-        }
-        
-        if(colorSet.activity){
-            cy.nodes().forEach(node => {
-                if(node.data('category') === 'activity'){
-                    node.style('background-color', colorSet.activity[500]);
-                }
-            });
-        }
-
-        const pngDataUrl = cy.png({
-            output: 'base64uri',
-            full: true,
-            scale: 2,
-            bg: '#ffffff'
-        });
-        setPngDataUrl(pngDataUrl);
+        setCyInstance(cy);
 
         return () => {
             cy.destroy();
         };
     
-    }, [knowledge, colorSet, selectedObjectTypes, selectedProcesses, showingNodeType, nodeSharing, focusingNode]);
+    }, [knowledge, selectedObjectTypes, selectedProcesses, showingNodeType, nodeSharing, focusingNode]);
+
+    useEffect(() => {
+
+        if (!cyInstance) return;
+
+        if(colorSet.process){
+            cyInstance.nodes().forEach(node => {
+                if(node.data('category') === 'process'){
+                    node.style('background-color', colorSet.process[500]);
+                }
+            });
+        } else {
+            cyInstance.nodes().forEach(node => {
+                if(node.data('category') === 'process'){
+                    node.style('background-color', grey[700]);
+                }
+            });
+        }
+        
+        if(colorSet.objectType){
+            cyInstance.nodes().forEach(node => {
+                if(node.data('category') === 'object_type'){
+                    node.style('background-color', colorSet.objectType[500]);
+                }
+            });
+        } else {
+            cyInstance.nodes().forEach(node => {
+                if(node.data('category') === 'object_type'){
+                    node.style('background-color', grey[500]);
+                }
+            });
+        }
+        
+        if(colorSet.activity){
+            cyInstance.nodes().forEach(node => {
+                if(node.data('category') === 'activity'){
+                    node.style('background-color', colorSet.activity[500]);
+                }
+            });
+        } else {
+            cyInstance.nodes().forEach(node => {
+                if(node.data('category') === 'activity'){
+                    node.style('background-color', grey[300]);
+                }
+            });
+        }
+
+        const pngDataUrl = cyInstance.png({
+            output: 'base64uri',
+            full: true,
+            scale: 2,
+            bg: '#ffffff'
+        });
+
+        setPngDataUrl(pngDataUrl);
+    }, [cyInstance, colorSet])
     
     return (
         <Box 

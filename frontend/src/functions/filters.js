@@ -15,10 +15,9 @@ function formatTimeStr(totalSeconds) {
     const days = Math.floor(totalSeconds / 86400);
     const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
 
     const padded = (num) => num.toString().padStart(2, '0');
-    const timePart = `${padded(hours)}:${padded(minutes)}:${padded(seconds)}`;
+    const timePart = `${padded(hours)} hrs ${padded(minutes)} min`;
 
     return `${days} days ${timePart}`;
 }
@@ -41,6 +40,7 @@ function filterInteractionData(selectedObjectTypes, selectedProcesses, interacti
                     filteredObjectType[type] = originalEdge.object_type[type];
                 }
             }
+            if (Object.keys(filteredObjectType).length < 1) continue;
 
             const total_count = Object.values(filteredObjectType).reduce((acc, cur) => acc + cur.count, 0);
             const total_time = Object.values(filteredObjectType).reduce((acc, cur) => acc + sparseTimeStr(cur.average_flow_time) * cur.count, 0);
@@ -65,6 +65,8 @@ function filterInteractionData(selectedObjectTypes, selectedProcesses, interacti
             filteredInteractionData[p1][p2] = filteredEdge;
         }
     }
+
+    console.log(filteredInteractionData);
 
     return filteredInteractionData;
 }
@@ -103,6 +105,8 @@ function filterProcessData(selectedObjectTypes, selectedProcesses, processData) 
         filteredProcessData[p] = filteredNode;
 
     }
+
+    console.log(filteredProcessData);
 
     return filteredProcessData
 }

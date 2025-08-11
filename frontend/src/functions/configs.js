@@ -1,4 +1,4 @@
-const calculateNodeSize = (elements, attributeTypeChecked) => {
+function calculateNodeSize(elements, attributeTypeChecked) {
     if(attributeTypeChecked == ''){
         return
     }
@@ -29,4 +29,4 @@ const calculateNodeSize = (elements, attributeTypeChecked) => {
     return sizes;
 };
 
-export default calculateNodeSize;
+export { calculateNodeSize };

@@ -1,25 +1,18 @@
 import { Box, Menu, MenuButton, IconButton, Typography, Divider, Stack, Button, Select, Option, Dropdown } from "@mui/joy";
 import ArchitectureOutlinedIcon from '@mui/icons-material/ArchitectureOutlined';
 import useConfigStore from "../store/useConfigStore";
-import useStatusStore from "../store/useStatusStore";
-import useSelectorStore from "../store/useSelectorStore";
 
+export default function InteractionConfigs() {
+    const nodeSizeMetric = useConfigStore(state => state.nodeSizeMetric);
+    const setNodeSizeMetric = useConfigStore(state => state.setNodeSizeMetric);
+    const edgeNotationMetric = useConfigStore(state => state.edgeNotationMetric);
+    const setEdgeNotationMetric = useConfigStore(state => state.setEdgeNotationMetric);
+    const clearInteractionGraphConfig = useConfigStore(state => state.clearInteractionGraphConfig);
 
-export default function KnowledgeConfigurations() {
-    const showingNodeType = useConfigStore(state => state.showingNodeType);
-    const setShowingNodeType = useConfigStore(state => state.setShowingNodeType);
-    const nodeSharing = useConfigStore(state => state.nodeSharing);
-    const setNodeSharing = useConfigStore(state => state.setNodeSharing);
-    const clearKnowledgeGraphConfig = useConfigStore(state => state.clearKnowledgeGraphConfig);
-
-    const mode = useStatusStore(state => state.mode);
-    const focusingNode = useSelectorStore(state => state.focusingNode);
-    const disabled = mode === 'knowledge' && focusingNode;
-
-    const showingNodeTypes = ['both', 'objectType', 'activity'];
-    const showingNodeTypeLabels = ['Both', 'Object Type', 'Event Type'];
-    const nodeSharingStatus = ['both', 'shared', 'nonshared'];
-    const nodeSharingStatusLabels = ['Both', 'Shared', 'Non-shared'];
+    const nodeSizeMetrics = ['none', 'objectCount', 'objectTypeCount'];
+    const nodeSizeMetricLabels = ['None', 'Total Object Count', 'Object Type Diversity'];
+    const edgeNotationMetrics = ['none', 'objectType', 'totalObjectCount', 'objectCount', 'averageFlowTime'];
+    const edgeNotationMetricLabels = ['None', 'Object Type', 'Total Object Count', 'Object Count', 'Average Flow Time'];
 
     const Panel = () => (
         <Box sx={{ m: 2, width: 328 }}>
@@ -27,53 +20,53 @@ export default function KnowledgeConfigurations() {
                 Graph Configurations
             </Typography>
             <Typography level="body-sm" mb={2}>
-                Configure the knowledge graph.
+                Configure for the interaction graph.
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
                 <Typography level="title-md">
-                    Showing Node Types
+                    Node Size
                 </Typography>
                 <Select 
-                    sx={{ width: '10rem' }} 
+                    sx={{ width: '12rem' }} 
                     slotProps={{ listbox: { disablePortal: true }}}
-                    defaultValue='both'
-                    value={showingNodeType}
-                    onChange={(e, newValue) => setShowingNodeType(newValue)}
+                    defaultValue='none'
+                    value={nodeSizeMetric}
+                    onChange={(e, newValue) => setNodeSizeMetric(newValue)}
                 >
-                    {showingNodeTypes.map((item, index) => (
+                    {nodeSizeMetrics.map((item, index) => (
                         <Option key={item} value={item}>
-                            {showingNodeTypeLabels[index]}
+                            {nodeSizeMetricLabels[index]}
                         </Option>
                     ))}
                 </Select>
             </Stack>
             <Typography level="body-sm" mb={2}>
-                Configure which node types are displayed on the graph.
+                Select a metric to determine the node sizes.
             </Typography>
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
                 <Typography level="title-md">
-                    Node Share Status
+                    Edge Annotation
                 </Typography>
                 <Select 
-                    sx={{ width: '10rem' }} 
+                    sx={{ width: '12rem' }} 
                     slotProps={{ listbox: { disablePortal: true }}}
-                    defaultValue='both'
-                    value={nodeSharing}
-                    onChange={(e, newValue) => setNodeSharing(newValue)}
+                    defaultValue='none'
+                    value={edgeNotationMetric}
+                    onChange={(e, newValue) => setEdgeNotationMetric(newValue)}
                 >
-                    {nodeSharingStatus.map((item, index) => (
+                    {edgeNotationMetrics.map((item, index) => (
                         <Option key={item} value={item}>
-                            {nodeSharingStatusLabels[index]}
+                            {edgeNotationMetricLabels[index]}
                         </Option>
                     ))}
                 </Select>
             </Stack>
             <Typography level="body-sm" mb={5}>
-                Configure whether to display only shared nodes, only non-shared nodes, or all nodes on the graph. 
+                Select a metric to assign edge annotations.
             </Typography>
             <Stack direction="row" alignItems="center">
-                <Button level="solid" onClick={() => clearKnowledgeGraphConfig()}>
+                <Button level="solid" onClick={() => clearInteractionGraphConfig()}>
                     Reset
                 </Button>
             </Stack>
@@ -83,7 +76,6 @@ export default function KnowledgeConfigurations() {
     return (
         <Dropdown>
             <MenuButton
-                disabled={disabled}
                 slots={{ root: IconButton }}
                 slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}
             >

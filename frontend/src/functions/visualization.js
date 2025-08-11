@@ -14,7 +14,7 @@ function getVisData(objectTypeList, activityList, processList, interactionData, 
         objectTypeList,
         activityList,
         processList,
-        interactionData,
+        processData,
         updatedLabelToId,
         updatedNodeIdCounter
     );
@@ -33,6 +33,8 @@ function buildInteractionsElements(
     const interactionElements = [];
 
     for (const process of processList) {
+        if (!processData[process]) continue;
+
         const nodeId = String(nodeIdCounter++);
         labelToId[process] = nodeId;
 
@@ -40,9 +42,9 @@ function buildInteractionsElements(
             data: {
                 id: nodeId,
                 label: process,
-                objectType: Object.keys(processData[process].object_type),
-                objectTypeCount: Object.keys(processData[process].object_type).length,
-                objectCount: processData[process].total_count,
+                objectType: processData[process].object_type_list,
+                objectTypeCount: processData[process].object_type_list.length,
+                objectCount: processData[process].total_object_count,
             }
         });
     }
@@ -53,12 +55,18 @@ function buildInteractionsElements(
             const targetId = labelToId[target];
 
             if (sourceId && targetId) {
+                let objectCount = '';
+                Object.entries(interactionData[source][target].object_type).forEach(([ot, item]) => {
+                    objectCount  = objectCount + `#${ot}: ${item.count}  `;
+                });
+
                 interactionElements.push({
                     data: {
                         id: `${sourceId}-${targetId}`,
                         source: sourceId,
                         target: targetId,
                         totalObjectCount: interactionData[source][target].total_count,
+                        objectCount: objectCount,
                         averageFlowTime: String(interactionData[source][target].average_flow_time),
                         objectType: Object.keys(interactionData[source][target].object_type),
                     }
@@ -121,10 +129,14 @@ function buildKnowledgeElements(
     }
 
     for (const process in processData) {
+        console.log(process, processData[process]);
+
+        const processObjectTypes = processData[process].object_type_list;
+        const processActivities = processData[process].activity_list;
         const processId = labelToId[process];
 
         for (const ot of objectTypeList) {
-            if (processData[process].object_type.hasOwnProperty(ot)) {
+            if (processObjectTypes.includes(ot)) {
                 knowledgeElements.push({
                     data: {
                         id: `${processId}-${labelToId[ot]}`,
@@ -136,7 +148,7 @@ function buildKnowledgeElements(
         }
 
         for (const at of activityList) {
-            if (processData[process].activity.includes(at)) {
+            if (processActivities.includes(at)) {
                 knowledgeElements.push({
                     data: {
                         id: `${processId}-${labelToId[at]}`,
