@@ -2,7 +2,8 @@ import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
 import { grey } from '@mui/material/colors';
 import { useGlobal } from "../contexts/GlobalContext";
-import { Box } from "@mui/joy";
+import { Box, IconButton } from "@mui/joy";
+import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
 import useDataStore from "../store/useDataStore";
 import useConfigStore from "../store/useConfigStore";
 import useFilterStore from "../store/useFilterStore";
@@ -63,6 +64,7 @@ export default function Interaction({ elements, nodeCard }) {
     const selectedColor = useConfigStore(state => state.selectedColor);
     const nodeSizeMetric = useConfigStore(state => state.nodeSizeMetric);
     const edgeNotationMetric = useConfigStore(state => state.edgeNotationMetric);
+    const edgeNotationStyle = useConfigStore(state => state.edgeNotationStyle);
 
     const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
@@ -200,7 +202,11 @@ export default function Interaction({ elements, nodeCard }) {
         if(edgeNotationMetric != 'none'){
             cyInstance.edges().forEach(edge => {
                 if (edgeNotationMetric) {
-                    edge.style('label', edge.data(edgeNotationMetric));
+                    edge.style({
+                        'label': edge.data(edgeNotationMetric),
+                        'edge-text-rotation': edgeNotationStyle,
+                        'text-wrap': 'wrap'
+                    });
                 } else {
                     edge.style('label', '');
                 }
@@ -218,7 +224,7 @@ export default function Interaction({ elements, nodeCard }) {
             bg: '#ffffff'
         });
         setPngDataUrl(pngDataUrl);
-    }, [cyInstance, selectedColor, colorScheme, nodeSizeMetric, edgeNotationMetric])
+    }, [cyInstance, selectedColor, colorScheme, nodeSizeMetric, edgeNotationMetric, edgeNotationStyle])
 
     useEffect(() => {
         if (!cyInstance) return;
@@ -285,6 +291,16 @@ export default function Interaction({ elements, nodeCard }) {
                 ref={interactionRef} 
                 sx={{ width: '100%', height: '100%', overflow: 'hidden' }}
             />
+            <IconButton 
+                sx={{
+                    position: 'fixed',
+                    top: 76,
+                    right: 20
+                }}
+                onClick={() => cyInstance.fit(cyInstance.elements(), 20)}
+            >
+                <CropFreeRoundedIcon />
+            </IconButton>
             {
                 selectedNode && (
                     <ProcessCard 

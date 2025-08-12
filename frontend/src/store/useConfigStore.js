@@ -13,7 +13,9 @@ const useConfigStore = create((set) => ({
     setNodeSizeMetric: (data) => set({ nodeSizeMetric: data }),
     edgeNotationMetric: 'none',
     setEdgeNotationMetric: (data) => set({ edgeNotationMetric: data }),
-    clearInteractionGraphConfig: () => set({ nodeSizeMetric: 'none', edgeNotationMetric: 'none' }),
+    edgeNotationStyle: 'none',
+    setEdgeNotationStyle: (data) => set({ edgeNotationStyle: data }),
+    clearInteractionGraphConfig: () => set({ nodeSizeMetric: 'none', edgeNotationMetric: 'none', edgeNotationStyle: 'none' }),
 
     /** knowledge color palette */
     colorSet: {process: null, objectType: null, activity: null},

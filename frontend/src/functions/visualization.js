@@ -1,3 +1,5 @@
+import { sparseTimeStr, formatTimeStr } from "./utils";
+
 function getVisData(objectTypeList, activityList, processList, interactionData, processData) {
     const labelToId = {};
     let nodeIdCounter = 0;
@@ -56,8 +58,14 @@ function buildInteractionsElements(
 
             if (sourceId && targetId) {
                 let objectCount = '';
+                let flowTime = '';
+
                 Object.entries(interactionData[source][target].object_type).forEach(([ot, item]) => {
-                    objectCount  = objectCount + `#${ot}: ${item.count}  `;
+                    objectCount = objectCount + `#${ot} ${item.count}  \n`;
+                });
+
+                Object.entries(interactionData[source][target].object_type).forEach(([ot, item]) => {
+                    flowTime = flowTime + `${ot}: ${formatTimeStr(sparseTimeStr(item.average_flow_time))}  \n`;
                 });
 
                 interactionElements.push({
@@ -69,6 +77,7 @@ function buildInteractionsElements(
                         objectCount: objectCount,
                         averageFlowTime: String(interactionData[source][target].average_flow_time),
                         objectType: Object.keys(interactionData[source][target].object_type),
+                        flowTime: flowTime
                     }
                 });
             }
