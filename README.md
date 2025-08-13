@@ -3,7 +3,8 @@
 Business Execution Graph is the companion tool of [Procellar](https://github.com/hudsonjychen/procellar). It is a part of our framework that enhances analytical power of object-centric process mining (OCPM). You can learn more about our initiative in our paper.
 
 **"Process-Level Aggregation and Analysis of Object-Centric Event Data"**  
-*Shahrzad Khayatbashi, Majid Rafiei, Jiayuan Chen, and Amin Jalali*
+*Shahrzad Khayatbashi, Majid Rafiei, Jiayuan Chen, Timotheus Kampik, Gregor
+Berg, and Amin Jalali*
 
 Submitted to the [10th International Workshop on Process Querying, Manipulation, and Intelligence (PQMI 2025)](http://processquerying.com/pqmi2025/)
 
