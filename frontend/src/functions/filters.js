@@ -1,27 +1,4 @@
-function sparseTimeStr(timeStr) {
-    const dayMatch = timeStr.match(/(\d+)\s*days?/);
-    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2}):(\d{2})/);
-
-    const days = dayMatch ? parseInt(dayMatch[1], 10) : 0;
-    const hours = timeMatch ? parseInt(timeMatch[1], 10) : 0;
-    const minutes = timeMatch ? parseInt(timeMatch[2], 10) : 0;
-    const seconds = timeMatch ? parseInt(timeMatch[3], 10) : 0;
-
-    return days * 86400 + hours * 3600 + minutes * 60 + seconds;
-}
-
-
-function formatTimeStr(totalSeconds) {
-    const days = Math.floor(totalSeconds / 86400);
-    const hours = Math.floor((totalSeconds % 86400) / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    const padded = (num) => num.toString().padStart(2, '0');
-    const timePart = `${padded(hours)}:${padded(minutes)}:${padded(seconds)}`;
-
-    return `${days} days ${timePart}`;
-}
+import { sparseTimeStr, formatTimeStr } from "./utils";
 
 
 function filterInteractionData(selectedObjectTypes, selectedProcesses, interactionData, objectToType) {
@@ -41,6 +18,7 @@ function filterInteractionData(selectedObjectTypes, selectedProcesses, interacti
                     filteredObjectType[type] = originalEdge.object_type[type];
                 }
             }
+            if (Object.keys(filteredObjectType).length < 1) continue;
 
             const total_count = Object.values(filteredObjectType).reduce((acc, cur) => acc + cur.count, 0);
             const total_time = Object.values(filteredObjectType).reduce((acc, cur) => acc + sparseTimeStr(cur.average_flow_time) * cur.count, 0);
@@ -65,6 +43,8 @@ function filterInteractionData(selectedObjectTypes, selectedProcesses, interacti
             filteredInteractionData[p1][p2] = filteredEdge;
         }
     }
+
+    console.log(filteredInteractionData);
 
     return filteredInteractionData;
 }
@@ -104,7 +84,9 @@ function filterProcessData(selectedObjectTypes, selectedProcesses, processData) 
 
     }
 
+    console.log(filteredProcessData);
+
     return filteredProcessData
 }
 
-export {filterInteractionData, filterProcessData};
+export { sparseTimeStr, formatTimeStr, filterInteractionData, filterProcessData };

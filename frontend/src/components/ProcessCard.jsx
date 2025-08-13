@@ -1,5 +1,5 @@
 import { Card, Box, Stack, Typography, List, ListItem, Button } from "@mui/joy";
-import { ActivityIcon, ObjectIcon } from "../util/CustomIcons";
+import { ActivityIcon, ObjectIcon } from "../assets/CustomIcons";
 import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom';
 import { useGlobal } from "../contexts/GlobalContext";

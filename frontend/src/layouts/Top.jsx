@@ -2,12 +2,11 @@ import { Sheet, Stack } from "@mui/joy";
 import Filters from "../components/Filters";
 import Import from "../components/Import";
 import Download from "../components/Download";
-import InteractionColorPalette from "../components/InteractionColorPalette";
-import InteractionConfigurations from "../components/InteractionConfigurations";
+import InteractionColorPal from "../components/InteractionColorPal";
+import InteractionConfigs from "../components/InteractionConfigs";
 import Mode from "../components/Mode";
-import { useGlobal } from "../contexts/GlobalContext";
-import KnowledgeColorPalette from "../components/KnowledgeColorPalette";
-import KnowledgeConfigurations from "../components/KnowledgeConfigurations";
+import KnowledgeColorPal from "../components/KnowledgeColorPal";
+import KnowledgeConfigs from "../components/KnowledgeConfigs";
 import useStatusStore from "../store/useStatusStore";
 
 
@@ -47,13 +46,13 @@ export default function Top({ setElements, setKnowledge, setNodeCard }) {
                 {
                     mode === 'discovery' ? (
                         <Stack direction='row' alignItems='center' spacing={1}>
-                            <InteractionColorPalette />
-                            <InteractionConfigurations />
+                            <InteractionColorPal />
+                            <InteractionConfigs />
                         </Stack>
                     ) : (
                         <Stack direction='row' alignItems='center' spacing={1}>
-                            <KnowledgeColorPalette />
-                            <KnowledgeConfigurations />
+                            <KnowledgeColorPal />
+                            <KnowledgeConfigs />
                         </Stack>
                     )
                 }

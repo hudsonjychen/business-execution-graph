@@ -2,11 +2,16 @@ import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
 import { grey } from '@mui/material/colors';
 import { useGlobal } from "../contexts/GlobalContext";
-import { Box } from "@mui/joy";
+import { Box, IconButton } from "@mui/joy";
+import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
 import useDataStore from "../store/useDataStore";
 import useConfigStore from "../store/useConfigStore";
 import useFilterStore from "../store/useFilterStore";
 import ProcessCard from "./ProcessCard";
+import { calculateNodeSize } from "../functions/configs";
+import getElements from "../functions/getElements";
+import { filterProcessData } from "../functions/filters";
+import { getImportanceIndex, mapToLevel } from "../functions/color";
 
 
 export const objectTypeFilter = (elements, objectTypeChecked) => {
@@ -43,91 +48,6 @@ export const processFilter = (elements, processChecked) => {
 
 };
 
-const calculateNodeSize = (elements, attributeTypeChecked) => {
-    if(attributeTypeChecked == ''){
-        return
-    }
-    const values = {};
-    const sizes = {};
-    let maxValue;
-    let minValue;
-
-    elements.forEach(element => {
-        if(element['data']['label']){
-            values[element['data']['id']] = element['data'][attributeTypeChecked]
-        }
-    });
-
-    const allValues = Object.values(values);
-
-    maxValue = Math.max(...allValues);
-    minValue = Math.min(...allValues);
-
-    function calculate(maxValue, minValue, value) {
-        return (40 + (value - minValue) / (maxValue - minValue) * 80)
-    };
-
-    elements.forEach(element => {
-        sizes[element['data']['id']] = calculate(maxValue, minValue, values[element['data']['id']]);
-    });
-
-    return sizes;
-};
-
-const getImportanceIndex = (elements, type) => {
-    const targetInstance = {};
-    const importanceIndex = {};
-    const targetList = [];
-
-    const nodeList = elements
-        .filter(element => element.data.label)
-        .map(element => element.data.id);
-    
-    const edgeList = elements.filter(element => !element.data.label);
-    if (type === 'incomingEdges'){
-        targetList.push(...edgeList.map(element => element.data.target));
-    } else if (type === 'outgoingEdges'){
-        targetList.push(...edgeList.map(element => element.data.source));
-    } else if (type === 'totalEdges'){
-        targetList.push(...edgeList.flatMap(element => [element.data.target, element.data.source]));
-    } else {
-        return null;
-    }
-
-    targetList.forEach(target => {
-        targetInstance[target] = (targetInstance[target] || 0) + 1;
-    });
-
-    const maxValue = Math.max(...Object.values(targetInstance));
-    const minValue = Math.min(...Object.values(targetInstance));
-    const range = maxValue - minValue;
-    const a = 0.125;
-    const b = 1;
-    if(range){
-        for (const key in targetInstance){
-            const normalized = (targetInstance[key] - minValue) / range;
-            importanceIndex[key] = a + normalized * (b - a);
-        }
-    } else{
-        for (const key in targetInstance){
-            importanceIndex[key] = 0.625;
-        }
-    }
-
-    nodeList.forEach(node => {
-        if (!Object.keys(importanceIndex).includes(node)) {
-            importanceIndex[node] = 0;
-        }
-    })
-    return importanceIndex;
-};
-
-const mapToLevel = (value, levels) => {
-    const target = value * 800;
-    return levels.reduce((prev, curr) =>
-        Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev
-    );
-};
 
 export default function Interaction({ elements, nodeCard }) {
 
@@ -137,11 +57,14 @@ export default function Interaction({ elements, nodeCard }) {
     const cardRef = useRef();
 
     const processData = useDataStore(state => state.processData);
+    const interactionData = useDataStore(state => state.interactionData);
+    const objectToType = useDataStore(state => state.objectToType);
     
     const colorScheme = useConfigStore(state => state.colorScheme);
     const selectedColor = useConfigStore(state => state.selectedColor);
     const nodeSizeMetric = useConfigStore(state => state.nodeSizeMetric);
     const edgeNotationMetric = useConfigStore(state => state.edgeNotationMetric);
+    const edgeNotationStyle = useConfigStore(state => state.edgeNotationStyle);
 
     const selectedObjectTypes = useFilterStore(state => state.selectedObjectTypes);
     const selectedProcesses = useFilterStore(state => state.selectedProcesses);
@@ -152,17 +75,22 @@ export default function Interaction({ elements, nodeCard }) {
 
     const levels = [50, 100, 200, 300, 400, 500, 600, 700, 800];
 
+    const filteredProcessData = filterProcessData(selectedObjectTypes, selectedProcesses, processData);
+
 
     useEffect(() => {
-        const filteredElements = processFilter(objectTypeFilter(elements, selectedObjectTypes), selectedProcesses);
-        const importanceIndex = getImportanceIndex(filteredElements, colorScheme);
-        setVosData(filteredElements);
+
+        if (!processData || Object.keys(processData).length === 0) return;
+        
+        const { interactionElements, knowledgeElements } = getElements(interactionData, processData, selectedObjectTypes, selectedProcesses, objectToType);
+
+        setVosData(interactionElements);
 
         const cy = cytoscape(
         {
             container: interactionRef.current,
 
-            elements: filteredElements,
+            elements: interactionElements,
             
             style: [
                 {
@@ -197,42 +125,65 @@ export default function Interaction({ elements, nodeCard }) {
             },
         });
 
+        setCyInstance(cy);
+
+        return () => {
+            cy.destroy();
+        };
+
+    }, [processData, elements, selectedProcesses, selectedObjectTypes]);
+    
+    useEffect(() => {
+        if (!cyInstance) return;
+
+        const { interactionElements, knowledgeElements } = getElements(interactionData, processData, selectedObjectTypes, selectedProcesses, objectToType);
+
+        const importanceIndex = getImportanceIndex(interactionElements, colorScheme);
+        
         if(importanceIndex){
             if(selectedColor){
-                cy.nodes().forEach(node => {
+                cyInstance.nodes().forEach(node => {
                     const level = mapToLevel(importanceIndex[node.data('id')], levels);
                     node.style('background-color', selectedColor[level]);
                 });
-                cy.edges().forEach(edge => {
+                cyInstance.edges().forEach(edge => {
                     edge.style('line-color', selectedColor[200]);
                     edge.style('target-arrow-color', selectedColor[200],)
                 });
             } else {
-                cy.nodes().forEach(node => {
+                cyInstance.nodes().forEach(node => {
                     const level = mapToLevel(importanceIndex[node.data('id')], levels);
                     node.style('background-color', grey[level]);
                 });
-                cy.edges().forEach(edge => {
+                cyInstance.edges().forEach(edge => {
                     edge.style('line-color', grey[500]);
                     edge.style('target-arrow-color', grey[500],)
                 });
             }
         } else {
             if(selectedColor){
-                cy.nodes().forEach(node => {
+                cyInstance.nodes().forEach(node => {
                     node.style('background-color', selectedColor[500]);
                 });
-                cy.edges().forEach(edge => {
+                cyInstance.edges().forEach(edge => {
                     edge.style('line-color', selectedColor[200]);
                     edge.style('target-arrow-color', selectedColor[200],)
+                });
+            } else {
+                cyInstance.nodes().forEach(node => {
+                    node.style('background-color', grey[700]);
+                });
+                cyInstance.edges().forEach(edge => {
+                    edge.style('line-color', grey[400]);
+                    edge.style('target-arrow-color', grey[400],)
                 });
             }
         }
 
-        if(nodeSizeMetric != ''){
-            const sizes = calculateNodeSize(elements, nodeSizeMetric)
+        if(nodeSizeMetric != 'none'){
+            const sizes = calculateNodeSize(interactionElements, nodeSizeMetric)
 
-            cy.nodes().forEach(node => {
+            cyInstance.nodes().forEach(node => {
                 const nodeId = node.id();
                 const size = sizes[nodeId];
               
@@ -241,33 +192,40 @@ export default function Interaction({ elements, nodeCard }) {
                     node.style('height', size);
                 }
             });
-        };
+        } else {
+            cyInstance.nodes().forEach(node => {
+                node.style('width', 60);
+                node.style('height', 60);
+            });
+        }
 
-        if(edgeNotationMetric != ''){
-            cy.edges().forEach(edge => {
+        if(edgeNotationMetric != 'none'){
+            cyInstance.edges().forEach(edge => {
                 if (edgeNotationMetric) {
-                    edge.style('label', edge.data(edgeNotationMetric));
+                    edge.style({
+                        'label': edge.data(edgeNotationMetric),
+                        'edge-text-rotation': edgeNotationStyle,
+                        'text-wrap': 'wrap'
+                    });
                 } else {
                     edge.style('label', '');
                 }
             });
-        };
+        } else {
+            cyInstance.edges().forEach(edge => {
+                edge.style('label', '');
+            });
+        }
 
-        const pngDataUrl = cy.png({
+        const pngDataUrl = cyInstance.png({
             output: 'base64uri',
             full: true,
             scale: 2,
             bg: '#ffffff'
         });
         setPngDataUrl(pngDataUrl);
-        setCyInstance(cy);
+    }, [cyInstance, selectedColor, colorScheme, nodeSizeMetric, edgeNotationMetric, edgeNotationStyle])
 
-        return () => {
-            cy.destroy();
-        };
-
-    }, [elements, selectedColor, colorScheme, selectedProcesses, selectedObjectTypes, nodeSizeMetric, edgeNotationMetric]);
-    
     useEffect(() => {
         if (!cyInstance) return;
 
@@ -333,12 +291,22 @@ export default function Interaction({ elements, nodeCard }) {
                 ref={interactionRef} 
                 sx={{ width: '100%', height: '100%', overflow: 'hidden' }}
             />
+            <IconButton 
+                sx={{
+                    position: 'fixed',
+                    top: 76,
+                    right: 20
+                }}
+                onClick={() => cyInstance.fit(cyInstance.elements(), 20)}
+            >
+                <CropFreeRoundedIcon />
+            </IconButton>
             {
                 selectedNode && (
                     <ProcessCard 
                         cardRef={cardRef}
                         processLabel={selectedNode.label}
-                        processInfo={processData[selectedNode.label]}
+                        processInfo={filteredProcessData[selectedNode.label]}
                         position={nodePosition}
                         interactionRef={interactionRef}
                     />

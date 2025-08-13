@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-venv/
+*venv/
 __pycache__/
 /backend/app/__pycache__
 *.pyc

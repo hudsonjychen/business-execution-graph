@@ -74,44 +74,50 @@ def data_preload(log):
 
 def data_process(log, task_id):
 
-    discover_results = discover(log)
-    interaction_data = discover_results["interaction_data"]
-    process_data = discover_results["process_data"]
+    try:
+        discover_results = discover(log)
+        interaction_data = discover_results["interaction_data"]
+        process_data = discover_results["process_data"]
 
-    # interaction data
-    cachedInteractionData.clear()
-    cachedInteractionData.update(convert_for_json(interaction_data))
-    # process data
-    cachedProcessData.clear()
-    cachedProcessData.update(convert_for_json(process_data))
+        # interaction data
+        cachedInteractionData.clear()
+        cachedInteractionData.update(convert_for_json(interaction_data))
+        # process data
+        cachedProcessData.clear()
+        cachedProcessData.update(convert_for_json(process_data))
 
-    # object to object type map data
-    object_to_type = map_object_id_to_type(log)
-    cachedObjectToType.clear()
-    cachedObjectToType.update(object_to_type)
+        # object to object type map data
+        object_to_type = map_object_id_to_type(log)
+        cachedObjectToType.clear()
+        cachedObjectToType.update(object_to_type)
 
-    object_types = get_object_types(log)
-    processes = get_processes(log)
-    activities = get_activities(log)
-    elements, nodes, knowledge = get_vis_data(object_types, processes, activities, interaction_data, process_data)
+        object_types = get_object_types(log)
+        processes = get_processes(log)
+        activities = get_activities(log)
+        elements, nodes, knowledge = get_vis_data(object_types, processes, activities, interaction_data, process_data)
+        
+        # Update cache
+        cachedElements.clear()
+        cachedElements.extend(elements)
+
+        cachedNodeCard.clear()
+        cachedNodeCard.update(convert_for_json(nodes))
+
+        cachedKnowledge.clear()
+        cachedKnowledge.extend(knowledge)
+
+        cachedObjectTypes.clear()
+        cachedObjectTypes.extend(list(object_types))
+
+        cachedProcesses.clear()
+        cachedProcesses.extend(list(processes))
+
+        task_status[task_id] = True
     
-    # Update cache
-    cachedElements.clear()
-    cachedElements.extend(elements)
-
-    cachedNodeCard.clear()
-    cachedNodeCard.update(convert_for_json(nodes))
-
-    cachedKnowledge.clear()
-    cachedKnowledge.extend(knowledge)
-
-    cachedObjectTypes.clear()
-    cachedObjectTypes.extend(list(object_types))
-
-    cachedProcesses.clear()
-    cachedProcesses.extend(list(processes))
-
-    task_status[task_id] = True
+    except Exception as e:
+        print("Fail", e)
+        traceback.print_exc()
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 @main.errorhandler(RequestEntityTooLarge)

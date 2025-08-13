@@ -44,20 +44,23 @@ export default function Import({ setElements, setKnowledge, setNodeCard }) {
     };
 
     const pollData = (taskId) => {
-        console.log("Polling with taskId:", taskId);
-
         if (!taskId) {
             console.error("taskId is undefined in pollData");
+            setLoadingStatus('failure');
             return;
         }
+
+        let retries = 0;
+        const maxRetries = 240;
 
         const intervalId = setInterval(async () => {
             try {
                 const res = await fetch(`http://localhost:5002/get_data/${taskId}`);
                 if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
                 const data = await res.json();
+
                 if (data.ready) {
-                    setLoadingStatus(data.ready);
+                    setLoadingStatus('success');
                     setInteractionData(data.interactionData);
                     setProcessData(data.processData);
                     setObjectToType(data.objectToType);
@@ -68,25 +71,28 @@ export default function Import({ setElements, setKnowledge, setNodeCard }) {
                     setSelectedObjectTypes([...data.objectTypes]);
                     setSelectedProcesses([...data.processes]);
                     clearInterval(intervalId);
+                } else if (++retries >= maxRetries) {
+                    throw new Error("Polling timeout");
                 }
             } catch (err) {
                 console.error("Polling error", err);
+                clearInterval(intervalId);
+                setLoadingStatus('failure');
             }
         }, 500);
     };
 
     const handleChange = async (event) => {
-        setLoadingStatus(false);
-
+        setFileImported(true);
+        setLoadingStatus(null);
         clearFileInfo();
         clearPreloadData();
         clearInteractionData();
         clearProcessData();
 
         const file = event.target.files[0];
-        if(file){
-            setFileImported(true);
-        };
+        if (!file) return;
+
         const formData = new FormData();
         formData.append("file", file);
 
@@ -96,19 +102,21 @@ export default function Import({ setElements, setKnowledge, setNodeCard }) {
                 body: formData,
                 mode: 'cors'
             });
-        
+
+            if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
+
             const result = await response.json();
-            console.log(result.taskId);
-            
+            if (!result.taskId) throw new Error("No taskId from server");
+
             setFileInfo(result.fileInfo);
             setPreloadData(result.preloadData);
 
             pollData(result.taskId);
-        } 
-        catch (err) {
-            console.error("Fail", err);
+        } catch (err) {
+            console.error("Upload error", err);
+            setLoadingStatus('failure');
         }
-    }
+    };
 
     return (
         <Box>

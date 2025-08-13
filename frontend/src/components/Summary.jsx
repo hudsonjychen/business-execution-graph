@@ -1,5 +1,5 @@
 import { Card, Stack, Typography } from "@mui/joy";
-import { ObjectIcon, ProcessIcon } from "../util/CustomIcons";
+import { ObjectIcon, ProcessIcon } from "../assets/CustomIcons";
 import useDataStore from "../store/useDataStore";
 import useFilterStore from "../store/useFilterStore";
 import summary from "../functions/summary";

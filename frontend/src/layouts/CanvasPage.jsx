@@ -5,7 +5,8 @@ import Knowledge from "../components/Knowledge";
 import Summary from "../components/Summary";
 import FileInfo from "../components/FileInfo";
 import useStatusStore from "../store/useStatusStore";
-import { CircularProgress } from "@mui/joy";
+import { Box, CircularProgress } from "@mui/joy";
+import ErrorAlert from "../components/ErrorAlert";
 
 export default function CanvasPage({ elements, nodeCard, knowledge }) {
 
@@ -14,29 +15,26 @@ export default function CanvasPage({ elements, nodeCard, knowledge }) {
     const mode = useStatusStore(state => state.mode);
 
     return (
-        <div>
+        <Box>
             <FileInfo />
             <Summary />
+
             {!fileImported ? (
-                <Prompt />
-            ) : (loadingStatus ? (
-                mode === 'discovery' ? (
-                    <div>
-                        <Interaction 
-                            elements={elements} 
-                            nodeCard={nodeCard}
-                        />
-                    </div>
-                ) : mode === 'knowledge' ? (
-                    <div>
-                        <Knowledge 
-                            knowledge={knowledge}
-                        />
-                    </div>
-                ) : null ) : (
+                    <Prompt />
+                ) : loadingStatus ? (
+                loadingStatus === 'success' ? (
+                    mode === 'discovery' ? (
+                        <Interaction elements={elements} nodeCard={nodeCard} />
+                    ) : mode === 'knowledge' ? (
+                        <Knowledge knowledge={knowledge} />
+                    ) : null
+                ) : loadingStatus === 'failure' ? (
+                    <ErrorAlert />
+                ) : null
+                ) : (
                     <CircularProgress />
                 )
-            )}
-        </div>
-    )
+            }
+        </Box>
+    );
 }
