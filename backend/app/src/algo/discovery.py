@@ -4,7 +4,6 @@ from typing import Dict, Any, Set, List
 from pm4py.objects.ocel.obj import OCEL
 from .map import map_object_id_to_type, map_process_to_event, map_process_to_object
 from .get_entities import get_processes
-from .update_stats import update_process_interactions_count, update_process_interactions_flow_time
 
 
 def _build_object_event_streams(ocel: OCEL, processes: Set[str]) -> Dict[str, List[Dict]]:
@@ -44,52 +43,56 @@ def _discover_process_interactions(ocel: OCEL) -> Dict[str, Any]:
     """
     Discovers the process interactions from an object-centric event log (OCEL).
     """
-    process_interactions = dict()
-    flow_time = dict()
+    process_interactions = defaultdict(lambda: defaultdict(lambda: {
+        'total_count': 0,
+        'object_type': defaultdict(lambda: {'count': 0, 'average_flow_time': timedelta()}),
+        'object': set(),
+        'average_flow_time': timedelta()
+    }))
 
     processes = get_processes(ocel)
-
     oid_to_type_map = map_object_id_to_type(ocel)
-
     object_event_streams = _build_object_event_streams(ocel, processes)
 
-    for obj in object_event_streams:
+    for obj, stream in object_event_streams.items():
         obj_type = oid_to_type_map[obj]
-        stream = object_event_streams[obj]
 
         for i in range(len(stream)-1):
-            pids1 = stream[i]['pids']
-            pids2 = stream[i + 1]['pids']
-            ts1 = stream[i]['timestamp']
-            ts2 = stream[i + 1]['timestamp']
+            pids1, pids2 = stream[i]['pids'], stream[i + 1]['pids']
+            ts1, ts2 = stream[i]['timestamp'], stream[i + 1]['timestamp']
             delta = ts2 - ts1
             for p1 in pids1:
                 for p2 in pids2:
-                    if p1 != p2:
-                        if p1 not in process_interactions:
-                            process_interactions[p1] = dict()
-                        if p2 not in process_interactions[p1]:
-                            process_interactions[p1][p2] = dict()
-                            process_interactions[p1][p2]['total_count'] = 0
-                            process_interactions[p1][p2]['object_type'] = dict()
-                            process_interactions[p1][p2]['object'] = set()
-                        if obj_type not in process_interactions[p1][p2]['object_type']:
-                            process_interactions[p1][p2]['object_type'][obj_type] = dict()
-                            process_interactions[p1][p2]['object_type'][obj_type]['count'] = 0
-                            process_interactions[p1][p2]['object_type'][obj_type]['average_flow_time'] = timedelta()
+                    if p1 == p2:
+                        continue
+                    inter = process_interactions[p1][p2]
+                    inter['object'].add(obj)
+                    inter['total_count'] += 1
+                    obj_type_stat = inter['object_type'][obj_type]
+                    obj_type_stat['count'] += 1
 
-                        process_interactions[p1][p2]['object'].add(obj)
+                    prev_avg = obj_type_stat['average_flow_time'].total_seconds()
+                    new_avg = (prev_avg*(obj_type_stat['count']-1) + delta.total_seconds()) / obj_type_stat['count']
+                    obj_type_stat['average_flow_time'] = timedelta(seconds=new_avg)
 
-                        if p1 not in flow_time:
-                            flow_time[p1] = dict()
-                        if p2 not in flow_time[p1]:
-                            flow_time[p1][p2] = dict()
-                        if obj not in flow_time[p1][p2]:
-                            flow_time[p1][p2][obj] = set()
-                        flow_time[p1][p2][obj].add(delta)
+    for p1 in process_interactions:
+        for p2 in process_interactions[p1]:
+            inter = process_interactions[p1][p2]
+            avg_seconds = 0.0
+            total_count = 0
 
-    update_process_interactions_count(process_interactions, oid_to_type_map)
-    update_process_interactions_flow_time(process_interactions, oid_to_type_map, flow_time)
+            for obj_type_stat in inter['object_type'].values():
+                avg_time = obj_type_stat['average_flow_time'].total_seconds()
+                count = obj_type_stat['count']
+
+                if count == 0:
+                    continue
+
+                new_total = total_count + count
+                avg_seconds = (avg_seconds * total_count + avg_time * count) / new_total
+                total_count = new_total
+
+            inter['average_flow_time'] = timedelta(seconds=avg_seconds)
 
     return process_interactions
 

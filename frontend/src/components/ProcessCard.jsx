@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom';
 import { useGlobal } from "../contexts/GlobalContext";
 import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
+import ZoomInRoundedIcon from '@mui/icons-material/ZoomInRounded';
 import useSelectorStore from "../store/useSelectorStore";
 import useStatusStore from "../store/useStatusStore";
 
@@ -105,7 +106,7 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                 </ListItem>
             </List>
 
-            <Box>
+            <Stack direction='row' spacing={1}>
                 <Button 
                     onClick={() => {
                         setFocusingNode(processLabel);
@@ -121,7 +122,18 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                 >
                     Focus
                 </Button>
-            </Box>
+                <Button
+                    variant="soft"
+                    color="primary"
+                    startDecorator={<ZoomInRoundedIcon sx={{ fontSize: 16 }}/>}
+                    size="sm"
+                    sx={{
+                        fontSize: 12
+                    }}
+                >
+                    Unfold
+                </Button>
+            </Stack>
 
         </Card>
     )
