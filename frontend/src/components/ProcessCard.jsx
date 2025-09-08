@@ -1,5 +1,5 @@
 import { Card, Box, Stack, Typography, List, ListItem, Button } from "@mui/joy";
-import { ActivityIcon, ObjectIcon } from "../assets/CustomIcons";
+import { ActivityIcon, ObjectIcon, Focus, Unfold } from "../assets/CustomIcons";
 import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom';
 import { useGlobal } from "../contexts/GlobalContext";
@@ -114,7 +114,7 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                     }}
                     variant="soft"
                     color="success"
-                    startDecorator={<ArrowOutwardRoundedIcon sx={{ fontSize: 16 }}/>}
+                    startDecorator={<Focus fontSize='lg'/>}
                     size="sm"
                     sx={{
                         fontSize: 12
@@ -125,7 +125,7 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                 <Button
                     variant="soft"
                     color="primary"
-                    startDecorator={<ZoomInRoundedIcon sx={{ fontSize: 16 }}/>}
+                    startDecorator={<Unfold fontSize='lg'/>}
                     size="sm"
                     sx={{
                         fontSize: 12
