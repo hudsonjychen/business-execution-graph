@@ -9,3 +9,5 @@ cachedPreloadData = dict()
 cachedInteractionData = dict()
 cachedProcessData = dict()
 cachedObjectToType = dict()
+
+cachedOcdfgData = dict()

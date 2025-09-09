@@ -7,6 +7,8 @@ import FileInfo from "../components/FileInfo";
 import useStatusStore from "../store/useStatusStore";
 import { Box, CircularProgress } from "@mui/joy";
 import ErrorAlert from "../components/ErrorAlert";
+import DfgCanvas from "../components/DfgCanvas";
+
 
 export default function CanvasPage({ elements, nodeCard, knowledge }) {
 
@@ -27,6 +29,8 @@ export default function CanvasPage({ elements, nodeCard, knowledge }) {
                         <Interaction elements={elements} nodeCard={nodeCard} />
                     ) : mode === 'knowledge' ? (
                         <Knowledge knowledge={knowledge} />
+                    ) : mode === 'unfold' ? (
+                        <DfgCanvas />
                     ) : null
                 ) : loadingStatus === 'failure' ? (
                     <ErrorAlert />

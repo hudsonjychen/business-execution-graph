@@ -21,6 +21,7 @@ export default function Import({ setElements, setKnowledge, setNodeCard }) {
     const clearInteractionData = useDataStore(state => state.clearInteractionData);
     const clearProcessData = useDataStore(state => state.clearProcessData);
     const setObjectToType = useDataStore(state => state.setObjectToType);
+    const setOcdfgData = useDataStore(state => state.setOcdfgData);
 
     const setSelectedObjectTypes = useFilterStore(state => state.setSelectedObjectTypes);
     const setSelectedProcesses = useFilterStore(state => state.setSelectedProcesses);
@@ -70,6 +71,9 @@ export default function Import({ setElements, setKnowledge, setNodeCard }) {
                     setNodeCard(data.nodes);
                     setSelectedObjectTypes([...data.objectTypes]);
                     setSelectedProcesses([...data.processes]);
+
+                    setOcdfgData(data.ocdfgData);
+
                     clearInterval(intervalId);
                 } else if (++retries >= maxRetries) {
                     throw new Error("Polling timeout");

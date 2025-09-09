@@ -20,6 +20,11 @@ const useDataStore = create((set) => ({
     objectToType: {},
     setObjectToType: (data) => set({ objectToType: data }),
     
+    ocdfgData: {},
+    setOcdfgData: (data) => set({ ocdfgData: data }),
+    unfoldedProcess: null,
+    setUnfoldedProcess: (data) => set({ unfoldedProcess: data })
+    
 }))
 
 export default useDataStore

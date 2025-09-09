@@ -2,17 +2,16 @@ import { Card, Box, Stack, Typography, List, ListItem, Button } from "@mui/joy";
 import { ActivityIcon, ObjectIcon, Focus, Unfold } from "../assets/CustomIcons";
 import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom';
-import { useGlobal } from "../contexts/GlobalContext";
-import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
-import ZoomInRoundedIcon from '@mui/icons-material/ZoomInRounded';
 import useSelectorStore from "../store/useSelectorStore";
 import useStatusStore from "../store/useStatusStore";
+import useDataStore from "../store/useDataStore";
 
 
 const CardTemplate = ({ processLabel, processInfo }) => {
     
     const setFocusingNode = useSelectorStore(state => state.setFocusingNode);
     const setMode = useStatusStore(state => state.setMode);
+    const setUnfoldedProcess = useDataStore(state => state.setUnfoldedProcess);
 
     return (
         <Card sx={{ width: 220 }}>
@@ -114,7 +113,7 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                     }}
                     variant="soft"
                     color="success"
-                    startDecorator={<Focus fontSize='lg'/>}
+                    startDecorator={<Focus/>}
                     size="sm"
                     sx={{
                         fontSize: 12
@@ -125,10 +124,14 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                 <Button
                     variant="soft"
                     color="primary"
-                    startDecorator={<Unfold fontSize='lg'/>}
+                    startDecorator={<Unfold size='16px'/>}
                     size="sm"
                     sx={{
                         fontSize: 12
+                    }}
+                    onClick={() => {
+                        setUnfoldedProcess(processLabel);
+                        setMode('unfold');
                     }}
                 >
                     Unfold

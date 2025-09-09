@@ -1,6 +1,7 @@
-import { Box, Button, ToggleButtonGroup } from "@mui/joy";
+import { Stack, Button, ToggleButtonGroup } from "@mui/joy";
 import { useGlobal } from "../contexts/GlobalContext";
 import useStatusStore from "../store/useStatusStore";
+import { Unfold } from "../assets/CustomIcons";
 
 
 export default function Mode() {
@@ -9,7 +10,7 @@ export default function Mode() {
     const setMode = useStatusStore(state => state.setMode);
 
     return (
-        <Box>
+        <Stack direction='row' spacing={2} alignItems='center'>
             <ToggleButtonGroup
                 disabled={!fileImported} 
                 value={mode} 
@@ -26,6 +27,7 @@ export default function Mode() {
                     Entity Relations
                 </Button>
             </ToggleButtonGroup>
-        </Box>
+            <Unfold size={18} color={mode === 'unfold' ? 'primary' : null}/>
+        </Stack>
     )
 }
