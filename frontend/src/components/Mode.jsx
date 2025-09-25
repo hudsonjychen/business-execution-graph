@@ -1,7 +1,7 @@
 import { Stack, Button, ToggleButtonGroup } from "@mui/joy";
 import { useGlobal } from "../contexts/GlobalContext";
 import useStatusStore from "../store/useStatusStore";
-import { Unfold } from "../assets/CustomIcons";
+import { ExpandMode } from "../assets/CustomIcons";
 
 
 export default function Mode() {
@@ -27,7 +27,7 @@ export default function Mode() {
                     Entity Relations
                 </Button>
             </ToggleButtonGroup>
-            <Unfold size={18} color={mode === 'unfold' ? 'primary' : null}/>
+            <ExpandMode size={18} color={mode === 'expanded' ? 'primary' : null}/>
         </Stack>
     )
 }

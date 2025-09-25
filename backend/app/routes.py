@@ -9,12 +9,12 @@ from datetime import datetime
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from .src.util.json_adapter import convert_for_json
-from .cache import cachedFileInfo, cachedPreloadData, cachedInteractionData, cachedProcessData, cachedObjectToType, cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedProcesses, cachedOcdfgData
+from .cache import cachedFileInfo, cachedPreloadData, cachedInteractionData, cachedProcessData, cachedObjectToType, cachedElements, cachedKnowledge, cachedObjectTypes, cachedNodeCard, cachedProcesses, cachedOCDFGData
 from .src.algo.discovery import discover
 from .src.algo.get_entities import get_processes, get_object_types, get_activities, get_objects
 from .src.visualization.vis_converter import get_vis_data
 from .src.algo.map import map_object_id_to_type
-from .src.algo.unfold import get_ocdfg_data
+from .src.algo.expand_process import get_ocdfg_data
 
 main = Blueprint('main', __name__)
 
@@ -114,8 +114,8 @@ def data_process(log, task_id):
         cachedProcesses.extend(list(processes))
 
         # new-feat: unfold process
-        cachedOcdfgData.clear()
-        cachedOcdfgData.update(convert_for_json(get_ocdfg_data(log, processes)))
+        cachedOCDFGData.clear()
+        cachedOCDFGData.update(convert_for_json(get_ocdfg_data(log, processes)))
 
         task_status[task_id] = True
     
@@ -143,7 +143,7 @@ def get_data(task_id):
             'knowledge': cachedKnowledge,
             'objectTypes': cachedObjectTypes,
             'processes': cachedProcesses,
-            'ocdfgData': cachedOcdfgData
+            'ocdfgData': cachedOCDFGData
         })
     else:
         return jsonify({'ready': False})

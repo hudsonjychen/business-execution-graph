@@ -4,7 +4,6 @@ import { green, blue, orange } from '@mui/material/colors';
 import { Box, IconButton } from "@mui/joy";
 import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
 import useDataStore from "../store/useDataStore";
-import getOcdfgElements from "../functions/getOcdfg";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import useStatusStore from "../store/useStatusStore";
 
@@ -13,7 +12,7 @@ export default function DfgCanvas() {
     const [cyInstance, setCyInstance] = useState(null);
 
     const ocdfgData = useDataStore(state => state.ocdfgData);
-    const unfoldedProcess = useDataStore(state => state.unfoldedProcess);
+    const expandedProcess = useDataStore(state => state.expandedProcess);
 
     const setMode = useStatusStore(state => state.setMode);
     
@@ -21,11 +20,13 @@ export default function DfgCanvas() {
 
     useEffect(() => {
         console.log(ocdfgData);
-        console.log(unfoldedProcess);
+        console.log(expandedProcess);
 
-        if (!ocdfgData || Object.keys(ocdfgData).length === 0 || !unfoldedProcess) return;
+        if (!ocdfgData || Object.keys(ocdfgData).length === 0 || !expandedProcess) return;
         
-        const ocdfgElements = getOcdfgElements(ocdfgData[unfoldedProcess]);
+        const ocdfgElements = getElements(ocdfgData[expandedProcess]);
+        const positions = applyOCDFGLayout(ocdfgElements);
+        console.log(ocdfgElements);
 
         const cy = cytoscape(
         {
@@ -65,25 +66,40 @@ export default function DfgCanvas() {
                     }
                 },
                 {
-                    selector: 'edge',
+                    selector: 'edge[edgeType="directional"]',
                     style: {
                         'width': 2,
                         'line-color': '#666',
                         'target-arrow-color': '#666',
                         'target-arrow-shape': 'triangle',
                         'curve-style': 'bezier',
-                        'label': 'data(label)',
+                        'label': 'data(allObjectTypes)',
+                        'font-size': '10px'
+                    }
+                },
+                {
+                    selector: 'edge[edgeType="bidirectional"]',
+                    style: {
+                        'width': 2,
+                        'line-color': '#666',
+                        'target-arrow-color': '#666',
+                        'target-arrow-shape': 'triangle',
+                        'source-arrow-color': '#666',
+                        'source-arrow-shape': 'triangle',
+                        'curve-style': 'bezier',
+                        'label': 'data(allObjectTypes)',
                         'font-size': '10px'
                     }
                 }
             ],
             layout: {
-                name: 'circle',
-                nodeDimensionsIncludeLabels: false,
-                spacingFactor: 0.8,
-                startAngle: Math.PI,
-            },
+                name: 'preset',
+                positions: positions,
+                fit: true,
+                padding: 50
+            }
         });
+        
 
         setCyInstance(cy);
 
@@ -91,7 +107,7 @@ export default function DfgCanvas() {
             cy.destroy();
         };
 
-    }, [ocdfgData, unfoldedProcess]);
+    }, [ocdfgData, expandedProcess]);
 
     return (
         <Box 

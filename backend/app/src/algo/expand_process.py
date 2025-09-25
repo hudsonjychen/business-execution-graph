@@ -1,13 +1,11 @@
 from collections import defaultdict
-import copy
-from typing import Dict, Any, Set, List
 from pm4py.objects.ocel.obj import OCEL
 from .get_entities import get_processes
 from .discovery import _build_object_event_streams
 import pandas as pd
 import pm4py
 
-def _unfold_ocel(ocel: OCEL, process: str) -> OCEL:
+def _get_expanded_procel(ocel: OCEL, process: str) -> OCEL:
     relations = ocel.relations
 
     processes = get_processes(ocel)
@@ -150,8 +148,8 @@ def get_ocdfg_data(ocel: OCEL, processes: set) -> dict:
     ocdfg_data = dict()
 
     for process in processes:
-        unfolded_ocel = _unfold_ocel(ocel, process)
-        graph_data = _get_graph_data(unfolded_ocel, processes)
+        expanded_procel = _get_expanded_procel(ocel, process)
+        graph_data = _get_graph_data(expanded_procel, processes)
         ocdfg_data[process] = graph_data
     
     return ocdfg_data

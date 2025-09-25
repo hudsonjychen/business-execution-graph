@@ -10,4 +10,4 @@ cachedInteractionData = dict()
 cachedProcessData = dict()
 cachedObjectToType = dict()
 
-cachedOcdfgData = dict()
+cachedOCDFGData = dict()

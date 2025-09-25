@@ -1,4 +1,4 @@
-function _getOCDFGElements(graphData) {
+function _getOcdfgElements(graphData) {
     const ocdfgElements = [];
     
     function addNodes(data) {
@@ -10,7 +10,8 @@ function _getOCDFGElements(graphData) {
                     data: {
                         id: objectType,
                         label: objectType,
-                        type: 'object_type'
+                        type: 'object_type',
+                        data: {label: objectType}
                     }
                 });
             });
@@ -22,7 +23,8 @@ function _getOCDFGElements(graphData) {
                     data: {
                         id: process,
                         label: process,
-                        type: 'process'
+                        type: 'process',
+                        data: {label: process}
                     }
                 });
             });
@@ -34,7 +36,8 @@ function _getOCDFGElements(graphData) {
                     data: {
                         id: activity,
                         label: activity,
-                        type: 'activity'
+                        type: 'activity',
+                        data: {label: activity}
                     }
                 });
             });
@@ -137,7 +140,7 @@ function _getOCDFGElements(graphData) {
 }
 
 
-function _optimizeOCDFGElements(elements) {
+function _optimizeOcdfgElements(elements) {
     const allNodes = elements.filter(ele => ['object_type', 'process', 'activity'].includes(ele.data.type));
     const edges = elements.filter(ele => !['object_type', 'process', 'activity'].includes(ele.data.type));
     
@@ -196,7 +199,7 @@ function _optimizeOCDFGElements(elements) {
                     objects: edgeData.objects || [],
                     objectCount: edgeData.objectCount || 0,
                     originalLabel: edgeData.label,
-                    originalId: edgeData.id
+                    originalId: edgeData.id,
                 };
             }
         });
@@ -219,7 +222,7 @@ function _optimizeOCDFGElements(elements) {
                 id: `merged_${source}_${target}`,
                 source: source,
                 target: target,
-                label: label,
+                labelData: label,
                 type: 'merged',
                 edgeType: edgeTypeIndicator,
                 
@@ -232,6 +235,7 @@ function _optimizeOCDFGElements(elements) {
                 
                 totalObjectCount: edgeGroup.reduce((sum, edge) => sum + (edge.data.objectCount || 0), 0),
                 allObjectTypes: [...new Set(edgeGroup.map(edge => edge.data.objectType).filter(Boolean))],
+                label: [...new Set(edgeGroup.map(edge => edge.data.objectType).filter(Boolean))],
                 allObjects: edgeGroup.reduce((all, edge) => {
                     if (edge.data.objects) {
                         return [...all, ...edge.data.objects];
@@ -263,117 +267,163 @@ function _optimizeOCDFGElements(elements) {
 }
 
 
-function getFlowData(graphData) {
-    const objectTypeNodes = [];
-    const activityNodes = [];
-    const processNodes = [];
-    const edgeList = [];
-    const edgeIdList = [];
-    
-    function getNodes(data) {
-        const { nodes } = data;
-        
-        if (nodes.object_types) {
-            nodes.object_types.forEach(objectType => {
-                objectTypeNodes.push({
-                    id: objectType,
-                    data: {
-                        label: objectType,
-                    },
-                    type: 'object_type'
-                });
-            });
-        }
-        
-        if (nodes.processes) {
-            nodes.processes.forEach(process => {
-                processNodes.push({
-                    id: process,
-                    data: {
-                        label: process,
-                    },
-                    type: 'process'
-                });
-            });
-        }
-        
-        if (nodes.activities) {
-            nodes.activities.forEach(activity => {
-                activityNodes.push({
-                    id: activity,
-                    data: {
-                        label: activity,
-                    },
-                    type: 'activity'
-                });
-            });
-        }
-    }
-    
-    function getEdges(data) {
-        const { edges } = data;
+function getElements(graphData) {
+    const elements = _getOcdfgElements(graphData);
+    const optimizedElements = _optimizeOcdfgElements(elements);
 
-        ['act_act', 'act_p'].forEach(key => {
-            if (edges[key]) {
-                Object.entries(edges[key]).forEach(([source, data]) => {
-                    Object.entries(data).forEach(([target, objectTypes]) => {
-                        Object.entries(objectTypes).forEach(([objectType, objects]) => {
-                            const id = `${source}_${target}`;
-                            const reversedId = `${target}_${source}`
-                            if (edgeIdList.includes(id)) {
-                                const index = edgeList.findIndex(item => item.id === id);
-                                if (index !== -1) {
-                                    edgeList[index].objectType.push(objectType);
-                                    edgeList[index].objects.push(...objects);
-                                    edgeList[index].objectCount += objects.length;
-                                }
-                                return;
-                            };
-                            if (edgeIdList.includes(reversedId)) {
-                                const index = edgeList.findIndex(item => item.id === reversedId);
-                                if (index !== -1) {
-                                    edgeList[index].edgeType = 'bidirectional';
-                                    edgeList[index].objectType.push(objectType);
-                                    edgeList[index].objects.push(...objects);
-                                    edgeList[index].objectCount += objects.length;
-                                }
-                                return;
-                            };                       
-                            edgeList.push({
-                                id: id,
-                                source: source,
-                                target: target,
-                                type: key,
-                                edgeType: 'directional',
-                                objectType: [objectType],
-                                objects: objects,
-                                objectCount: objects.length
-                            });
-                            edgeIdList.push(`${source}_${target}`)
-                        });
-                    });
-                });
-            }
-        })
-
-    }
-    
-    if (graphData.nodes && graphData.edges) {
-        getNodes(graphData);
-        getEdges(graphData);
-    } 
-
-    const nodes = {
-        objectTypeNodes,
-        activityNodes,
-        processNodes
-    }
-
-    const edges = edgeList;
-    
-    return { nodes, edges };
+    return optimizedElements;
 }
 
 
+function _getNodeArray(elements, type) {
+    const nodeArray = elements
+        .filter(ele => ele.data.type === type)
+        .map(ele => ele.data.id)
 
-export { getFlowData };
+    return nodeArray;
+}
+
+
+function _calculateNodesLayers(elements) {
+    const layers = {};
+
+    elements.forEach(ele => {
+        if (!ele.data.source && !ele.data.target) return;
+        if (ele.data.source === ele.data.target) return;
+        if (!ele.data.edgeTypes.includes('act_act')) return;
+
+        layers[ele.data.target] = (layers[ele.data.target] || 0) + 1;
+    });
+
+    const nodesLayers = Object.entries(layers).reduce((result, [key, value]) => {
+        if (!result[value]) {
+            result[value] = [];
+        }
+        result[value].push(key);
+        return result;
+    }, {});
+
+    console.log(nodesLayers);
+
+    return nodesLayers;
+}
+
+
+function _calculateNodePositions(elements, layers, YRange, XRange = null) {
+    const result = {};
+
+    const processY = 850;
+    const objectTypeY = 150;
+
+    const processNodes = _getNodeArray(elements, 'process');
+    const objectTypeNodes = _getNodeArray(elements, 'object_type');
+
+    console.log(processNodes);
+    console.log(objectTypeNodes);
+
+    const layerKeys = Object.keys(layers)
+        .map(Number)
+        .sort((a, b) => a - b);
+    const numLayers = layerKeys.length;
+
+    const xMin = 10;
+    const xMax = 1000;
+    const yMin = YRange[0];
+    const yMax = YRange[1];
+
+    const xStep = numLayers > 1 ? (xMax - xMin) / (numLayers - 1) : 0;
+
+    layerKeys.forEach((layerKey, layerIndex) => {
+        const nodes = layers[layerKey];
+        const numNodes = nodes.length;
+
+        const x = xMin + layerIndex * xStep;
+
+        if (numNodes === 0) return;
+
+        if (numNodes === 1) {
+            const y = (yMin + yMax) / 2;
+            if (!result[nodes[0]]) {
+                result[nodes[0]] = { x, y };
+            }
+        } else {
+            const yStep = (yMax - yMin) / (numNodes - 1);
+            nodes.forEach((nodeId, nodeIndex) => {
+                const y = yMin + nodeIndex * yStep;
+                if (!result[nodeId]) {
+                    result[nodeId] = { x, y };
+                }
+            });
+        }
+    });
+
+    const xStart = 100;
+    const xEnd = 1000;
+    const processN = processNodes.length;
+
+    if (processN === 1) {
+        const nodeId = processNodes[0];
+        if (!result[nodeId]) {
+            result[nodeId] = { x: (xStart + xEnd) / 2, y: processY };
+        }
+    } else if (processN > 1) {
+        const processStep = (xEnd - xStart) / (processN - 1);
+        processNodes.forEach((nodeId, i) => {
+            if (!result[nodeId]) {
+                result[nodeId] = {
+                    x: xStart + i * processStep,
+                    y: processY,
+                };
+            }
+        });
+    }
+
+    const objectTypeN = objectTypeNodes.length;
+
+    if (objectTypeN === 1) {
+        const nodeId = objectTypeNodes[0];
+        if (!result[nodeId]) {
+            result[nodeId] = { x: (xStart + xEnd) / 2, y: objectTypeY };
+        }
+    } else if (objectTypeN > 1) {
+        const objectTypeStep = (xEnd - xStart) / (objectTypeN - 1);
+        objectTypeNodes.forEach((nodeId, i) => {
+            if (!result[nodeId]) {
+                result[nodeId] = {
+                    x: xStart + i * objectTypeStep,
+                    y: objectTypeY,
+                };
+            }
+        });
+    }
+
+    console.log(result);
+    return result;
+}
+
+function getFlowData(elements) {
+    const activityYRange = [250, 650];
+
+    const layers = _calculateNodesLayers(elements);
+    const positions = _calculateNodePositions(elements, layers, activityYRange);
+
+    const flowData = elements.map(ele => {
+        const data = { ...ele.data };
+        data['position'] = positions[data.id] || { x: 0, y: 0 };
+        return data;
+    });
+
+    const nodes = flowData.filter(data => {
+        return !data.source && !data.target;
+    });
+
+    const edges = flowData.filter(data => {
+        return data.source && data.target;
+    });
+
+    console.log(nodes);
+    console.log(edges);
+    return {nodes, edges};
+}
+
+export {getElements, getFlowData};

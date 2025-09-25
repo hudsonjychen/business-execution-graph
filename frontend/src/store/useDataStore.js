@@ -22,8 +22,8 @@ const useDataStore = create((set) => ({
     
     ocdfgData: {},
     setOcdfgData: (data) => set({ ocdfgData: data }),
-    unfoldedProcess: null,
-    setUnfoldedProcess: (data) => set({ unfoldedProcess: data })
+    expandedProcess: null,
+    setExpandedProcess: (data) => set({ expandedProcess: data })
     
 }))
 

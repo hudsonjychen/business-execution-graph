@@ -1,5 +1,5 @@
 import { Card, Box, Stack, Typography, List, ListItem, Button } from "@mui/joy";
-import { ActivityIcon, ObjectIcon, Focus, Unfold } from "../assets/CustomIcons";
+import { ActivityIcon, ObjectIcon, Focus, ExpandMode } from "../assets/CustomIcons";
 import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom';
 import useSelectorStore from "../store/useSelectorStore";
@@ -11,7 +11,7 @@ const CardTemplate = ({ processLabel, processInfo }) => {
     
     const setFocusingNode = useSelectorStore(state => state.setFocusingNode);
     const setMode = useStatusStore(state => state.setMode);
-    const setUnfoldedProcess = useDataStore(state => state.setUnfoldedProcess);
+    const setExpandedProcess = useDataStore(state => state.setExpandedProcess);
 
     return (
         <Card sx={{ width: 220 }}>
@@ -124,17 +124,17 @@ const CardTemplate = ({ processLabel, processInfo }) => {
                 <Button
                     variant="soft"
                     color="primary"
-                    startDecorator={<Unfold size='16px'/>}
+                    startDecorator={<ExpandMode size='16px'/>}
                     size="sm"
                     sx={{
                         fontSize: 12
                     }}
                     onClick={() => {
-                        setUnfoldedProcess(processLabel);
-                        setMode('unfold');
+                        setExpandedProcess(processLabel);
+                        setMode('expanded');
                     }}
                 >
-                    Unfold
+                    Expand
                 </Button>
             </Stack>
 
